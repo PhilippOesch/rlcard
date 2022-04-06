@@ -1,0 +1,12 @@
+autopep8==1.6.0
+gitdb==4.0.9
+gitdb2==4.0.2
+GitPython==3.1.27
+numpy==1.22.3
+pycodestyle==2.8.0
+-e git+https://github.com/PhilippOesch/rlcard.git@cd6d9840b7ae0e496763b158c5d6ef20e4003fc5#egg=rlcard
+smmap==5.0.0
+termcolor==1.1.0
+toml==0.10.2
+torch==1.11.0
+typing_extensions==4.1.1

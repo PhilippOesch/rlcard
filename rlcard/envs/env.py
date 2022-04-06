@@ -1,11 +1,13 @@
 from rlcard.utils import *
 
+
 class Env(object):
     '''
     The base Env class. For all the environments in RLCard,
     we should base on this class and implement as many functions
     as we can.
     '''
+
     def __init__(self, config):
         ''' Initialize the environment
 
@@ -30,7 +32,8 @@ class Env(object):
         # Game specific configurations
         # Currently only support blackjack、limit-holdem、no-limit-holdem
         # TODO support game configurations for all the games
-        supported_envs = ['blackjack', 'leduc-holdem', 'limit-holdem', 'no-limit-holdem']
+        supported_envs = ['blackjack', 'leduc-holdem',
+                          'limit-holdem', 'no-limit-holdem']
         if self.name in supported_envs:
             _game_config = self.default_game_config.copy()
             for key in config:
@@ -47,7 +50,6 @@ class Env(object):
 
         # Set random seed, default is None
         self.seed(config['seed'])
-
 
     def reset(self):
         ''' Start a new game
@@ -97,7 +99,8 @@ class Env(object):
         Note: Error will be raised if step back from the root node.
         '''
         if not self.allow_step_back:
-            raise Exception('Step back is off. To use step_back, please set allow_step_back=True in rlcard.make')
+            raise Exception(
+                'Step back is off. To use step_back, please set allow_step_back=True in rlcard.make')
 
         if not self.game.step_back():
             return False
@@ -146,7 +149,8 @@ class Env(object):
                 action = self.agents[player_id].step(state)
 
             # Environment steps
-            next_state, next_player_id = self.step(action, self.agents[player_id].use_raw)
+            next_state, next_player_id = self.step(
+                action, self.agents[player_id].use_raw)
             # Save action
             trajectories[player_id].append(action)
 
@@ -183,7 +187,6 @@ class Env(object):
             (int): The id of the current player
         '''
         return self.game.get_player_id()
-
 
     def get_state(self, player_id):
         ''' Get the state given player id
