@@ -42,5 +42,5 @@ def train(args):
 
 
 if __name__ == "__main__":
-    # os.environ["CUDA_VISIBLE_DEVICES"] = args["cuda"]
+    os.environ["CUDA_VISIBLE_DEVICES"] = args["cuda"]
     train(args)
