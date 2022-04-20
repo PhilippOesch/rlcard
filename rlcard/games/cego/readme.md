@@ -1,13 +1,19 @@
 # Cego RLCard
 
-## Card
+# Cego Environment
 
-### Attributes
+## The Classes
 
-* **suit**: the suit of the card
-* **rank**: the rank of the card
+* **CegoCard**: the card class
+* **CegoDealer**: the class for dealing cards
+* **CegoPlayer**: the player class
+* **CegoRound**: represents a round of Cego
+* **CegoJudger**: Judges the round of Cego
+* **Utils**: helper classes
 
 ### Card Encoding
+
+For know the part of the game, where the cego player selects the blind cards will be ignored for the reason of simplifying the action space.
 
 File: ./jsondata/action_space.json
 
@@ -20,5 +26,10 @@ File: ./jsondata/action_space.json
 | 16-23 | Hearts |
 | 24-31 | Diamonds |
 | 32-53 | Trumps |
-| 54 | Action for throwing away card from hand (cego-player) |
-| 55 | Action for taking card with you (cego-player) |
+
+## Card
+
+### Attributes
+
+* **suit**: the suit of the card
+* **rank**: the rank of the card

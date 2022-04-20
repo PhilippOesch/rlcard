@@ -1,4 +1,5 @@
 from termcolor import colored
+from utils import compare_card_rank
 
 
 def map_suit_to_color(suit):
@@ -28,6 +29,10 @@ class CegoCard:
 
     info = {
         "suits": ["c", "d", "h", "s", "trump"],
+        "ranks": ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10",
+                  "11", "12", "13", "14", "15", "16", "17", "18", "19", "20",
+                  "21", "gstieß",
+                  "b", "r", "d", "k"],
         "cards": [
             "7-c", "8-c", "9-c", "10-c", "b-c", "r-c", "d-c", "k-c",
             "7-s", "8-s", "9-s", "10-s", "b-s", "r-s", "d-s", "k-s",
@@ -65,6 +70,12 @@ class CegoCard:
     def __str__(self):
         return self.rank + '-' + self.suit
 
+    def __gt__(self, other):
+        if self.suit == other.suit:
+            return self.rank > other.rank
+        else:
+            return self.suit > other.suit
+
     def get_value(self):
         if self.rank in CegoCard.info["color_card_values"]:
             return CegoCard.info["color_card_values"][self.rank]
@@ -73,6 +84,16 @@ class CegoCard:
             return CegoCard.info["trump_card_values"][self.rank]
 
         return 0.5
+
+    @staticmethod
+    def split_ranks():
+        black_cards_ranks = CegoCard.info["ranks"][6:10] + \
+            CegoCard.info["ranks"][22:]
+        red_card_ranks = CegoCard.info["ranks"][0:4][::-1] + \
+            CegoCard.info["ranks"][22:]
+        trump_card_ranks = CegoCard.info["ranks"][:22]
+
+        return black_cards_ranks, red_card_ranks, trump_card_ranks
 
     @staticmethod
     def print_cards(cards):

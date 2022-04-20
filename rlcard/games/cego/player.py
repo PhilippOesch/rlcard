@@ -9,7 +9,7 @@ class CegoPlayer:
         self.player_id = player_id
         self.is_cego_player = is_cego_player
         self.hand = []
-        self.blinds = []
+        self.valued_cards = []  # the cards that the cego player has layed aside
         self.stack = []
         self.points = 0
 
