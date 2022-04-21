@@ -31,41 +31,24 @@ def cards2value(cards):
     return value
 
 
-def compare_trick_winner(card1, card2):
-    black_cards_ranks, red_card_ranks, trump_card_ranks = Card.split_ranks()
-
-    if card1.suit == card2.suit:
-        if card1.suit == "trump":
-            return trump_card_ranks.index(card1.rank) - trump_card_ranks.index(card2.rank)
-        elif card1.suit == "d" or card1.suit == "h":
-            return red_card_ranks.index(card1.rank) - red_card_ranks.index(card2.rank)
-        else:
-            return black_cards_ranks.index(card1.rank) - black_cards_ranks.index(card2.rank)
-    elif card2.suit == "trump":
-        return -1
-    else:
-        return 1
-
-
-def compare_card_rank(card1, card2):
-    black_cards_ranks, red_card_ranks, trump_card_ranks = Card.split_ranks()
-
-    if card1.suit == card2.suit:
-        if card1.suit == "trump":
-            return trump_card_ranks.index(card1.rank) - trump_card_ranks.index(card2.rank)
-        elif card1.suit == "d" or card1.suit == "h":
-            return red_card_ranks.index(card1.rank) - red_card_ranks.index(card2.rank)
-        else:
-            return black_cards_ranks.index(card1.rank) - black_cards_ranks.index(card2.rank)
-    else:
-        return Card.info["ranks"].index(card1.rank) - Card.info["ranks"].index(card2.rank)
-
-
-def sort_cards_by_rank_ascending(cards):
-    # TODO
-    pass
+""" this function is a helper function for selecting 
+    the cards from the blind deck for the cego player"""
 
 
 def get_cego_player_deck(hand_cards, blind_cards):
-    # TODO
-    pass
+    """ the selection process is rule based:
+
+        1. sort the blind and hand cards by rank descending
+        2. throw away worst ranked card from blind
+        3. take best 2 cards from hand
+        """
+
+    sorted_blinds = sorted(blind_cards, reverse=True)
+    sorted_hand = sorted(hand_cards, reverse=True)
+
+    new_hand = sorted_blinds[:-1] + sorted_hand[0:2]
+
+    throw_away = sorted_hand[1:]
+    throw_away.append(sorted_blinds[-1])
+
+    return new_hand, throw_away

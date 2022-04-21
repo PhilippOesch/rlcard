@@ -15,9 +15,19 @@ class CegoRound:
         self.game_round = 0
 
     def proceed_round(self, players, action):
-        # if action
-        # TODO: implement this function
-        pass
+
+        # get current player
+        player = players[self.current_player]
+
+        # get and remove card from player hand
+        remove_index = None
+        for index, card in enumerate(player.hand):
+            if card.str == action:
+                remove_index = index
+                break
+
+        card = player.hand.pop(remove_index)
+        # self.trick.append(card)
 
     def get_legal_actions(self, players, player_id):
         hand = players[player_id].hand  # get hand of current player

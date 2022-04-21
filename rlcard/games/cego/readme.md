@@ -29,6 +29,8 @@ File: ./jsondata/action_space.json
 
 ## Card
 
+This class contains the static attribute info, which contains information about the card suits, ranks and values of the cards, as well as a couple static helper methods for printing and comparing.
+
 ### Attributes
 
 * **suit**: the suit of the card

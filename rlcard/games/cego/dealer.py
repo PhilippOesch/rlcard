@@ -14,9 +14,11 @@ class CegoDealer:
         self.np_random.shuffle(self.deck)
 
     def deal_cards(self, player):
-        for _ in num_player_cards:
+        for _ in range(num_player_cards):
             player.hand.append(self.deck.pop())
 
-    def deal_blinds(self, player):
-        for _ in num_blind_cards:
-            player.blinds.append(self.deck.pop())
+    def deal_blinds(self):
+        blinds = []
+        for _ in range(num_blind_cards):
+            blinds.append(self.deck.pop())
+        return blinds

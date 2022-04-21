@@ -10,7 +10,7 @@ class CegoPlayer:
         self.is_cego_player = is_cego_player
         self.hand = []
         self.valued_cards = []  # the cards that the cego player has layed aside
-        self.stack = []
+        # self.stack = []
         self.points = 0
 
     def get_player_id(self):
