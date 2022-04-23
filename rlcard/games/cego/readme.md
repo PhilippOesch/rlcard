@@ -40,6 +40,12 @@ This class contains the static attribute info, which contains information about 
 
 This class represents a single round. The first player of the round is the winner of the previous round. Cego consists of 11 rounds.
 
+## Judger
+
+The judger class generates the payoffs for the players.
+
+If the player who receives the reward is the cego player only this player receives it. If the player who receives the reward is not the cego player, everybody but the cego player receives the reward.
+
 ## Testing
 
 **test.py** contains the test cases for the game.

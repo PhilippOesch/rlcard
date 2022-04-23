@@ -38,6 +38,7 @@ class LimitHoldemGame:
         self.round_counter = None
         self.history = None
         self.history_raises_nums = None
+        self.current_player = None
 
     def configure(self, game_config):
         """Specify some game specific parameters, such as number of players"""
@@ -59,14 +60,16 @@ class LimitHoldemGame:
         self.dealer = Dealer(self.np_random)
 
         # Initialize two players to play the game
-        self.players = [Player(i, self.np_random) for i in range(self.num_players)]
+        self.players = [Player(i, self.np_random)
+                        for i in range(self.num_players)]
 
         # Initialize a judger class which will decide who wins in the end
         self.judger = Judger(self.np_random)
 
         # Deal cards to each  player to prepare for the first round
         for i in range(2 * self.num_players):
-            self.players[i % self.num_players].hand.append(self.dealer.deal_card())
+            self.players[i % self.num_players].hand.append(
+                self.dealer.deal_card())
 
         # Initialize public cards
         self.public_cards = []
@@ -87,10 +90,8 @@ class LimitHoldemGame:
                            num_players=self.num_players,
                            np_random=self.np_random)
 
-        self.round.start_new_round(game_pointer=self.game_pointer, raised=[p.in_chips for p in self.players])
-
-        # Count the round. There are 4 rounds in each game.
-        self.round_counter = 0
+        self.round.start_new_round(game_pointer=self.game_pointer, raised=[
+                                   p.in_chips for p in self.players])
 
         # Save the history for stepping back to the last state.
         self.history = []
@@ -208,7 +209,8 @@ class LimitHoldemGame:
         """
         chips = [self.players[i].in_chips for i in range(self.num_players)]
         legal_actions = self.get_legal_actions()
-        state = self.players[player].get_state(self.public_cards, chips, legal_actions)
+        state = self.players[player].get_state(
+            self.public_cards, chips, legal_actions)
         state['raise_nums'] = self.history_raise_nums
 
         return state
@@ -220,7 +222,8 @@ class LimitHoldemGame:
         Returns:
             (boolean): True if the game is over
         """
-        alive_players = [1 if p.status in (PlayerStatus.ALIVE, PlayerStatus.ALLIN) else 0 for p in self.players]
+        alive_players = [1 if p.status in (
+            PlayerStatus.ALIVE, PlayerStatus.ALLIN) else 0 for p in self.players]
         # If only one player is alive, the game is over.
         if sum(alive_players) == 1:
             return True
@@ -237,7 +240,8 @@ class LimitHoldemGame:
         Returns:
             (list): Each entry corresponds to the payoff of one player
         """
-        hands = [p.hand + self.public_cards if p.status == PlayerStatus.ALIVE else None for p in self.players]
+        hands = [p.hand + self.public_cards if p.status ==
+                 PlayerStatus.ALIVE else None for p in self.players]
         chips_payoffs = self.judger.judge_game(self.players, hands)
         payoffs = np.array(chips_payoffs) / self.big_blind
         return payoffs

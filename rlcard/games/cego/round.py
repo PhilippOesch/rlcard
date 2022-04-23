@@ -1,27 +1,27 @@
-from card import CegoCard as Card
-from utils import cards2list
+from rlcard.games.cego.card import CegoCard as Card
+from rlcard.games.cego.utils import cards2list
 
 
 """ A Round in Cego equals one trick """
 
 
 class CegoRound:
-    def __init__(self, dealer, np_random, starting_player=0):
+    def __init__(self, np_random):
         self.np_random = np_random
-        self.dealer = dealer
-        self.starting_player = starting_player
-        self.current_player = self.starting_player
-        self.num_players = 4  # there are always 4 players in cego
+        self.num_players = 4  # there are always 4 players in cego# index of current winning player
+
+    def start_new_round(self, starting_player_idx) -> None:
+        self.current_player_idx = starting_player_idx
         self.trick = []
         self.target = None
         self.is_over = False
-        self.winner_idx = None  # index of current winning player
+        self.winner_idx = None
 
-    def proceed_round(self, players, action):
+    def proceed_round(self, players, action) -> None:
         """ keep the round running """
 
         # get current player
-        player = players[self.current_player]
+        player = players[self.current_player_idx]
 
         # get and remove card from player hand
         remove_index = None
@@ -35,12 +35,12 @@ class CegoRound:
         # if no card has been player, the first card is the target
         if len(self.trick) == 0:
             self.target = card
-            self.winner_idx = self.current_player
+            self.winner_idx = self.current_player_idx
         else:
             current_winner = Card.compare_trick_winner(self.target, card)
             if current_winner < 0:
                 self.target = card
-                self.winner_idx = self.current_player
+                self.winner_idx = self.current_player_idx
 
         self.trick.append(card)
 
@@ -48,11 +48,12 @@ class CegoRound:
         if len(self.trick) == self.num_players:
             self.is_over = True
 
-        self.current_player = (self.current_player + 1) % self.num_players
+        self.current_player_idx = (
+            self.current_player_idx + 1) % self.num_players
 
     # get legal actions for current player
-    def get_legal_actions(self, players, player_id):
-        hand = players[player_id].hand  # get hand of current player
+    def get_legal_actions(self, player) -> list:
+        hand = player.hand  # get hand of current player
         legal_actions = []
 
         # if no card has been player, all cards are legal
@@ -78,14 +79,14 @@ class CegoRound:
         if len(legal_actions) == 0:
             return legal_actions
 
-        # else, all cards are legal
+        # else, all other cards are legal
         return cards2list(hand)
 
-    def get_state(self, players, player_id):
+    def get_state(self, player) -> dict:
         state = {}
-        player = players[player_id]
         state['hand'] = cards2list(player.hand)
-        state['current_trick'] = cards2list(self.trick)
-        state['played_tricks'] = self.played_tricks
-        state['legal_actions'] = self.get_legal_actions(players, player_id)
+        state['trick'] = cards2list(self.trick)
+        state['valued_cards'] = cards2list(
+            player.valued_cards) if player.is_cego_player else []
+        state['legal_actions'] = self.get_legal_actions(player)
         return state

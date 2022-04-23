@@ -1,4 +1,4 @@
-from utils import init_deck
+from rlcard.games.cego.utils import init_deck
 
 
 class CegoDealer:
@@ -10,14 +10,14 @@ class CegoDealer:
         self.deck = init_deck()
         self.shuffle()
 
-    def shuffle(self):
+    def shuffle(self) -> None:
         self.np_random.shuffle(self.deck)
 
-    def deal_cards(self, player):
+    def deal_cards(self, player) -> None:
         for _ in range(CegoDealer.num_player_cards):
             player.hand.append(self.deck.pop())
 
-    def deal_blinds(self):
+    def deal_blinds(self) -> list:
         blinds = []
         for _ in range(CegoDealer.num_blind_cards):
             blinds.append(self.deck.pop())

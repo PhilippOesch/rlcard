@@ -1,11 +1,11 @@
-from utils import cards2value
+from rlcard.games.cego.utils import cards2value
 
 
 class CegoJudger:
     def __init__(self, np_random):
         self.np_random = np_random
 
-    def receive_payoffs(self, payoffs, players, player_id, cards):
+    def receive_payoffs(self, payoffs, players, player_id, cards) -> list:
         points = cards2value(cards)
 
         payoffs = payoffs[:]

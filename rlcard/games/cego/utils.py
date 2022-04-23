@@ -1,6 +1,6 @@
-from card import CegoCard as Card
-
 import json
+
+from rlcard.games.cego.card import CegoCard as Card
 
 jsondata_path = 'rlcard/games/cego/jsondata/action_space.json'
 

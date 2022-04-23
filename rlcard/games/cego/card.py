@@ -1,5 +1,4 @@
 from termcolor import colored
-# from utils import compare_card_rank
 
 
 def map_suit_to_color(suit):

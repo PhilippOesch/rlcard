@@ -1,7 +1,7 @@
 import unittest
 
-from game import CegoGame as Game
-from utils import cards2value
+from rlcard.games.cego import Game
+from rlcard.games.cego.utils import cards2value
 
 
 def check_if_all_cards_are_unique(players: list):

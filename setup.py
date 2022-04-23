@@ -7,6 +7,7 @@ extras = {
     'torch': ['torch', 'GitPython', 'gitdb2', 'matplotlib'],
 }
 
+
 def _get_version():
     with open('rlcard/__init__.py') as f:
         for line in f:
@@ -15,6 +16,7 @@ def _get_version():
                 exec(line, g)
                 return g['__version__']
         raise ValueError('`__version__` not defined')
+
 
 VERSION = _get_version()
 
@@ -36,6 +38,7 @@ setuptools.setup(
                    'games/leducholdem/card2index.json',
                    'games/doudizhu/jsondata.zip',
                    'games/uno/jsondata/*',
+                   'games/cego/jsondata/*',
                    ]},
     install_requires=[
         'numpy>=1.16.3',
