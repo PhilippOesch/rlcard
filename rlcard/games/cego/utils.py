@@ -1,8 +1,21 @@
+import numpy as np
 import json
+import os
+from collections import OrderedDict
+
+import rlcard
 
 from rlcard.games.cego.card import CegoCard as Card
 
 jsondata_path = 'rlcard/games/cego/jsondata/action_space.json'
+
+# Read required docs
+ROOT_PATH = rlcard.__path__[0]
+
+with open(os.path.join(ROOT_PATH, 'games/cego/jsondata/action_space.json'), 'r') as file:
+    ACTION_TO_IDX_DICT = json.load(file)
+    ACTION_SPACE = json.load(file, object_pairs_hook=OrderedDict)
+    ACTION_LIST = list(ACTION_SPACE.keys())
 
 
 def init_deck():
@@ -29,6 +42,15 @@ def cards2value(cards):
         value += card.get_value()
 
     return value
+
+
+def get_tricks_played(tricks):
+    card_idxs = []
+    for trick in tricks:
+        for card in trick:
+            card_idxs.append(ACTION_TO_IDX_DICT[card])
+
+    return card_idxs
 
 
 """ this function is a helper function for selecting 

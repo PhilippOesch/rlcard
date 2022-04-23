@@ -77,6 +77,7 @@ class CegoGame:
         state = self.get_state(self.current_player)
 
         self.history = []
+        self.trick_history = []
 
         return state, self.round.current_player_idx
 
@@ -86,6 +87,8 @@ class CegoGame:
         state = self.round.get_state(self.players[player_id])
         state['num_players'] = self.get_num_players()
         state['current_player'] = self.round.current_player_idx
+        state['current_trick_round'] = self.round_counter
+        state['played_tricks'] = self.round.trick_history
         return state
 
     def step(self, action) -> tuple[dict, Any]:

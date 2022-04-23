@@ -1,5 +1,5 @@
 from game import CegoGame as Game
-from utils import cards2list
+from utils import cards2list, ACTION_SPACE, ACTION_LIST
 
 
 if __name__ == "__main__":
@@ -14,3 +14,6 @@ if __name__ == "__main__":
           cards2list(game.players[0].valued_cards))
 
     print("Payoffs:", game.payoffs)
+
+    print("Action Space:", ACTION_SPACE)
+    print("Action List:", ACTION_LIST)

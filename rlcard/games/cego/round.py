@@ -12,7 +12,9 @@ class CegoRound:
 
     def start_new_round(self, starting_player_idx) -> None:
         self.current_player_idx = starting_player_idx
+        self.starting_player_idx = starting_player_idx
         self.trick = []
+        self.winner_card = None
         self.target = None
         self.is_over = False
         self.winner_idx = None
@@ -34,12 +36,12 @@ class CegoRound:
 
         # if no card has been player, the first card is the target
         if len(self.trick) == 0:
-            self.target = card
+            self.winner_card = card
             self.winner_idx = self.current_player_idx
         else:
-            current_winner = Card.compare_trick_winner(self.target, card)
+            current_winner = Card.compare_trick_winner(self.winner_card, card)
             if current_winner < 0:
-                self.target = card
+                self.winner_card = card
                 self.winner_idx = self.current_player_idx
 
         self.trick.append(card)
@@ -61,11 +63,11 @@ class CegoRound:
             legal_actions = cards2list(hand)
             return legal_actions
 
-        target = self.trick[0]  # get the first card in trick
+        self.target = self.trick[0]  # get the first card in trick
 
         # if the cards fit the suit, they must be played
         for card in hand:
-            if card.suit == target.suit:
+            if card.suit == self.target.suit:
                 legal_actions.append(card.str)
 
         if len(legal_actions) == 0:
@@ -86,7 +88,13 @@ class CegoRound:
         state = {}
         state['hand'] = cards2list(player.hand)
         state['trick'] = cards2list(self.trick)
+        state['target'] = str(self.target) if str(
+            self.target) is not None else None
+        state['winner_card'] = str(self.winner_card) if str(
+            self.winner_card) is not None else None
+        state['winner'] = self.winner_idx
         state['valued_cards'] = cards2list(
             player.valued_cards) if player.is_cego_player else []
         state['legal_actions'] = self.get_legal_actions(player)
+        state['start_player'] = self.starting_player_idx
         return state
