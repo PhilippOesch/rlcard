@@ -1,20 +1,24 @@
+from card import CegoCard as Card
 from utils import cards2list
 
 
+""" A Round in Cego equals one trick """
+
+
 class CegoRound:
-    def __init__(self, dealer, np_random):
+    def __init__(self, dealer, np_random, starting_player=0):
         self.np_random = np_random
         self.dealer = dealer
-        self.current_player = 0
+        self.starting_player = starting_player
+        self.current_player = self.starting_player
         self.num_players = 4  # there are always 4 players in cego
         self.trick = []
-        self.played_tricks = [],
+        self.target = None
         self.is_over = False
-        self.winner = None
-        self.trick_round = 0
-        self.game_round = 0
+        self.winner_idx = None  # index of current winning player
 
     def proceed_round(self, players, action):
+        """ keep the round running """
 
         # get current player
         player = players[self.current_player]
@@ -27,8 +31,26 @@ class CegoRound:
                 break
 
         card = player.hand.pop(remove_index)
-        # self.trick.append(card)
 
+        # if no card has been player, the first card is the target
+        if len(self.trick) == 0:
+            self.target = card
+            self.winner_idx = self.current_player
+        else:
+            current_winner = Card.compare_trick_winner(self.target, card)
+            if current_winner < 0:
+                self.target = card
+                self.winner_idx = self.current_player
+
+        self.trick.append(card)
+
+        # if the trick is full, this round is over
+        if len(self.trick) == self.num_players:
+            self.is_over = True
+
+        self.current_player = (self.current_player + 1) % self.num_players
+
+    # get legal actions for current player
     def get_legal_actions(self, players, player_id):
         hand = players[player_id].hand  # get hand of current player
         legal_actions = []

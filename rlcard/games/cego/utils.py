@@ -26,7 +26,7 @@ def cards2list(cards):
 def cards2value(cards):
     value = 0
     for card in cards:
-        values += card.get_value()
+        value += card.get_value()
 
     return value
 
@@ -35,7 +35,25 @@ def cards2value(cards):
     the cards from the blind deck for the cego player"""
 
 
-def get_cego_player_deck(hand_cards, blind_cards):
+# def get_cego_player_deck(hand_cards, blind_cards):
+#     """ the selection process is rule based:
+
+#         1. sort the blind and hand cards by rank descending
+#         2. throw away worst ranked card from blind
+#         3. take best 2 cards from hand
+#         """
+
+#     sorted_blinds = sorted(blind_cards, reverse=True)
+#     sorted_hand = sorted(hand_cards, reverse=True)
+
+#     new_hand = sorted_blinds[:-1] + sorted_hand[0:2]
+
+#     throw_away = sorted_hand[1:]
+#     throw_away.append(sorted_blinds[-1])
+
+#     return new_hand, throw_away
+
+def set_cego_player_deck(player, blind_cards):
     """ the selection process is rule based:
 
         1. sort the blind and hand cards by rank descending
@@ -43,12 +61,20 @@ def get_cego_player_deck(hand_cards, blind_cards):
         3. take best 2 cards from hand
         """
 
+    #  get hand cards
+    hand_cards = player.hand
+
+    # sort cards
     sorted_blinds = sorted(blind_cards, reverse=True)
     sorted_hand = sorted(hand_cards, reverse=True)
 
+    # generate new hand
     new_hand = sorted_blinds[:-1] + sorted_hand[0:2]
 
-    throw_away = sorted_hand[1:]
+    # generate throw aways
+    throw_away = sorted_hand[2:]
     throw_away.append(sorted_blinds[-1])
 
-    return new_hand, throw_away
+    # set player cards
+    player.hand = new_hand
+    player.valued_cards = throw_away

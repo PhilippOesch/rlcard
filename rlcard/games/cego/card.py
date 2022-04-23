@@ -130,16 +130,6 @@ class CegoCard:
             idx_card2 = CegoCard.info["black_cards_ranks"].index(card2.rank)
 
         return idx_card1 - idx_card2
-        # if card1.suit == card2.suit:
-        #     return CegoCard.compare_same_suit_cards(
-        #         card1,
-        #         card2,
-        #         CegoCard.info["black_cards_ranks"],
-        #         CegoCard.info["red_card_ranks"],
-        #         CegoCard.info["trump_card_ranks"]
-        #     )
-        # else:
-        #     return CegoCard.info["suits"].index(card1.suit) - CegoCard.info["suits"].index(card2.suit)
 
     @staticmethod
     def compare_same_suit_cards(card1, card2, black_cards_ranks, red_card_ranks, trump_card_ranks):
@@ -153,13 +143,19 @@ class CegoCard:
     @staticmethod
     def compare_trick_winner(target, compare_to_card):
         if target.suit == compare_to_card.suit:
-            return CegoCard.compare_same_suit_cards(
-                target,
-                compare_to_card,
-                CegoCard.info["black_cards_ranks"],
-                CegoCard.info["red_card_ranks"],
-                CegoCard.info["trump_card_ranks"]
-            )
+            # return CegoCard.compare_same_suit_cards(
+            #     target,
+            #     compare_to_card,
+            #     CegoCard.info["black_cards_ranks"],
+            #     CegoCard.info["red_card_ranks"],
+            #     CegoCard.info["trump_card_ranks"]
+            # )
+            if target.suit == "trump":
+                return CegoCard.info["trump_card_ranks"].index(target.rank) - CegoCard.info["trump_card_ranks"].index(compare_to_card.rank)
+            elif target.suit == "d" or target.suit == "h":
+                return CegoCard.info["red_card_ranks"].index(target.rank) - CegoCard.info["red_card_ranks"].index(compare_to_card.rank)
+            else:
+                return CegoCard.info["black_cards_ranks"].index(target.rank) - CegoCard.info["black_cards_ranks"].index(compare_to_card.rank)
         elif compare_to_card.suit == "trump":
             return -1
         else:

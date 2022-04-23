@@ -35,3 +35,12 @@ This class contains the static attribute info, which contains information about 
 
 * **suit**: the suit of the card
 * **rank**: the rank of the card
+
+## Round 
+
+This class represents a single round. The first player of the round is the winner of the previous round. Cego consists of 11 rounds.
+
+## Testing
+
+**test.py** contains the test cases for the game.
+
