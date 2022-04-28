@@ -7,13 +7,13 @@ import rlcard
 
 from rlcard.games.cego.card import CegoCard as Card
 
-jsondata_path = 'rlcard/games/cego/jsondata/action_space.json'
+# jsondata_path = 'rlcard/games/cego/jsondata/action_space.json'
 
 # Read required docs
 ROOT_PATH = rlcard.__path__[0]
 
 with open(os.path.join(ROOT_PATH, 'games/cego/jsondata/action_space.json'), 'r') as file:
-    ACTION_TO_IDX_DICT = json.load(file)
+    # ACTION_TO_IDX_DICT = json.load(file)
     ACTION_SPACE = json.load(file, object_pairs_hook=OrderedDict)
     ACTION_LIST = list(ACTION_SPACE.keys())
 
@@ -48,7 +48,7 @@ def get_tricks_played(tricks):
     card_idxs = []
     for trick in tricks:
         for card in trick:
-            card_idxs.append(ACTION_TO_IDX_DICT[card])
+            card_idxs.append(ACTION_SPACE[str(card)])
 
     return card_idxs
 
@@ -56,24 +56,6 @@ def get_tricks_played(tricks):
 """ this function is a helper function for selecting 
     the cards from the blind deck for the cego player"""
 
-
-# def get_cego_player_deck(hand_cards, blind_cards):
-#     """ the selection process is rule based:
-
-#         1. sort the blind and hand cards by rank descending
-#         2. throw away worst ranked card from blind
-#         3. take best 2 cards from hand
-#         """
-
-#     sorted_blinds = sorted(blind_cards, reverse=True)
-#     sorted_hand = sorted(hand_cards, reverse=True)
-
-#     new_hand = sorted_blinds[:-1] + sorted_hand[0:2]
-
-#     throw_away = sorted_hand[1:]
-#     throw_away.append(sorted_blinds[-1])
-
-#     return new_hand, throw_away
 
 def set_cego_player_deck(player, blind_cards):
     """ the selection process is rule based:
@@ -100,3 +82,9 @@ def set_cego_player_deck(player, blind_cards):
     # set player cards
     player.hand = new_hand
     player.valued_cards = throw_away
+
+
+def set_observation(obs, plane, indexes):
+    # print("indexes:", indexes)
+    for index in indexes:
+        obs[plane][index] = 1

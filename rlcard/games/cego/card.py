@@ -177,11 +177,11 @@ class CegoCard:
         for i, card in enumerate(cards):
             rank, suit = card.split('-')
 
-        print(colored(rank+"-" + map_suit_to_symbol(suit),
-              map_suit_to_color(suit)), end="")
+            print(colored(rank+"-" + map_suit_to_symbol(suit),
+                          map_suit_to_color(suit)), end="")
 
-        if i < len(cards) - 1:
-            print(', ', end='')
+            if i < len(cards) - 1:
+                print(', ', end='')
 
     @staticmethod
     def setup_sorted_suit_ranks():

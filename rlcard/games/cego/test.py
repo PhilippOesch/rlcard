@@ -43,7 +43,7 @@ class TestStartPayoffs(unittest.TestCase):
             cards2value(game.players[0].valued_cards), 0, 0, 0
         ]
 
-        self.assertEqual(game.payoffs, expected_payoffs)
+        self.assertEqual(game.points, expected_payoffs)
 
 
 if __name__ == '__main__':

@@ -22,13 +22,22 @@ class CegoRound:
     def proceed_round(self, players, action) -> None:
         """ keep the round running """
 
+        # print("cards in trick", len(self.trick))
+
+        """ Logs for Testing """
+        # print("current player: ", self.current_player_idx)
+        # print("Player Cards: ", cards2list(
+        #     players[self.current_player_idx].hand))
+        # print("Target Card: ", str(self.target))
+        # print("Played Card: ", action)
+
         # get current player
         player = players[self.current_player_idx]
 
         # get and remove card from player hand
         remove_index = None
         for index, card in enumerate(player.hand):
-            if card.str == action:
+            if str(card) == action:
                 remove_index = index
                 break
 
@@ -68,17 +77,17 @@ class CegoRound:
         # if the cards fit the suit, they must be played
         for card in hand:
             if card.suit == self.target.suit:
-                legal_actions.append(card.str)
+                legal_actions.append(str(card))
 
-        if len(legal_actions) == 0:
+        if len(legal_actions) > 0:
             return legal_actions
 
         # if no card of the same suit is on the hand, a trump card must be played
         for card in hand:
-            if card.type == 'trump':
-                legal_actions.append(card.str)
+            if card.suit == 'trump':
+                legal_actions.append(str(card))
 
-        if len(legal_actions) == 0:
+        if len(legal_actions) > 0:
             return legal_actions
 
         # else, all other cards are legal

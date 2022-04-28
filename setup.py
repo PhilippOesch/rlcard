@@ -38,7 +38,7 @@ setuptools.setup(
                    'games/leducholdem/card2index.json',
                    'games/doudizhu/jsondata.zip',
                    'games/uno/jsondata/*',
-                   'games/cego/jsondata/*',
+                   #    'games/cego/jsondata/*',
                    ]},
     install_requires=[
         'numpy>=1.16.3',

@@ -25,7 +25,8 @@ TRAIT_MAP = {'0': 0, '1': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7,
 
 WILD = ['r-wild', 'g-wild', 'b-wild', 'y-wild']
 
-WILD_DRAW_4 = ['r-wild_draw_4', 'g-wild_draw_4', 'b-wild_draw_4', 'y-wild_draw_4']
+WILD_DRAW_4 = ['r-wild_draw_4', 'g-wild_draw_4',
+               'b-wild_draw_4', 'y-wild_draw_4']
 
 
 def init_deck():
@@ -66,6 +67,7 @@ def cards2list(cards):
         cards_list.append(card.get_str())
     return cards_list
 
+
 def hand2dict(hand):
     ''' Get the corresponding dict representation of hand
 
@@ -82,6 +84,7 @@ def hand2dict(hand):
         else:
             hand_dict[card] += 1
     return hand_dict
+
 
 def encode_hand(plane, hand):
     ''' Encode hand and represerve it into plane
@@ -109,6 +112,7 @@ def encode_hand(plane, hand):
             plane[0][color][trait] = 0
             plane[count][color][trait] = 1
     return plane
+
 
 def encode_target(plane, target):
     ''' Encode target and represerve it into plane

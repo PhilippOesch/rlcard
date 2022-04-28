@@ -2,7 +2,7 @@ from copy import deepcopy
 import numpy as np
 from typing import Any
 
-from rlcard.games.cego.utils import set_cego_player_deck
+from rlcard.games.cego.utils import set_cego_player_deck, cards2list
 from rlcard.games.cego import Dealer
 from rlcard.games.cego import Player
 from rlcard.games.cego import Judger
@@ -20,7 +20,7 @@ class CegoGame:
         self.allow_step_back = allow_step_back
         self.np_random = np.random.RandomState()
         self.num_players = 4  # there are always 4 players in this game
-        self.payoffs = [0 for _ in range(self.num_players)]
+        self.points = [0 for _ in range(self.num_players)]
 
         self.dealer = None
         self.players = None
@@ -30,12 +30,14 @@ class CegoGame:
         self.history = None
         self.trick_history = None
         self.blind_cards = None
+        self.last_round_winner_idx = None
 
     def configure(self, game_config):
         """Specify some game specific parameters, such as number of players"""
         self.num_players = game_config['game_num_players']
 
     def init_game(self) -> tuple[dict, Any]:
+        self.points = [0 for _ in range(self.num_players)]
         # Initialize a dealer that can deal cards
         self.dealer = Dealer(self.np_random)
 
@@ -58,8 +60,8 @@ class CegoGame:
         set_cego_player_deck(self.players[0], self.blind_cards)
 
         # Cego player gets the points from the throw away cards
-        self.payoffs = self.judger.receive_payoffs(
-            self.payoffs,
+        self.points = self.judger.receive_points(
+            self.points,
             self.players,
             0,
             self.players[0].valued_cards
@@ -88,7 +90,8 @@ class CegoGame:
         state['num_players'] = self.get_num_players()
         state['current_player'] = self.round.current_player_idx
         state['current_trick_round'] = self.round_counter
-        state['played_tricks'] = self.round.trick_history
+        state['played_tricks'] = self.trick_history
+        state['last_round_winner'] = self.last_round_winner_idx
         return state
 
     def step(self, action) -> tuple[dict, Any]:
@@ -100,9 +103,10 @@ class CegoGame:
             the_dealer = deepcopy(self.dealer)
             the_round_counter = deepcopy(self.round_counter)
             the_trick_history = deepcopy(self.trick_history)
-            the_playoffs = deepcopy(self.payoffs)
+            the_playoffs = deepcopy(self.points)
+            the_last_round_winner = deepcopy(self.last_round_winner_idx)
             self.history.append(
-                (the_round, the_players, the_dealer, the_round_counter, the_trick_history, the_playoffs))
+                (the_round, the_players, the_dealer, the_round_counter, the_trick_history, the_playoffs, the_last_round_winner))
 
         # playing of a single step
         self.round.proceed_round(self.players, action)
@@ -116,15 +120,15 @@ class CegoGame:
 
             """
         if self.round.is_over:
-            self.trick_history.append(self.round.trick.copy())
-            round_winner_idx = self.round.winner_idx
-            self.playoffs = self.receive_payoffs(
-                self.payoffs,
+            self.trick_history.append(cards2list(self.round.trick.copy()))
+            self.last_round_winner_idx = self.round.winner_idx
+            self.points = self.judger.receive_points(
+                self.points,
                 self.players,
-                round_winner_idx,
+                self.last_round_winner_idx,
                 self.round.trick.copy()
             )
-            self.round.start_new_round(round_winner_idx)
+            self.round.start_new_round(self.last_round_winner_idx)
             self.round_counter += 1
 
         player_id = self.round.current_player_idx
@@ -135,7 +139,7 @@ class CegoGame:
     def step_back(self) -> bool:
         if len(self.history) > 0:
             self.round, self.players, self.dealer, \
-                self.round_counter, self.trick_history, self.payoffs = self.history.pop()
+                self.round_counter, self.trick_history, self.points, self.last_round_winner_idx = self.history.pop()
             return True
         return False
 
@@ -147,13 +151,15 @@ class CegoGame:
         return CegoGame.num_actions
 
     def get_player_id(self) -> int:
-        return self.round.current_player
+        return self.round.current_player_idx
 
     def is_over(self) -> bool:
         return self.round_counter >= CegoGame.num_rounds
 
     def get_payoffs(self) -> list:
-        return self.payoffs
+        # payoffs = self.judger.judge_game(self.points)
+        # return payoffs
+        return self.points
 
     def get_legal_actions(self) -> list:
-        return self.round.get_legal_actions(self.round.current_player)
+        return self.round.get_legal_actions(self.players[self.round.current_player_idx])
