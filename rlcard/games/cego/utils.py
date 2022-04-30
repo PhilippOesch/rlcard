@@ -7,18 +7,17 @@ import rlcard
 
 from rlcard.games.cego.card import CegoCard as Card
 
-# jsondata_path = 'rlcard/games/cego/jsondata/action_space.json'
-
 # Read required docs
 ROOT_PATH = rlcard.__path__[0]
 
 with open(os.path.join(ROOT_PATH, 'games/cego/jsondata/action_space.json'), 'r') as file:
-    # ACTION_TO_IDX_DICT = json.load(file)
     ACTION_SPACE = json.load(file, object_pairs_hook=OrderedDict)
     ACTION_LIST = list(ACTION_SPACE.keys())
 
 
-def init_deck():
+def init_deck() -> list:
+    ''' initialize the cego deck'''
+
     deck = []
     card_info = Card.info
 
@@ -29,14 +28,20 @@ def init_deck():
     return deck
 
 
-def cards2list(cards):
+def cards2list(cards) -> list:
+    ''' convert cards to list of str'''
+
     cards_list = []
+
     for card in cards:
         cards_list.append(str(card))
+
     return cards_list
 
 
-def cards2value(cards):
+def cards2value(cards) -> float:
+    ''' get the value of a list of cards'''
+
     value = 0
     for card in cards:
         value += card.get_value()
@@ -44,7 +49,9 @@ def cards2value(cards):
     return value
 
 
-def get_tricks_played(tricks):
+def get_tricks_played(tricks) -> list:
+    ''' get all the cards out of the tricks list'''
+
     card_idxs = []
     for trick in tricks:
         for card in trick:
@@ -53,17 +60,17 @@ def get_tricks_played(tricks):
     return card_idxs
 
 
-""" this function is a helper function for selecting 
-    the cards from the blind deck for the cego player"""
+def set_cego_player_deck(player, blind_cards) -> None:
+    """ 
+    this function is a helper function for selecting 
+    the cards from the blind deck for the cego player
 
-
-def set_cego_player_deck(player, blind_cards):
-    """ the selection process is rule based:
+    the selection process is rule based:
 
         1. sort the blind and hand cards by rank descending
         2. throw away worst ranked card from blind
         3. take best 2 cards from hand
-        """
+    """
 
     #  get hand cards
     hand_cards = player.hand
@@ -85,6 +92,12 @@ def set_cego_player_deck(player, blind_cards):
 
 
 def set_observation(obs, plane, indexes):
-    # print("indexes:", indexes)
+    ''' set observation of a specific plane 
+
+    Parameters:
+        - obs (dict): the observation
+        - plane (int): the plane to be set
+        - indexes (list): the indexes to be set
+    '''
     for index in indexes:
         obs[plane][index] = 1

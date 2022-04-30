@@ -4,7 +4,13 @@ from rlcard.games.cego import Game
 from rlcard.games.cego.utils import cards2value
 
 
-def check_if_all_cards_are_unique(players: list):
+def check_if_all_cards_are_unique(players: list) -> bool:
+    ''' Check if all players have unique cards
+
+    Parameters:
+        - players (list): list of players
+    '''
+
     all_cards_set = set()
     count = 0
 

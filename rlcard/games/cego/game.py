@@ -8,36 +8,57 @@ from rlcard.games.cego import Player
 from rlcard.games.cego import Judger
 from rlcard.games.cego import Round
 
-num_cards_per_player = 11
-num_blind_cards = 10
-
 
 class CegoGame:
-    num_rounds = 11
-    num_actions = 54  # one action for each card
+    ''' The class for a cego game
+
+    class attributes:
+        - num_rounds: the number of rounds in a game
+        - num_actions: the number of actions a player can play
+
+    instance attributes:
+        - allow_step_back (bool): whether to allow step back
+        - np_random (np.random.RandomState): numpy random state
+        - num_players (int): the number of players
+        - points (list[int]): the points of each player
+        - dealer (Dealer): the dealer
+        - players (list[Player]): the players
+        - judger (Judger): the judger
+        - round (Round): the current round
+        - round_counter (int): the current round counter
+        - history (list): the history of the game
+        - trick_history (list): the history of the tricks
+        - blind_cards (list): the blind cards
+        - last_round_winner_idx (int): the last round winner
+    '''
+
+    num_rounds: int = 11
+    num_actions: int = 54
 
     def __init__(self, allow_step_back=False):
-        self.allow_step_back = allow_step_back
-        self.np_random = np.random.RandomState()
-        self.num_players = 4  # there are always 4 players in this game
-        self.points = [0 for _ in range(self.num_players)]
+        self.allow_step_back: bool = allow_step_back
+        self.np_random: np.random.RandomState = np.random.RandomState()
+        self.num_players: int = 4  # there are always 4 players in this game
+        self.points: list[int] = [0 for _ in range(self.num_players)]
 
-        self.dealer = None
-        self.players = None
-        self.judger = None
-        self.round = None
-        self.round_counter = None
-        self.history = None
-        self.trick_history = None
-        self.blind_cards = None
-        self.last_round_winner_idx = None
+        self.dealer: Dealer = None
+        self.players: list = None
+        self.judger: Judger = None
+        self.round: Round = None
+        self.round_counter: int = None
+        self.history: list = None
+        self.trick_history: list = None
+        self.blind_cards: list = None
+        self.last_round_winner_idx: int = None
 
-    def configure(self, game_config):
-        """Specify some game specific parameters, such as number of players"""
+    def configure(self, game_config) -> None:
+        ''' Specify some game specific parameters, such as number of players '''
+
         self.num_players = game_config['game_num_players']
 
     def init_game(self) -> tuple[dict, Any]:
         self.points = [0 for _ in range(self.num_players)]
+
         # Initialize a dealer that can deal cards
         self.dealer = Dealer(self.np_random)
 
@@ -84,7 +105,12 @@ class CegoGame:
         return state, self.round.current_player_idx
 
     def get_state(self, player_id) -> dict:
-        """ get state """
+        ''' get current state of the game 
+
+        Parameters:
+            - player_id: the id of the player
+
+        '''
 
         state = self.round.get_state(self.players[player_id])
         state['num_players'] = self.get_num_players()
@@ -95,6 +121,11 @@ class CegoGame:
         return state
 
     def step(self, action) -> tuple[dict, Any]:
+        ''' Play a single step in the game
+
+        Parameters:
+            - action: the action taken by the current player
+        '''
 
         if self.allow_step_back:
             # save current state for potential step back
@@ -111,14 +142,15 @@ class CegoGame:
         # playing of a single step
         self.round.proceed_round(self.players, action)
 
-        """ if the round is over:
+        '''
+        if the round is over:
             1. save the trick in history
             3. get the winner
             2. update the payoffs
             4. start a new round
             5. count up the round
+        '''
 
-            """
         if self.round.is_over:
             self.trick_history.append(cards2list(self.round.trick.copy()))
             self.last_round_winner_idx = self.round.winner_idx
@@ -157,8 +189,6 @@ class CegoGame:
         return self.round_counter >= CegoGame.num_rounds
 
     def get_payoffs(self) -> list:
-        # payoffs = self.judger.judge_game(self.points)
-        # return payoffs
         return self.points
 
     def get_legal_actions(self) -> list:

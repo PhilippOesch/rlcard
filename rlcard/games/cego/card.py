@@ -1,7 +1,13 @@
 from termcolor import colored
 
 
-def map_suit_to_color(suit):
+def map_suit_to_color(suit) -> str:
+    ''' Map the suit to a color
+
+    Parameters:
+        - suit: the suit of the card
+    '''
+
     switcher = {
         "c": "grey",
         "d": "red",
@@ -12,7 +18,13 @@ def map_suit_to_color(suit):
     return switcher.get(suit, "Invalid suit")
 
 
-def map_suit_to_symbol(suit):
+def map_suit_to_symbol(suit) -> str:
+    ''' Map the suit to a symbol
+
+    Parameters:
+        - suit: the suit of the card
+    '''
+
     switcher = {
         "c": "♣",
         "d": "♦",
@@ -25,6 +37,23 @@ def map_suit_to_symbol(suit):
 
 
 class CegoCard:
+    ''' A class for a card in Cego game
+
+    Class Attributes:
+        - info (dict): The information of the card
+            - suits (list): possible suits for a card
+            - ranks (list): possible ranks for a card
+            - cards (list): A list of all the cards
+            - color_card_values (dict): The value mapping for color cards
+            - trump_card_values (dict): The value mapping for trump cards
+            - black_cards_ranks (list): The ranking of black cards
+            - red_cards_ranks (list): The ranking of red cards
+            - trump_cards_ranks (list): The ranking of trump cards
+
+    Instance Attributes:
+        - suit (str): The suit of the card
+        - rank (str): The rank of the card
+    '''
 
     info = {
         "suits": ["c", "d", "h", "s", "trump"],
@@ -62,39 +91,39 @@ class CegoCard:
     def __init__(self, suit, rank):
         ''' Initialize the class of CegoCard
 
-        Args:
-            suit (str): The suit of card
-            trait (str): The trait of card
+        Parameters:
+            - suit (str): The suit of card
+            - trait (str): The trait of card
         '''
         self.suit = suit
         self.rank = rank
 
-    """ Comparison function for sorting cards 
+    ''' Comparison function for sorting cards 
         Start
-    """
+    '''
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.rank + '-' + self.suit
 
-    def __lt__(self, other):
+    def __lt__(self, other) -> bool:
         return CegoCard.compare_card_rank(self, other) < 0
 
-    def __gt__(self, other):
+    def __gt__(self, other) -> bool:
         return CegoCard.compare_card_rank(self, other) > 0
 
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
         return CegoCard.compare_card_rank(self, other) == 0
 
-    def __le__(self, other):
+    def __le__(self, other) -> bool:
         return CegoCard.compare_card_rank(self, other) <= 0
 
-    def __ge__(self, other):
+    def __ge__(self, other) -> bool:
         return CegoCard.compare_card_rank(self, other) >= 0
 
-    def __ne__(self, other):
+    def __ne__(self, other) -> bool:
         return CegoCard.compare_card_rank(self, other) != 0
 
-    def get_value(self):
+    def get_value(self) -> float:
         if self.rank in CegoCard.info["color_card_values"]:
             return CegoCard.info["color_card_values"][self.rank]
 
@@ -103,12 +132,19 @@ class CegoCard:
 
         return 0.5
 
-    """ Comparison function for sorting cards 
+    ''' Comparison function for sorting cards 
         End
-    """
+    '''
 
     @staticmethod
-    def compare_card_rank(card1, card2):
+    def compare_card_rank(card1, card2) -> int:
+        ''' Compare the rank of two cards
+
+        Parameters:
+            - card1 (CegoCard): The first card
+            - card2 (CegoCard): The second card
+        '''
+
         if card1.suit == "trump" and card2.suit != "trump":
             return 1
         elif card1.suit != "trump" and card2.suit == "trump":
@@ -131,24 +167,15 @@ class CegoCard:
         return idx_card1 - idx_card2
 
     @staticmethod
-    def compare_same_suit_cards(card1, card2, black_cards_ranks, red_card_ranks, trump_card_ranks):
-        if card1.suit == "trump":
-            return trump_card_ranks.index(card1.rank) - trump_card_ranks.index(card2.rank)
-        elif card1.suit == "d" or card1.suit == "h":
-            return red_card_ranks.index(card1.rank) - red_card_ranks.index(card2.rank)
-        else:
-            return black_cards_ranks.index(card1.rank) - black_cards_ranks.index(card2.rank)
+    def compare_trick_winner(target, compare_to_card) -> int:
+        ''' Compare the winner of a trick
 
-    @staticmethod
-    def compare_trick_winner(target, compare_to_card):
+        Parameters:
+            - target (CegoCard): The current winner of the trick
+            - compare_to_card (CegoCard): The card to compare to
+        '''
+
         if target.suit == compare_to_card.suit:
-            # return CegoCard.compare_same_suit_cards(
-            #     target,
-            #     compare_to_card,
-            #     CegoCard.info["black_cards_ranks"],
-            #     CegoCard.info["red_card_ranks"],
-            #     CegoCard.info["trump_card_ranks"]
-            # )
             if target.suit == "trump":
                 return CegoCard.info["trump_card_ranks"].index(target.rank) - CegoCard.info["trump_card_ranks"].index(compare_to_card.rank)
             elif target.suit == "d" or target.suit == "h":
@@ -161,7 +188,7 @@ class CegoCard:
             return 1
 
     @staticmethod
-    def split_ranks():
+    def split_ranks() -> tuple[list, list, list]:
         black_cards_ranks = CegoCard.info["ranks"][6:10] + \
             CegoCard.info["ranks"][22:]
         red_card_ranks = CegoCard.info["ranks"][0:4][::-1] + \
@@ -171,7 +198,12 @@ class CegoCard:
         return black_cards_ranks, red_card_ranks, trump_card_ranks
 
     @staticmethod
-    def print_cards(cards):
+    def print_cards(cards) -> None:
+        ''' Print a cards list
+
+        Parameters:
+            - cards (list): The cards list
+        '''
         if isinstance(cards, str):
             cards = [cards]
         for i, card in enumerate(cards):
@@ -184,7 +216,7 @@ class CegoCard:
                 print(', ', end='')
 
     @staticmethod
-    def setup_sorted_suit_ranks():
+    def setup_sorted_suit_ranks() -> None:
         black_cards_ranks, red_card_ranks, trump_card_ranks = CegoCard.split_ranks()
 
         CegoCard.info["black_cards_ranks"] = black_cards_ranks

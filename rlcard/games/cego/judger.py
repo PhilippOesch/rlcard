@@ -2,6 +2,12 @@ from rlcard.games.cego.utils import cards2value
 
 
 class CegoJudger:
+    ''' The class to judge the winner of a round and the points of each player
+
+    instance attributes:
+        - np_random: numpy random state
+    '''
+
     def __init__(self, np_random):
         self.np_random = np_random
 
