@@ -47,7 +47,7 @@ The state the player can possibly observe is the following (not all information 
 | **played_tricks** | The tricks that have already been played: 2D-List | [['7-c', 'k-s', '1-trump', 'gstieß-trump'], [...], ...] |
 | **last_round_winner** | The winner of the last round: int | 3 |
 
-The Observation Shape has the Size of **7 x 54**. For the first 6 planes the Shape **54** represents the amount of different cards. The last plane is used to encode general information about the game. 
+The Observation Shape has the Size of **6 x 54**. For the first 6 planes the Shape **54** represents the cards (actions). The last plane is used to encode general information about the game. 
 
 The following table shows the encoding of the different planes:
 

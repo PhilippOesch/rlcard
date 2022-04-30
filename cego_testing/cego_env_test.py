@@ -22,9 +22,9 @@ env.set_agents([
     random3,
 ])
 
-print(env.num_actions)  # 61
-print(env.num_players)  # 2
-# [[7, 54], [7, 54], [7, 54], [7, 54]]: 4 players, each have the space 7*54
+print(env.num_actions)  # 54
+print(env.num_players)  # 4
+# [[6, 54], [6, 54], [6, 54], [6, 54]]: 4 players, each have the space 7*54
 print(env.state_shape)
 print(env.action_shape)  # [None, None, None, None]
 
@@ -32,7 +32,9 @@ print(env.action_shape)  # [None, None, None, None]
 if __name__ == "__main__":
     trajectories, payoffs = env.run(is_training=False)
 
-    if payoffs[0] > 0:
+    print("Payoffs:", payoffs)
+
+    if payoffs[0] > payoffs[1]:
         print('You win!')
     else:
         print('You lose!')
