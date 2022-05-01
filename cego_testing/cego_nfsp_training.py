@@ -16,7 +16,7 @@ from rlcard.utils import (
 )  # import some useful functions
 
 args = {
-    "_log_dir": "experiments/cego_nfsp_result/",
+    "_log_dir": "experiments/cego_nfsp_result_test/",
     "_env_name": "cego",
     "_seed": 10,
     "_hidden_layers_sizes": [64, 64],
