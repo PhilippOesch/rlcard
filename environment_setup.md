@@ -1,0 +1,45 @@
+### Create Virtual environment
+
+```bash
+virtualenv venv
+```
+
+### Activate Environment
+
+#### Windows
+
+```bash
+.\venv\Scripts\activate
+```
+
+#### Linux
+
+```bash
+source venv/Scripts/activate
+```
+
+### Install Requirements
+
+```bash
+pip install -r requirements.txt
+```
+
+### Install RLCard
+
+```bash
+pip3 install -e .
+```
+
+### Deactivate Env
+
+#### Windows
+
+```bash
+deactivate
+```
+
+#### Linux
+
+```bash
+source deactivate
+```
