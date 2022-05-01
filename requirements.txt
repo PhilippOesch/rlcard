@@ -1,5 +1,14 @@
+cycler==0.11.0
+fonttools==4.33.3
+kiwisolver==1.4.2
+matplotlib==3.5.1
 numpy==1.22.3
--e git+https://github.com/PhilippOesch/rlcard.git@bd85e6db406f309d43cabfe6754c411f5fcc6b9d#egg=rlcard
+packaging==21.3
+Pillow==9.1.0
+pyparsing==3.0.8
+python-dateutil==2.8.2
+-e git+https://github.com/PhilippOesch/rlcard.git@99a648f01d7378123cd17dd1c8714ed6e0e62b84#egg=rlcard
+six==1.16.0
 termcolor==1.1.0
 torch==1.11.0
 typing_extensions==4.2.0
