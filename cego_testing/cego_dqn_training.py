@@ -16,17 +16,29 @@ from rlcard.utils import (
 )  # import some useful functions
 
 args = {
-    "_log_dir": "experiments/cego_dqn_result_player_2/",
+    "_log_dir": "experiments/cego_dqn_result_player_0_model3/",
     "_env_name": "cego",
     "_seed": 10,
-    "_mlp_layer": [512, 512],
+    "_replay_memory_size": 20000,
+    "_update_target_estimator_every": 1000,
+    "_discount_factor": 0.99,
+    "_epsilon_start": 1.0,
+    "_epsilon_end": 0.1,
+    "_epsilon_decay_steps": 20000,
+    "_batch_size": 32,
+    "_mlp_layers": [512, 512],
     "_num_eval_games": 10000,
-    "_num_episodes": 10000,
-    "_evaluate_every": 100
+    "_num_episodes": 1000,
+    "_evaluate_every": 100,
+    "_learning_rate": 0.0001
 }
 
 
-def train(_log_dir, _env_name, _seed, _mlp_layer, _num_eval_games=10000, _num_episodes=1000, _evaluate_every=100):
+def train(_log_dir, _env_name, _seed, _replay_memory_size,
+          _update_target_estimator_every, _discount_factor,
+          _epsilon_start, _epsilon_end, _epsilon_decay_steps,
+          _batch_size, _mlp_layers, _num_eval_games,
+          _num_episodes, _evaluate_every, _learning_rate):
 
     # Check whether gpu is available
     device = get_device()
@@ -45,14 +57,23 @@ def train(_log_dir, _env_name, _seed, _mlp_layer, _num_eval_games=10000, _num_ep
     dqn_agent = DQNAgent(
         num_actions=env.num_actions,
         state_shape=env.state_shape[0],
-        mlp_layers=_mlp_layer,
+        mlp_layers=_mlp_layers,
         device=device,
+        replay_memory_size=_replay_memory_size,
+        update_target_estimator_every=_update_target_estimator_every,
+        discount_factor=_discount_factor,
+        epsilon_start=_epsilon_start,
+        epsilon_end=_epsilon_end,
+        epsilon_decay_steps=_epsilon_decay_steps,
+        batch_size=_batch_size,
+        learning_rate=_learning_rate
+
     )
     random_agent1 = RandomAgent(num_actions=env.num_actions)
     random_agent2 = RandomAgent(num_actions=env.num_actions)
     random_agent3 = RandomAgent(num_actions=env.num_actions)
 
-    agents = [random_agent1, dqn_agent, random_agent2, random_agent3]
+    agents = [dqn_agent, random_agent1, random_agent2, random_agent3]
 
     env.set_agents(agents)  # set agents to the environment
 
@@ -93,5 +114,5 @@ def train(_log_dir, _env_name, _seed, _mlp_layer, _num_eval_games=10000, _num_ep
 
 
 if __name__ == "__main__":
-    os.environ["CUDA_VISIBLE_DEVICES"] = ""
+    # os.environ["CUDA_VISIBLE_DEVICES"] = "cuda"
     train(**args)

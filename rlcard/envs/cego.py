@@ -115,7 +115,7 @@ class CegoEnv(Env):
 
         return extracted_state
 
-    def get_payoffs(self) -> np.NDArray:
+    def get_payoffs(self):
         ''' Get the payoffs of the players'''
 
         payoffs = self.game.get_payoffs()
