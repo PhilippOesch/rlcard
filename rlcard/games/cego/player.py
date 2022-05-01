@@ -9,7 +9,7 @@ class CegoPlayer:
         - valued_cards (list): The cards layed asside and converted to points
     '''
 
-    def __init__(self, player_id, np_random, is_cego_player=False):
+    def __init__(self, player_id, np_random, is_single_player=False):
         ''' Initilize a player
 
         Parameters:
@@ -19,7 +19,7 @@ class CegoPlayer:
         '''
         self.np_random = np_random
         self.player_id: int = player_id
-        self.is_cego_player: bool = is_cego_player
+        self.is_single_player: bool = is_single_player
         self.hand: list = []
         self.valued_cards: list = []  # the cards that the cego player has layed aside
 

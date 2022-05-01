@@ -59,7 +59,7 @@ class CegoCard:
         "suits": ["c", "d", "h", "s", "trump"],
         "ranks": ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10",
                   "11", "12", "13", "14", "15", "16", "17", "18", "19", "20",
-                  "21", "gstieß",
+                  "21", "gstiess",
                   "b", "r", "d", "k"],
         "cards": [
             "7-c", "8-c", "9-c", "10-c", "b-c", "r-c", "d-c", "k-c",
@@ -70,7 +70,7 @@ class CegoCard:
             "6-trump", "7-trump", "8-trump", "9-trump", "10-trump",
             "11-trump", "12-trump", "13-trump", "14-trump", "15-trump",
             "16-trump", "17-trump", "18-trump", "19-trump", "20-trump",
-            "21-trump", "gstieß-trump"
+            "21-trump", "gstiess-trump"
         ],
         "color_card_values": {
             "k": 4.5,
@@ -81,7 +81,7 @@ class CegoCard:
         "trump_card_values": {
             "1": 4.5,
             "21": 4.5,
-            "gstieß": 4.5,
+            "gstiess": 4.5,
         },
         "black_cards_ranks": [],
         "red_card_ranks": [],

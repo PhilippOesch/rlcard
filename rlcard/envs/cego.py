@@ -3,13 +3,22 @@ from collections import OrderedDict
 
 import rlcard
 from rlcard.envs import Env
-from rlcard.games.cego import Game
+from rlcard.games.cego import GameStandard, GameSolo
 from rlcard.games.cego.utils import ACTION_LIST, ACTION_SPACE
-from rlcard.games.cego.utils import cards2list, get_tricks_played, set_observation
+from rlcard.games.cego.utils import cards2list, get_tricks_played
 
 DEFAULT_GAME_CONFIG = {
     'game_num_players': 4,
 }
+
+
+def map_to_Game(variant_name):
+    switcher: dict = {
+        'standard': GameStandard,
+        'solo': GameSolo,
+    }
+
+    return switcher.get(variant_name, "Invalid variant name")
 
 
 class CegoEnv(Env):
@@ -28,7 +37,11 @@ class CegoEnv(Env):
         '''
         self.name = 'cego'
         self.default_game_config = DEFAULT_GAME_CONFIG
-        self.game = Game()
+
+        # select the proper game variant
+        variant = config['variant'] if 'variant' in config else 'standard'
+        self.game = map_to_Game(variant)()
+
         super().__init__(config)
         self.state_shape = [[6, 54] for _ in range(self.num_players)]
         self.action_shape = [None for _ in range(self.num_players)]
@@ -80,14 +93,7 @@ class CegoEnv(Env):
         obs[0][hand_cards_idx] = 1
         obs[1][values_cards_idx] = 1
 
-        # TODO: Create a Helper function, that set the second plane of an observation
-
         if winner_card_idx is not None:
-            # print(type(winner_card_idx))
-            # print(len(winner_card_idx))
-            # # obs[2][winner_card_idx] = 1
-            # print('winner_card_idx: ', winner_card_idx)
-            # set_observation(obs, 2, winner_card_idx)
             obs[2][winner_card_idx] = 1
         if trick_card_idx != None:
             obs[3][trick_card_idx] = 1

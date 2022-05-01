@@ -8,6 +8,7 @@ env = rlcard.make(
     'cego',
     config={
         'seed': 10,
+        'variant': 'solo'
     })
 
 human_agent = HumanAgent(num_actions=env.num_actions)
@@ -24,7 +25,7 @@ env.set_agents([
 
 print(env.num_actions)  # 54
 print(env.num_players)  # 4
-# [[6, 54], [6, 54], [6, 54], [6, 54]]: 4 players, each have the space 7*54
+# [[6, 54], [6, 54], [6, 54], [6, 54]]: 4 players, each have the space 6x54
 print(env.state_shape)
 print(env.action_shape)  # [None, None, None, None]
 

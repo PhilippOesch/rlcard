@@ -16,7 +16,7 @@ from rlcard.utils import (
 )  # import some useful functions
 
 args = {
-    "_log_dir": "experiments/cego_dqn_result_player_0_model3/",
+    "_log_dir": "experiments/cego_dqn_result_player_0_model4/",
     "_env_name": "cego",
     "_seed": 10,
     "_replay_memory_size": 20000,
