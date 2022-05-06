@@ -11,6 +11,12 @@
 * **CegoJudger**: Judges the round of Cego
 * **Utils**: helper classes
 
+## Configuration
+
+The Game currently allows the following configurations:
+* **variant**: The setting currently allows 2 values, "standard" and "solo".
+* **judge_by_points**: This setting is of type boolean. If set to *True*, the payoffs of the game will be judged by the points the players get. If set to *False*, the payoffs will be judged by weather the player wins or loses. The default is *True*.
+
 ### Card Encoding
 
 For know the part of the game, where the cego player selects the blind cards will be ignored for the reason of simplifying the action space.
@@ -54,10 +60,10 @@ The following table shows the encoding of the different planes:
 | Plane | Description |
 |:-----:|:-----------:|
 | 0 | The cards the player has on his hand |
-| 1 | The cards the cego player (only he can see them) has taken layed aside |
+| 1 | The cards the cego player (only that player knows them) has layed aside |
 | 2 | The winning card of the trick |
 | 3 | All the cards within the current trick |
-| 4 | The cards that already have been played |
+| 4 | Get all the cards that havend been played jet and are still playable by players. This Plane takes the player knowledge of hand, valued and played cards into account |
 | 5 | [0-3]: For the player, part of the team the value is 1 <br> [4-7]: The player who currently would win the trick is encoded (one hot) <br>[8-11]: The player who started the current round is encoded (one hot) |
 
 ## Classes

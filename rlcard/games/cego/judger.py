@@ -14,8 +14,6 @@ class CegoJudger:
     def receive_points(self, points, players, player_id, cards) -> list:
         new_points = cards2value(cards)
 
-        # payoffs = payoffs.copy()
-
         # if player is cego player, only he receives the reward
         if players[player_id].is_single_player:
             points[player_id] += new_points
@@ -29,7 +27,8 @@ class CegoJudger:
         return points
 
     def judge_game(self, points) -> list:
+        print("points:", points)
         if points[0] > points[1]:
-            return [points[0], 0, 0, 0]
+            return [1, 0, 0, 0]
         else:
-            return [0, points[1], points[1], points[1]]
+            return [0, 1, 1, 1]

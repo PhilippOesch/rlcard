@@ -50,6 +50,7 @@ class CegoGame(ABC):
         self.trick_history: list = None
         self.blind_cards: list = None
         self.last_round_winner_idx: int = None
+        self.judge_by_points: bool = True
 
     def configure(self, game_config) -> None:
         ''' Specify some game specific parameters, such as number of players '''
@@ -57,7 +58,7 @@ class CegoGame(ABC):
         self.num_players = game_config['game_num_players']
 
     def init_game(self) -> tuple[dict, Any]:
-        pass
+        raise NotImplementedError
 
     def get_state(self, player_id) -> dict:
         ''' get current state of the game 
@@ -144,7 +145,10 @@ class CegoGame(ABC):
         return self.round_counter >= CegoGame.num_rounds
 
     def get_payoffs(self) -> list:
-        return self.points
+        if self.judge_by_points:
+            return self.points
+        else:
+            return self.judger.judge_game(self.points)
 
     def get_legal_actions(self) -> list:
         return self.round.get_legal_actions(self.players[self.round.current_player_idx])

@@ -59,6 +59,38 @@ def get_tricks_played(tricks) -> list:
 
     return card_idxs
 
+def get_other_cards(hand, valued_cards, tricks_played, current_trick) -> list:
+    ''' get all cards that are still playable by the other players '''
+    
+    known_cards = []
+    if hand is not None:
+        known_cards.extend(hand)
+    if valued_cards is not None:
+        known_cards.extend(valued_cards)
+    if tricks_played is not None:
+        known_cards.extend([card for trick in tricks_played for card in trick])
+    if current_trick is not None:
+        known_cards.extend(current_trick)
+    card_idxs= [ACTION_SPACE[card] for card in known_cards]
+    state = np.ones((54), dtype=int)
+    state[card_idxs] = 0
+    return state
+
+
+def get_cards_played(tricks_played, current_trick) -> list:
+    ''' get all the cards out of the game list'''
+
+    tricks = tricks_played[:]
+    tricks.append(current_trick)
+
+    # print("get_cards_played:",tricks)
+
+    card_idxs = []
+    for trick in tricks:
+        for card in trick:
+            card_idxs.append(ACTION_SPACE[str(card)])
+
+    return card_idxs
 
 def set_cego_player_deck(player, blind_cards) -> None:
     """ 
