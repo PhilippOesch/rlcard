@@ -9,6 +9,8 @@ from rlcard.games.cego.utils import cards2list, get_other_cards
 
 DEFAULT_GAME_CONFIG = {
     'game_num_players': 4,
+    'game_variant': 'standard',
+    'game_judge_by_points': True,
 }
 
 
@@ -39,11 +41,11 @@ class CegoEnv(Env):
         self.default_game_config = DEFAULT_GAME_CONFIG
 
         # select the proper game variant
-        variant = config['variant'] if 'variant' in config else 'standard'
+        variant = config['game_variant'] if 'game_variant' in config else 'standard'
+        self.game = map_to_Game(variant)()
 
         # select wheater the game payoffs are judged by points or by wins
-        self.game = map_to_Game(variant)()
-        self.game.judge_by_points= config['judge_by_points'] if 'variant' in config else True
+        self.game.judge_by_points= config['game_judge_by_points'] if 'game_judge_by_points' in config else True
 
         super().__init__(config)
         self.state_shape = [[6, 54] for _ in range(self.num_players)]
@@ -57,11 +59,10 @@ class CegoEnv(Env):
 
         Observation Representation
             - plane 0: [0] own cards
-            - plane 0: [1] valued cards
-            - plane 0: [2] winner of trick
-            - plane 0: [3] cards in trick
-            - plane 0: [4] cards playable by other players
-            - plane 0: [5]
+            - plane 0: [1] winner of trick
+            - plane 0: [2] cards in trick
+            - plane 0: [3] cards playable by other players
+            - plane 0: [4]
                 - [0-3]: who is part of the team
                 - [4-7]: who wins the current round
                 - [8-11]: player who started the trick round
@@ -94,25 +95,24 @@ class CegoEnv(Env):
 
         # setup observation
         obs[0][hand_cards_idx] = 1
-        obs[1][values_cards_idx] = 1
 
         if winner_card_idx is not None:
-            obs[2][winner_card_idx] = 1
+            obs[1][winner_card_idx] = 1
         if trick_card_idx != None:
-            obs[3][trick_card_idx] = 1
+            obs[2][trick_card_idx] = 1
 
-        obs[4]= get_other_cards(state['hand'], state['valued_cards'],state['played_tricks'], state['trick'])
+        obs[3]= get_other_cards(state['hand'], state['valued_cards'],state['played_tricks'], state['trick'])
 
         if current_player_idx == 0:
-            obs[5][0] = 1
+            obs[4][0] = 1
         else:
-            obs[5][[1, 2, 3]] = 1
+            obs[4][[1, 2, 3]] = 1
 
         if winner_idx != None:
-            obs[5][winner_idx+4] = 1
+            obs[4][winner_idx+4] = 1
 
         if start_player_idx != None:
-            obs[5][start_player_idx+8] = 1
+            obs[4][start_player_idx+8] = 1
 
         # setup extracted state
         extracted_state['obs'] = obs

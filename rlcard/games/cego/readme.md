@@ -60,11 +60,10 @@ The following table shows the encoding of the different planes:
 | Plane | Description |
 |:-----:|:-----------:|
 | 0 | The cards the player has on his hand |
-| 1 | The cards the cego player (only that player knows them) has layed aside |
-| 2 | The winning card of the trick |
-| 3 | All the cards within the current trick |
-| 4 | Get all the cards that havend been played jet and are still playable by players. This Plane takes the player knowledge of hand, valued and played cards into account |
-| 5 | [0-3]: For the player, part of the team the value is 1 <br> [4-7]: The player who currently would win the trick is encoded (one hot) <br>[8-11]: The player who started the current round is encoded (one hot) |
+| 1 | The winning card of the trick |
+| 2 | All the cards within the current trick |
+| 3 | Get all the cards that havend been played jet and are still playable by players. This Plane takes the player knowledge of hand, valued and played cards into account |
+| 4 | [0-3]: For the player, part of the team the value is 1 <br> [4-7]: The player who currently would win the trick is encoded (one hot) <br>[8-11]: The player who started the current round is encoded (one hot) |
 
 ## Classes
 
