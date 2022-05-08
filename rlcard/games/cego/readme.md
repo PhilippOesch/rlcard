@@ -2,20 +2,19 @@
 
 # Cego Environment
 
-## The Classes
+## The Game Classes
+
+Folder: *rlcard/games/cego/*
 
 * **CegoCard**: the card class
 * **CegoDealer**: the class for dealing cards
 * **CegoPlayer**: the player class
 * **CegoRound**: represents a round of Cego
 * **CegoJudger**: Judges the round of Cego
-* **Utils**: helper classes
-
-## Configuration
-
-The Game currently allows the following configurations:
-* **variant**: The setting currently allows 2 values, "standard" and "solo".
-* **judge_by_points**: This setting is of type boolean. If set to *True*, the payoffs of the game will be judged by the points the players get. If set to *False*, the payoffs will be judged by weather the player wins or loses. The default is *True*.
+* **CegoGame**: represents a game of Cego (abstract)
+* **CegoGameStandard**: Implementation of CegoGame for the game variant of *Cego*
+* **CegoSolo**: Implementation of CegoGame for the game variant of *Solo*
+* **Utils**: helper functions
 
 ### Card Encoding
 
@@ -40,11 +39,11 @@ The state the player can possibly observe is the following (not all information 
 | Key | Description | Example |
 |:---:|:-----------:|:-------:|
 | **hand** | The cards, the player currently has on his hand: List | ['7-c', 'k-s', '1-trump', 'gstieß-trump'] |
-| **trick** | The cards currently in the trick: List | ['7-c', 'k-s', '1-trump', 'gstieß-trump']  |
+| **trick** | The cards currently in the trick: List | ['7-c', 'k-s', '1-trump', 'gstiess-trump']  |
 | **target** | The card that has to be served: str | '11-trump' |
-| **winner_card** | The card that currently wins the trick: str | 'gstieß-trump' |
+| **winner_card** | The card that currently wins the trick: str | 'gstiess-trump' |
 | **winner_player** | The player that currently wins the trick: int | 2 |
-| **valued_cards** | cards that the cego player (only the cego player knows of these) has layed aside: List | ['7-c', 'k-s', '1-trump', 'gstieß-trump' ...] |
+| **valued_cards** | cards that the cego player (only the cego player knows of these) has layed aside: List | ['7-c', 'k-s', '1-trump', 'gstiess-trump' ...] |
 | **legal_actions** | The action the player is allowed to play: List | ['12-trump', '14-trump'] |
 | **start_player** | The player who started the current round: int | 0 |
 | **num_players** | The Number of players playing: int | 4 |
@@ -53,17 +52,21 @@ The state the player can possibly observe is the following (not all information 
 | **played_tricks** | The tricks that have already been played: 2D-List | [['7-c', 'k-s', '1-trump', 'gstieß-trump'], [...], ...] |
 | **last_round_winner** | The winner of the last round: int | 3 |
 
-The Observation Shape has the Size of **6 x 54**. For the first 6 planes the Shape **54** represents the cards (actions). The last plane is used to encode general information about the game. 
+The are several observation encodings possiblities implemented. Here is one example of a possible observation state encoding. The Size of this encoding is **224** or also **54x4+12**. The first **54x4** indexes encode card information. There are **54** cards within the game. The last **12** indexes encode the information about the current state of the game. 
 
-The following table shows the encoding of the different planes:
+The following table describes the encoding further:
 
-| Plane | Description |
-|:-----:|:-----------:|
-| 0 | The cards the player has on his hand |
-| 1 | The winning card of the trick |
-| 2 | All the cards within the current trick |
-| 3 | Get all the cards that havend been played jet and are still playable by players. This Plane takes the player knowledge of hand, valued and played cards into account |
-| 4 | [0-3]: For the player, part of the team the value is 1 <br> [4-7]: The player who currently would win the trick is encoded (one hot) <br>[8-11]: The player who started the current round is encoded (one hot) |
+| indexes | Description |
+|:---:|:---:|
+| 0-53 | The cards on the players hand |
+| 54-107 | The card that currently wins the trick |
+| 108-161 | All the cards within the current trick |
+| 162-215 | All the cards that haven't been played jet and may still be played by other players |
+| 216-227 | **This plane encodes other game specific information.** <br> **[216-219]**: The players within the same team have the value 1. <br> **[220-223]**: The player who would win the round is encoded. <br> **[224-227]**: The player who started the current trick round is encoded. |
+
+There are alternative possible encodings for the observation state.
+
+Theses are implemented as functions in the utils.py file. The Functions observation encoding functions are called **encode_observation_var[0-4]**. Additional information about the specific encoding can be found within the function documentation.
 
 ## Classes
 
@@ -104,4 +107,17 @@ This class represent the game itself and manages the full game state.
 
 ### Testing
 
-**test.py** contains the test cases for the game.
+**test.py** contains the test cases for the game class.
+
+## The Environment Class
+
+Path: *rlcard/envs/cego.py*
+
+### Configuration
+
+The Environment currently allows the following configurations:
+* **game_variant** (str): The setting currently allows 2 values, "standard" and "solo".
+* **game_judge_by_points** (int): 
+  * *0* (default): The payoffs of the game will be judged by the points the players gets. 
+  * *1*: The payoffs will be judged by weather the player wins or loses. If the player loses the payoff is **0**, if the player wins the payoff is **1**.
+  * *2*: The payoffs will be judged by weather the player wins or loses. If the player loses the payoff is **-1**, if the player wins the payoff is **1**.

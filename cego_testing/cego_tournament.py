@@ -17,11 +17,11 @@ from rlcard.utils import (
 args = {
     "_seed": 20,
     "_models": ["random",
-                "random", "random", "random"],
+                "experiments/cego_dqn_result_player_0_long/model.pth", "random", "random"],
     "_env_name": "cego",
     "_game_variant": "standard",
     "_game_judge_by_points": 2,
-    "_num_games": 1000000,
+    "_num_games": 100000,
 }
 
 
