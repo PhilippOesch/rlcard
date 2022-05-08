@@ -3,6 +3,7 @@ import os
 import torch
 import rlcard
 from rlcard.agents import (
+    DQNAgent,
     NFSPAgent,
     RandomAgent
 )

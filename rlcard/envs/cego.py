@@ -5,7 +5,7 @@ import rlcard
 from rlcard.envs import Env
 from rlcard.games.cego import GameStandard, GameSolo
 from rlcard.games.cego.utils import ACTION_LIST, ACTION_SPACE
-from rlcard.games.cego.utils import cards2list, get_other_cards
+from rlcard.games.cego.utils import cards2list, encode_observation_var0, encode_observation_var1
 
 DEFAULT_GAME_CONFIG = {
     'game_num_players': 4,
@@ -48,74 +48,18 @@ class CegoEnv(Env):
         self.game.judge_by_points= config['game_judge_by_points'] if 'game_judge_by_points' in config else True
 
         super().__init__(config)
-        self.state_shape = [[6, 54] for _ in range(self.num_players)]
+        self.state_shape = [[336] for _ in range(self.num_players)]
         self.action_shape = [None for _ in range(self.num_players)]
 
     def _extract_state(self, state) -> OrderedDict:
         ''' Extract the observation for each player
 
-        Parameters:
-            - state (dict): the state of the game
-
-        Observation Representation
-            - plane 0: [0] own cards
-            - plane 0: [1] winner of trick
-            - plane 0: [2] cards in trick
-            - plane 0: [3] cards playable by other players
-            - plane 0: [4]
-                - [0-3]: who is part of the team
-                - [4-7]: who wins the current round
-                - [8-11]: player who started the trick round
-            - plane 1: 54 - cards
         '''
         extracted_state: dict = OrderedDict()
         legal_actions: OrderedDict = self._get_legal_actions()
-        obs = np.zeros((6, 54), dtype=int)  # observation is a (6, 54) tensor
-
-        winner_card_idx: int = None
-        hand_cards_idx: list = []
-        values_cards_idx: list = []
-        trick_card_idx: list = []
-        played_cards_idx: list = []
-
-        hand_cards_idx = [ACTION_SPACE[card] for card in state['hand']]
-        values_cards_idx = [ACTION_SPACE[card]
-                            for card in state['valued_cards']]
-
-        if state['winner_card'] in ACTION_SPACE:
-            winner_card_idx = ACTION_SPACE[state['winner_card']]
-        if state['trick'] is not None:
-            trick_card_idx = [ACTION_SPACE[card] for card in state['trick']]
-        # if state['played_tricks'] is not None:
-        #     played_cards_idx = get_cards_played(state['played_tricks'], state['trick'])
-
-        winner_idx = state['winner']
-        start_player_idx = state['start_player']
-        current_player_idx = state['current_player']
-
-        # setup observation
-        obs[0][hand_cards_idx] = 1
-
-        if winner_card_idx is not None:
-            obs[1][winner_card_idx] = 1
-        if trick_card_idx != None:
-            obs[2][trick_card_idx] = 1
-
-        obs[3]= get_other_cards(state['hand'], state['valued_cards'],state['played_tricks'], state['trick'])
-
-        if current_player_idx == 0:
-            obs[4][0] = 1
-        else:
-            obs[4][[1, 2, 3]] = 1
-
-        if winner_idx != None:
-            obs[4][winner_idx+4] = 1
-
-        if start_player_idx != None:
-            obs[4][start_player_idx+8] = 1
 
         # setup extracted state
-        extracted_state['obs'] = obs
+        extracted_state['obs'] = encode_observation_var1(state)
         extracted_state['legal_actions'] = legal_actions
         extracted_state['raw_obs'] = state
         extracted_state['raw_legal_actions'] = [

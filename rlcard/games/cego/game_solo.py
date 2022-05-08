@@ -18,7 +18,6 @@ class CegoGameSolo(Game):
     '''
 
     def init_game(self) -> tuple[dict, Any]:
-        print("CegoGameSolo")
         self.points = [0 for _ in range(self.num_players)]
 
         # Initialize a dealer that can deal cards
