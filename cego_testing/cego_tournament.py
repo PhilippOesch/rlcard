@@ -15,12 +15,13 @@ from rlcard.utils import (
 )
 
 args = {
-    "_seed": 12,
-    "_models": [
-        ["random",
-         "random", "random", "random"]],
+    "_seed": 20,
+    "_models": ["random",
+                "random", "random", "random"],
     "_env_name": "cego",
-    "_num_games": 100000,
+    "_game_variant": "standard",
+    "_game_judge_by_points": 2,
+    "_num_games": 1000000,
 }
 
 
@@ -36,7 +37,7 @@ def load_model(model_path, env=None, position=None, device=None):
     return agent
 
 
-def evaluate(_seed, _models, _env_name, _num_games):
+def evaluate(_seed, _models, _env_name, _game_variant, _game_judge_by_points, _num_games):
 
     # Check whether gpu is available
     device = get_device()
@@ -45,7 +46,14 @@ def evaluate(_seed, _models, _env_name, _num_games):
     set_seed(_seed)
 
     # Make the environment with seed
-    env = rlcard.make(_env_name, config={'seed': _seed})
+    env = rlcard.make(
+        _env_name,
+        config={
+            'seed': _seed,
+            'game_variant': _game_variant,
+            'game_judge_by_points': _game_judge_by_points
+        }
+    )
 
     # Load models
     agents = []
@@ -60,5 +68,4 @@ def evaluate(_seed, _models, _env_name, _num_games):
 
 
 if __name__ == '__main__':
-    evaluate(args["_seed"], args["_models"][0],
-             args["_env_name"], args["_num_games"])
+    evaluate(**args)
