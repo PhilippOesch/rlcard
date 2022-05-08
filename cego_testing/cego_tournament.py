@@ -15,12 +15,12 @@ from rlcard.utils import (
 )
 
 args = {
-    "_seed": 10,
+    "_seed": 12,
     "_models": [
-        ["experiments/cego_dqn_result_player_0/model.pth",
+        ["random",
          "random", "random", "random"]],
     "_env_name": "cego",
-    "_num_games": 10000,
+    "_num_games": 100000,
 }
 
 

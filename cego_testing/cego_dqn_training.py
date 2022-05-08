@@ -16,22 +16,22 @@ from rlcard.utils import (
 )  # import some useful functions
 
 args = {
-    "_log_dir": "experiments/cego_dqn_result_player_0_m2/",
+    "_log_dir": "experiments/cego_dqn_result_player_0_m0/",
     "_env_name": "cego",
     "_game_judge_by_points": 2,
-    "_seed": 10,
+    "_seed": 12,
     "_replay_memory_size": 100000,
     "_update_target_estimator_every": 1000,
-    "_discount_factor": 0.99,
+    "_discount_factor": 0.95,
     "_epsilon_start": 1.0,
     "_epsilon_end": 0.1,
     "_epsilon_decay_steps": 20000,
     "_batch_size": 32,
     "_mlp_layers": [512, 512],
-    "_num_eval_games": 10000,
-    "_num_episodes": 10000,
-    "_evaluate_every": 50,
-    "_learning_rate": 0.00005
+    "_num_eval_games": 1000,
+    "_num_episodes": 40000,
+    "_evaluate_every": 100,
+    "_learning_rate": 0.0001
 }
 
 
@@ -43,6 +43,7 @@ def train(_log_dir, _env_name, _game_judge_by_points, _seed, _replay_memory_size
 
     # Check whether gpu is available
     device = get_device()
+    print(device)
 
     set_seed(_seed)
 
@@ -116,5 +117,5 @@ def train(_log_dir, _env_name, _game_judge_by_points, _seed, _replay_memory_size
 
 
 if __name__ == "__main__":
-    # os.environ["CUDA_VISIBLE_DEVICES"] = "cuda"
+    # print(torch.cuda.is_available())
     train(**args)

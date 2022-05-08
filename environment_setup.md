@@ -30,6 +30,11 @@ pip install -r requirements.txt
 pip3 install -e .
 ```
 
+#### Rreeze Requirements
+```bash
+pip freeze > requirements.txt
+```
+
 ### Deactivate Env
 
 #### Windows

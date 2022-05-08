@@ -79,9 +79,12 @@ class CegoEnv(Env):
         '''
 
         legal_ids = self._get_legal_actions()
+
+        # if the action is legal, return the action
         if action_id in legal_ids:
             return ACTION_LIST[action_id]
 
+        # else return a random legal action
         return ACTION_LIST[np.random.choice(legal_ids)]
 
     def _get_legal_actions(self) -> OrderedDict:
