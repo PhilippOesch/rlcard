@@ -216,10 +216,6 @@ def encode_observation_var1(state):
 
     hand_cards_idx = [ACTION_SPACE[card] for card in state['hand']]
 
-    winner_idx = state['winner']
-    start_player_idx = state['start_player']
-    current_player_idx = state['current_player']
-
     obs[hand_cards_idx] = 1
 
     known_cards_idxs= get_known_cards(state['hand'], state['valued_cards'],state['played_tricks'], state['trick'], 54)
@@ -234,16 +230,7 @@ def encode_observation_var1(state):
     for i in range(len(state["trick"])):
         obs[162 + (i*54)+ ACTION_SPACE[state["trick"][i]]] = 1
 
-    if current_player_idx == 0:
-        obs[324] = 1
-    else:
-        obs[[325, 326, 327]] = 1
-
-    if winner_idx != None:
-        obs[328+ winner_idx] = 1
-
-    if start_player_idx != None:
-        obs[332+start_player_idx] = 1
+    encode_obs_game_info(state, obs, 324)
 
     return obs
 
@@ -266,8 +253,32 @@ def encode_observation_var2(state):
             - [220-223]: who wins the current round
             - [224-227]: player who started the trick round
     '''
-    # TODO: implement this
-    pass
+    obs = np.zeros((228), dtype=int)
+
+    hand_cards_idx: list = []
+    trick_cards_idx: list = []
+
+    hand_cards_idx = [ACTION_SPACE[card] for card in state['hand']]
+    trick_cards_idx = [162+ ACTION_SPACE[card] for card in state['trick']]
+
+    obs[hand_cards_idx] = 1
+
+    obs[range(54, 107)] = 1
+    # unset all cards that are out of the game
+    obs[known_cards_idxs] = 0
+
+    known_cards_idxs= get_known_cards(state['hand'], state['valued_cards'],state['played_tricks'], state['trick'], 54)
+    
+    obs[known_cards_idxs] = 1
+
+    if state['winner_card'] != 'None':
+        obs[108+ ACTION_SPACE[state['winner_card']]]= 1
+
+    obs[trick_cards_idx]= 1
+
+    encode_obs_game_info(state, obs, 216)
+
+    return obs
 
 def encode_observation_var3(state):
     ''' the shape of this encoding is (282)
@@ -289,5 +300,48 @@ def encode_observation_var3(state):
             - [274-277]: who wins the current round
             - [278-281]: player who started the trick round
     '''
-    # TODO: implement this
-    pass
+    obs = np.zeros((228), dtype=int)
+
+    hand_cards_idx: list = []
+    trick_cards_idx: list = []
+
+    hand_cards_idx = [ACTION_SPACE[card] for card in state['hand']]
+    trick_cards_idx = [162+ ACTION_SPACE[card] for card in state['trick']]
+
+    obs[hand_cards_idx] = 1
+
+    obs[range(54, 107)] = 1
+    # unset all cards that are out of the game
+    obs[known_cards_idxs] = 0
+
+    known_cards_idxs= get_known_cards(state['hand'], state['valued_cards'],state['played_tricks'], state['trick'], 54)
+    
+    obs[known_cards_idxs] = 1
+
+    if state['winner_card'] != 'None':
+        obs[108+ ACTION_SPACE[state['winner_card']]]= 1
+
+    obs[trick_cards_idx]= 1
+
+    if len(state["trick"]) > 0:
+        obs[216+ ACTION_SPACE[state["trick"][0]]] = 1
+
+    encode_obs_game_info(state, obs, 270)
+
+    return obs
+
+def encode_obs_game_info(state, obs, start_idx):
+    winner_idx = state['winner']
+    start_player_idx = state['start_player']
+    current_player_idx = state['current_player']
+
+    if current_player_idx == 0:
+        obs[start_idx] = 1
+    else:
+        obs[[start_idx+1, start_idx+2, start_idx+3]] = 1
+
+    if winner_idx != None:
+        obs[start_idx+4+ winner_idx] = 1
+
+    if start_player_idx != None:
+        obs[start_idx+8+start_player_idx] = 1
