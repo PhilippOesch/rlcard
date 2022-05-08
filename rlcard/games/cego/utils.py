@@ -59,9 +59,10 @@ def get_tricks_played(tricks) -> list:
 
     return card_idxs
 
-def get_known_cards(hand, valued_cards, tricks_played, current_trick, start_idx= 0) -> list:
+
+def get_known_cards(hand, valued_cards, tricks_played, current_trick, start_idx=0) -> list:
     ''' get all cards that are already out of the game '''
-    
+
     known_cards = []
     if hand is not None:
         known_cards.extend(hand)
@@ -71,7 +72,7 @@ def get_known_cards(hand, valued_cards, tricks_played, current_trick, start_idx=
         known_cards.extend([card for trick in tricks_played for card in trick])
     if current_trick is not None:
         known_cards.extend(current_trick)
-    card_idxs= [ start_idx + ACTION_SPACE[card] for card in known_cards]
+    card_idxs = [start_idx + ACTION_SPACE[card] for card in known_cards]
     return card_idxs
 
 
@@ -89,6 +90,7 @@ def get_cards_played(tricks_played, current_trick) -> list:
             card_idxs.append(ACTION_SPACE[str(card)])
 
     return card_idxs
+
 
 def set_cego_player_deck(player, blind_cards) -> None:
     """ 
@@ -132,9 +134,10 @@ def set_observation(obs, plane, indexes):
     for index in indexes:
         obs[plane][index] = 1
 
+
 def encode_observation_var0(state):
     ''' the shape of this encoding is (228)
-    
+
     Parameters:
         - state (dict): the state of the game
 
@@ -157,7 +160,7 @@ def encode_observation_var0(state):
     trick_cards_idx: list = []
 
     hand_cards_idx = [ACTION_SPACE[card] for card in state['hand']]
-    trick_cards_idx = [162+ ACTION_SPACE[card] for card in state['trick']]
+    trick_cards_idx = [162 + ACTION_SPACE[card] for card in state['trick']]
 
     winner_idx = state['winner']
     start_player_idx = state['start_player']
@@ -165,16 +168,17 @@ def encode_observation_var0(state):
 
     obs[hand_cards_idx] = 1
 
-    known_cards_idxs= get_known_cards(state['hand'], state['valued_cards'],state['played_tricks'], state['trick'], 54)
-    
+    known_cards_idxs = get_known_cards(
+        state['hand'], state['valued_cards'], state['played_tricks'], state['trick'], 54)
+
     obs[range(54, 107)] = 1
     # unset all cards that are knowingly out of the game
     obs[known_cards_idxs] = 0
 
     if state['winner_card'] != 'None':
-        obs[108+ ACTION_SPACE[state['winner_card']]]= 1
+        obs[108 + ACTION_SPACE[state['winner_card']]] = 1
 
-    obs[trick_cards_idx]= 1
+    obs[trick_cards_idx] = 1
 
     if current_player_idx == 0:
         obs[216] = 1
@@ -182,16 +186,17 @@ def encode_observation_var0(state):
         obs[[217, 218, 219]] = 1
 
     if winner_idx != None:
-        obs[220+ winner_idx] = 1
+        obs[220 + winner_idx] = 1
 
     if start_player_idx != None:
         obs[224+start_player_idx] = 1
 
     return obs
 
+
 def encode_observation_var1(state):
     ''' the shape of this encoding is (336)
-    
+
     Parameters:
         - state (dict): the state of the game
 
@@ -218,25 +223,27 @@ def encode_observation_var1(state):
 
     obs[hand_cards_idx] = 1
 
-    known_cards_idxs= get_known_cards(state['hand'], state['valued_cards'],state['played_tricks'], state['trick'], 54)
+    known_cards_idxs = get_known_cards(
+        state['hand'], state['valued_cards'], state['played_tricks'], state['trick'], 54)
 
     obs[range(54, 107)] = 1
     # unset all cards that are out of the game
     obs[known_cards_idxs] = 0
 
     if state['winner_card'] != 'None':
-        obs[108+ ACTION_SPACE[state['winner_card']]]= 1
+        obs[108 + ACTION_SPACE[state['winner_card']]] = 1
 
     for i in range(len(state["trick"])):
-        obs[162 + (i*54)+ ACTION_SPACE[state["trick"][i]]] = 1
+        obs[162 + (i*54) + ACTION_SPACE[state["trick"][i]]] = 1
 
     encode_obs_game_info(state, obs, 324)
 
     return obs
 
+
 def encode_observation_var2(state):
     ''' the shape of this encoding is (228)
-    
+
     Parameters:
         - state (dict): the state of the game
 
@@ -259,7 +266,7 @@ def encode_observation_var2(state):
     trick_cards_idx: list = []
 
     hand_cards_idx = [ACTION_SPACE[card] for card in state['hand']]
-    trick_cards_idx = [162+ ACTION_SPACE[card] for card in state['trick']]
+    trick_cards_idx = [162 + ACTION_SPACE[card] for card in state['trick']]
 
     obs[hand_cards_idx] = 1
 
@@ -267,22 +274,24 @@ def encode_observation_var2(state):
     # unset all cards that are out of the game
     obs[known_cards_idxs] = 0
 
-    known_cards_idxs= get_known_cards(state['hand'], state['valued_cards'],state['played_tricks'], state['trick'], 54)
-    
+    known_cards_idxs = get_known_cards(
+        state['hand'], state['valued_cards'], state['played_tricks'], state['trick'], 54)
+
     obs[known_cards_idxs] = 1
 
     if state['winner_card'] != 'None':
-        obs[108+ ACTION_SPACE[state['winner_card']]]= 1
+        obs[108 + ACTION_SPACE[state['winner_card']]] = 1
 
-    obs[trick_cards_idx]= 1
+    obs[trick_cards_idx] = 1
 
     encode_obs_game_info(state, obs, 216)
 
     return obs
 
+
 def encode_observation_var3(state):
     ''' the shape of this encoding is (282)
-    
+
     Parameters:
         - state (dict): the state of the game
 
@@ -306,7 +315,7 @@ def encode_observation_var3(state):
     trick_cards_idx: list = []
 
     hand_cards_idx = [ACTION_SPACE[card] for card in state['hand']]
-    trick_cards_idx = [162+ ACTION_SPACE[card] for card in state['trick']]
+    trick_cards_idx = [162 + ACTION_SPACE[card] for card in state['trick']]
 
     obs[hand_cards_idx] = 1
 
@@ -314,21 +323,23 @@ def encode_observation_var3(state):
     # unset all cards that are out of the game
     obs[known_cards_idxs] = 0
 
-    known_cards_idxs= get_known_cards(state['hand'], state['valued_cards'],state['played_tricks'], state['trick'], 54)
-    
+    known_cards_idxs = get_known_cards(
+        state['hand'], state['valued_cards'], state['played_tricks'], state['trick'], 54)
+
     obs[known_cards_idxs] = 1
 
     if state['winner_card'] != 'None':
-        obs[108+ ACTION_SPACE[state['winner_card']]]= 1
+        obs[108 + ACTION_SPACE[state['winner_card']]] = 1
 
-    obs[trick_cards_idx]= 1
+    obs[trick_cards_idx] = 1
 
     if len(state["trick"]) > 0:
-        obs[216+ ACTION_SPACE[state["trick"][0]]] = 1
+        obs[216 + ACTION_SPACE[state["trick"][0]]] = 1
 
     encode_obs_game_info(state, obs, 270)
 
     return obs
+
 
 def encode_obs_game_info(state, obs, start_idx):
     winner_idx = state['winner']
@@ -341,7 +352,7 @@ def encode_obs_game_info(state, obs, start_idx):
         obs[[start_idx+1, start_idx+2, start_idx+3]] = 1
 
     if winner_idx != None:
-        obs[start_idx+4+ winner_idx] = 1
+        obs[start_idx+4 + winner_idx] = 1
 
     if start_player_idx != None:
         obs[start_idx+8+start_player_idx] = 1
