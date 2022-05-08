@@ -50,7 +50,7 @@ class CegoGame(ABC):
         self.trick_history: list = None
         self.blind_cards: list = None
         self.last_round_winner_idx: int = None
-        self.judge_by_points: bool = True
+        self.judge_by_points: int = 0
 
     def configure(self, game_config) -> None:
         ''' Specify some game specific parameters, such as number of players '''
@@ -145,10 +145,11 @@ class CegoGame(ABC):
         return self.round_counter >= CegoGame.num_rounds
 
     def get_payoffs(self) -> list:
-        if self.judge_by_points:
+        if self.judge_by_points == 0:
             return self.points
-        else:
+        if self.judge_by_points == 1:
             return self.judger.judge_game(self.points)
+        return self.judger.judge_game_var2(self.points)
 
     def get_legal_actions(self) -> list:
         return self.round.get_legal_actions(self.players[self.round.current_player_idx])

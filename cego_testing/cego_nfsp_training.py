@@ -18,6 +18,7 @@ from rlcard.utils import (
 args = {
     "_log_dir": "experiments/cego_nfsp_result_player/",
     "_env_name": "cego",
+    "_game_judge_by_points": 2,
     "_seed": 10,
     "_hidden_layers_sizes": [64, 64],
     "_reservoir_buffer_capacity": 20000,
@@ -43,7 +44,7 @@ args = {
 }
 
 
-def train(_log_dir, _env_name, _seed, _hidden_layers_sizes, _reservoir_buffer_capacity,
+def train(_log_dir, _env_name, _game_judge_by_points, _seed, _hidden_layers_sizes, _reservoir_buffer_capacity,
           _anticipatory_param, _batch_size, _train_every, _rl_learning_rate, _sl_learning_rate,
           _min_buffer_size_to_learn, _q_replay_memory_size, _q_replay_memory_init_size,
           _q_update_target_estimator_every, _q_discount_factor, _q_epsilon_start, _q_epsilon_end,
@@ -62,6 +63,7 @@ def train(_log_dir, _env_name, _seed, _hidden_layers_sizes, _reservoir_buffer_ca
         _env_name,
         config={
             'seed': _seed,
+            'game_judge_by_points': _game_judge_by_points
         }
     )
 

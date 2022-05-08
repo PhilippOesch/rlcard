@@ -18,6 +18,7 @@ from rlcard.utils import (
 args = {
     "_log_dir": "experiments/cego_dqn_result_player_0/",
     "_env_name": "cego",
+    "_game_judge_by_points": 2,
     "_seed": 10,
     "_replay_memory_size": 20000,
     "_update_target_estimator_every": 100,
@@ -34,7 +35,7 @@ args = {
 }
 
 
-def train(_log_dir, _env_name, _seed, _replay_memory_size,
+def train(_log_dir, _env_name, _game_judge_by_points, _seed, _replay_memory_size,
           _update_target_estimator_every, _discount_factor,
           _epsilon_start, _epsilon_end, _epsilon_decay_steps,
           _batch_size, _mlp_layers, _num_eval_games,
@@ -50,6 +51,7 @@ def train(_log_dir, _env_name, _seed, _replay_memory_size,
         _env_name,
         config={
             'seed': _seed,
+            'game_judge_by_points': _game_judge_by_points
         }
     )
 

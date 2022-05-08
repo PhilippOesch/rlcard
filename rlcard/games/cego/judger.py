@@ -27,8 +27,13 @@ class CegoJudger:
         return points
 
     def judge_game(self, points) -> list:
-        print("points:", points)
         if points[0] > points[1]:
             return [1, 0, 0, 0]
         else:
             return [0, 1, 1, 1]
+
+    def judge_game_var2(self, points) -> list:
+        if points[0] > points[1]:
+            return [1, -1, -1, -1]
+        else:
+            return [-1, 1, 1, 1]
