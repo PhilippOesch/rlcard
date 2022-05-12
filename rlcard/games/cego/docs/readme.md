@@ -103,7 +103,13 @@ Helper functions are within file **utils.py**.
 
 ### Game
 
-This class represent the game itself and manages the full game state.
+This class represent the game itself and manages the full game state. This class is abstract. One Game is a single cego variant.
+Currently following Variants are implemented:
+
+* **CegoGameStandard**: The Variant Cego
+  * A model of this variant can also be used to play all the sub games of cego.
+* **CegoSolo**: The Variant Solo
+* TODO: Implement the special games.
 
 ### Testing
 
@@ -121,3 +127,4 @@ The Environment currently allows the following configurations:
   * *0* (default): The payoffs of the game will be judged by the points the players gets. 
   * *1*: The payoffs will be judged by weather the player wins or loses. If the player loses the payoff is **0**, if the player wins the payoff is **1**.
   * *2*: The payoffs will be judged by weather the player wins or loses. If the player loses the payoff is **-1**, if the player wins the payoff is **1**.
+

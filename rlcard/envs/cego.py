@@ -10,7 +10,9 @@ from rlcard.games.cego.utils import cards2list, encode_observation_var0, encode_
 DEFAULT_GAME_CONFIG = {
     'game_num_players': 4,
     'game_variant': 'standard',
-    'game_judge_by_points': 0, # 0: judge by points, 1: judge by game, 2: judge by game var2 
+    # 0: judge by points, 1: judge by game, 2: judge by game var2
+    'game_judge_by_points': 0,
+    'game_activate_heuristic': False,
 }
 
 
@@ -45,7 +47,7 @@ class CegoEnv(Env):
         self.game = map_to_Game(variant)()
 
         # select wheater the game payoffs are judged by points or by wins
-        self.game.judge_by_points= config['game_judge_by_points'] if 'game_judge_by_points' in config else 0
+        self.game.judge_by_points = config['game_judge_by_points'] if 'game_judge_by_points' in config else 0
 
         super().__init__(config)
         self.state_shape = [[336] for _ in range(self.num_players)]

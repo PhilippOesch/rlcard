@@ -386,3 +386,19 @@ def encode_obs_game_info(state, obs, start_idx):
 
     if start_player_idx != None:
         obs[start_idx+8+start_player_idx] = 1
+
+
+def valid_cego(cego_player_cards) -> bool:
+    ''' This function checks if it would be valid for the 
+    for the cego player to play cego.
+
+    Parameters:
+        - cego_player_cards (list): the cards of the cego player
+
+    Returns:
+        - valid (bool): The base is that the player has
+            at least 15 points on his hand.
+    '''
+
+    value = cards2value(cego_player_cards)
+    return value >= 15

@@ -17,10 +17,11 @@ from rlcard.utils import (
 args = {
     "_seed": 20,
     "_models": ["random",
-                "experiments/cego_dqn_result_player_0_long/model.pth", "random", "random"],
+                "random", "random", "random"],
     "_env_name": "cego",
     "_game_variant": "standard",
     "_game_judge_by_points": 2,
+    "_game_activate_heuristic": True,
     "_num_games": 100000,
 }
 
@@ -37,7 +38,7 @@ def load_model(model_path, env=None, position=None, device=None):
     return agent
 
 
-def evaluate(_seed, _models, _env_name, _game_variant, _game_judge_by_points, _num_games):
+def evaluate(_seed, _models, _env_name, _game_variant, _game_judge_by_points, _game_activate_heuristic, _num_games):
 
     # Check whether gpu is available
     device = get_device()
@@ -51,7 +52,8 @@ def evaluate(_seed, _models, _env_name, _game_variant, _game_judge_by_points, _n
         config={
             'seed': _seed,
             'game_variant': _game_variant,
-            'game_judge_by_points': _game_judge_by_points
+            'game_judge_by_points': _game_judge_by_points,
+            'game_activate_heuristic': _game_activate_heuristic
         }
     )
 

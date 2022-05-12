@@ -15,44 +15,54 @@ from rlcard.utils import (
     set_seed,
 )  # import some useful functions
 
+
+def save_args_params(args):
+    if not os.path.exists(args["log_dir"]):
+        os.makedirs(args["log_dir"])
+
+    with open(args["log_dir"] + 'model_params.txt', 'w') as f:
+        for key, value in args.items():
+            f.write("{}: {}\n".format(key, value))
+
+
 args = {
-    "_log_dir": "experiments/cego_dqn_result_player_0_m0/",
-    "_env_name": "cego",
-    "_game_judge_by_points": 2,
-    "_seed": 12,
-    "_replay_memory_size": 100000,
-    "_update_target_estimator_every": 1000,
-    "_discount_factor": 0.95,
-    "_epsilon_start": 1.0,
-    "_epsilon_end": 0.1,
-    "_epsilon_decay_steps": 20000,
-    "_batch_size": 32,
-    "_mlp_layers": [512, 512],
-    "_num_eval_games": 1000,
-    "_num_episodes": 40000,
-    "_evaluate_every": 100,
-    "_learning_rate": 0.0001
+    "log_dir": "experiments/cego_dumb_training_test/",
+    "env_name": "cego",
+    "game_judge_by_points": 2,
+    "seed": 12,
+    "replay_memory_size": 100000,
+    "update_target_estimator_every": 1000,
+    "discount_factor": 0.95,
+    "epsilon_start": 1.0,
+    "epsilon_end": 0.1,
+    "epsilon_decay_steps": 20000,
+    "batch_size": 32,
+    "mlp_layers": [512, 512],
+    "num_eval_games": 1000,
+    "num_episodes": 40000,
+    "evaluate_every": 100,
+    "learning_rate": 0.0001
 }
 
 
-def train(_log_dir, _env_name, _game_judge_by_points, _seed, _replay_memory_size,
-          _update_target_estimator_every, _discount_factor,
-          _epsilon_start, _epsilon_end, _epsilon_decay_steps,
-          _batch_size, _mlp_layers, _num_eval_games,
-          _num_episodes, _evaluate_every, _learning_rate):
+def train(log_dir, env_name, game_judge_by_points, seed, replay_memory_size,
+          update_target_estimator_every, discount_factor,
+          epsilon_start, epsilon_end, epsilon_decay_steps,
+          batch_size, mlp_layers, num_eval_games,
+          num_episodes, evaluate_every, learning_rate):
 
     # Check whether gpu is available
     device = get_device()
     print(device)
 
-    set_seed(_seed)
+    set_seed(seed)
 
     # Make the environment with seed
     env = rlcard.make(
-        _env_name,
+        env_name,
         config={
-            'seed': _seed,
-            'game_judge_by_points': _game_judge_by_points
+            'seed': seed,
+            'game_judge_by_points': game_judge_by_points
         }
     )
 
@@ -60,16 +70,16 @@ def train(_log_dir, _env_name, _game_judge_by_points, _seed, _replay_memory_size
     dqn_agent = DQNAgent(
         num_actions=env.num_actions,
         state_shape=env.state_shape[0],
-        mlp_layers=_mlp_layers,
+        mlp_layers=mlp_layers,
         device=device,
-        replay_memory_size=_replay_memory_size,
-        update_target_estimator_every=_update_target_estimator_every,
-        discount_factor=_discount_factor,
-        epsilon_start=_epsilon_start,
-        epsilon_end=_epsilon_end,
-        epsilon_decay_steps=_epsilon_decay_steps,
-        batch_size=_batch_size,
-        learning_rate=_learning_rate
+        replay_memory_size=replay_memory_size,
+        update_target_estimator_every=update_target_estimator_every,
+        discount_factor=discount_factor,
+        epsilon_start=epsilon_start,
+        epsilon_end=epsilon_end,
+        epsilon_decay_steps=epsilon_decay_steps,
+        batch_size=batch_size,
+        learning_rate=learning_rate
 
     )
     random_agent1 = RandomAgent(num_actions=env.num_actions)
@@ -81,8 +91,8 @@ def train(_log_dir, _env_name, _game_judge_by_points, _seed, _replay_memory_size
     env.set_agents(agents)  # set agents to the environment
 
     # Start training
-    with Logger(_log_dir) as logger:
-        for episode in range(_num_episodes):
+    with Logger(log_dir) as logger:
+        for episode in range(num_episodes):
 
             # Generate data from the environment
             trajectories, payoffs = env.run(is_training=True)
@@ -95,12 +105,12 @@ def train(_log_dir, _env_name, _game_judge_by_points, _seed, _replay_memory_size
                 dqn_agent.feed(ts)
 
             # Evaluate the performance.
-            if episode % _evaluate_every == 0:
+            if episode % evaluate_every == 0:
                 logger.log_performance(
                     env.timestep,
                     tournament(
                         env,
-                        _num_eval_games,
+                        num_eval_games,
                     )[0]
                 )
 
@@ -111,11 +121,12 @@ def train(_log_dir, _env_name, _game_judge_by_points, _seed, _replay_memory_size
     plot_curve(csv_path, fig_path, "DQN")
 
     # Save model
-    save_path = os.path.join(_log_dir, 'model.pth')
+    save_path = os.path.join(log_dir, 'model.pth')
     torch.save(dqn_agent, save_path)
     print('Model saved in', save_path)
 
 
 if __name__ == "__main__":
     # print(torch.cuda.is_available())
+    save_args_params(args)
     train(**args)

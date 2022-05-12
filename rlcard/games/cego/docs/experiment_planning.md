@@ -281,3 +281,4 @@ Compare The Models resulting from **Stage 2** and **Stage 3** within the RLCard 
 
 - AI is implemented in ActionScript
 - Implementing the AI within RLCard might require to much time for planning and realization.
+

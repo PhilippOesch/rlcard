@@ -33,7 +33,7 @@ class Env(object):
         # Currently only support blackjack、limit-holdem、no-limit-holdem
         # TODO support game configurations for all the games
         supported_envs = ['blackjack', 'leduc-holdem',
-                          'limit-holdem', 'no-limit-holdem']
+                          'limit-holdem', 'no-limit-holdem', 'cego']  # cego added
         if self.name in supported_envs:
             _game_config = self.default_game_config.copy()
             for key in config:
