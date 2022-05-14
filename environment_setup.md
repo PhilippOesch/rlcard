@@ -18,6 +18,12 @@ virtualenv venv
 source venv/Scripts/activate
 ```
 
+#### MacOS
+
+```bash
+source venv/bin/activate
+```
+
 ### Install Requirements
 
 ```bash
@@ -31,6 +37,7 @@ pip3 install -e .
 ```
 
 #### Rreeze Requirements
+
 ```bash
 pip freeze > requirements.txt
 ```

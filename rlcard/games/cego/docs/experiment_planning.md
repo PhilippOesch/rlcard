@@ -138,15 +138,24 @@ Because Cego is a game where typically 3 players play against 1 player, the ques
 #### The Result
 
 - The Cego Player received an average Payoff of **-0.07743**
-- The Other players received an average Payoff of **0.07743**
+- The other players received an average Payoff of **0.07743**
 - This Experiment was repeated 3 times, with similar results.
-    - The 2. and 3. time the result was **+/-0.076712** and **+/-0.07748**
+- The 2. and 3. time the result was **-/+0.076712** and **-/+0.07748**
 
-This heavily implies, that the other players have a slight advantage against the cego player even thought the cego player gets a slight head start in points. This is plausible because the within the trick there are 3 players that have a chance to win that trick against one other player.
+This heavily implies, that the other players have a slight advantage against the Cego player even thought the Cego player gets a slight head start in points. This is plausible because the within the trick there are 3 players that have a chance to win that trick against one other player.
 
-An interesting question would if the cego player has a better chance to improve this margin. Because he always has more knowledge about the cards than the other players. There may be more room for improvement because of that.
+An interesting question would if the Cego player has a better chance to improve this margin. Because he always has more knowledge about the cards than the other players. There may be more room for improvement because of that.
 
 These results imply that rather than beating the **0** Reward mark. The goal should be to get more then about **-0.077** of average reward.
+
+The problem with this evaluation is, that it also takes games into account, that are not typically played as a Cego rounds. For this case a simple heuristic was implemented. It is defined that a the Cego player should play a variant of Cego when he has at least **15 points** on his hand. With this premise in mind the previous experiment was repeated.
+
+The Result is as follows:
+
+- The Cego player received an average of **-0.044836** points.
+- The other players received an average of **+0.044836** points.
+
+Through repeating this experiment with the implemented heuristic we indeed can see an improvement in points for the Cego player. This shows that the heuristic has the intended effect of improving the chances for the Cego player.
 
 ### Training of models for particular players
 
@@ -281,4 +290,3 @@ Compare The Models resulting from **Stage 2** and **Stage 3** within the RLCard 
 
 - AI is implemented in ActionScript
 - Implementing the AI within RLCard might require to much time for planning and realization.
-

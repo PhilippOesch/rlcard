@@ -22,7 +22,7 @@ args = {
     "_game_variant": "standard",
     "_game_judge_by_points": 2,
     "_game_activate_heuristic": True,
-    "_num_games": 100000,
+    "_num_games": 1000000,
 }
 
 

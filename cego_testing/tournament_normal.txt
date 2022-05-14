@@ -22,3 +22,10 @@
 1 experiments/cego_dqn_result_player_0_long/model.pth 0.10226
 2 random 0.10226
 3 random 0.10226
+---------------------
+Results with heuristic
+---------------------
+0 random -0.044836
+1 random 0.044836
+2 random 0.044836
+3 random 0.044836
