@@ -19,10 +19,10 @@ args = {
     "_models": ["random",
                 "random", "random", "random"],
     "_env_name": "cego",
-    "_game_variant": "standard",
+    "_game_variant": "piccolo",
     "_game_judge_by_points": 2,
-    "_game_activate_heuristic": True,
-    "_num_games": 1000000,
+    "_game_activate_heuristic": False,
+    "_num_games": 1000,
 }
 
 

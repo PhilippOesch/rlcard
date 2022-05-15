@@ -8,8 +8,9 @@ env = rlcard.make(
     'cego',
     config={
         'seed': 10,
-        'game_variant': 'standard',
-        'game_judge_by_points': False
+        'game_variant': 'piccolo',
+        'game_activate_heuristic': False,
+        'game_judge_by_points': 2,
     })
 
 human_agent = HumanAgent(num_actions=env.num_actions)

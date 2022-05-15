@@ -58,6 +58,7 @@ class CegoGame(ABC):
 
         self.num_players = game_config['game_num_players']
         self.activate_heuristic = game_config['game_activate_heuristic']
+        self.judge_by_points = game_config['game_judge_by_points']
 
     def init_game(self) -> tuple[dict, Any]:
         raise NotImplementedError
@@ -112,7 +113,7 @@ class CegoGame(ABC):
         if self.round.is_over:
             self.trick_history.append(cards2list(self.round.trick.copy()))
             self.last_round_winner_idx = self.round.winner_idx
-            self.points = self.judger.receive_points(
+            self.points = self.judger.update_points(
                 self.points,
                 self.players,
                 self.last_round_winner_idx,
@@ -150,8 +151,8 @@ class CegoGame(ABC):
         if self.judge_by_points == 0:
             return self.points
         if self.judge_by_points == 1:
-            return self.judger.judge_game(self.points)
-        return self.judger.judge_game_var2(self.points)
+            return self.judger.judge_game_zero_to_one(self.points)
+        return self.judger.judge_game_minusone_to_one(self.points)
 
     def get_legal_actions(self) -> list:
         return self.round.get_legal_actions(self.players[self.round.current_player_idx])

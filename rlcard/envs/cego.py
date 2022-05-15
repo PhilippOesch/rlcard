@@ -3,15 +3,15 @@ from collections import OrderedDict
 
 import rlcard
 from rlcard.envs import Env
-from rlcard.games.cego import GameStandard, GameSolo
+from rlcard.games.cego import GameStandard, GameSolo, GameBettel, GamePiccolo
 from rlcard.games.cego.utils import ACTION_LIST, ACTION_SPACE
-from rlcard.games.cego.utils import cards2list, encode_observation_var0, encode_observation_var1
+from rlcard.games.cego.utils import cards2list, encode_observation_var1
 
 DEFAULT_GAME_CONFIG = {
     'game_num_players': 4,
     'game_variant': 'standard',
     # 0: judge by points, 1: judge by game, 2: judge by game var2
-    'game_judge_by_points': 0,
+    'game_judge_by_points': 2,
     'game_activate_heuristic': False,
 }
 
@@ -20,6 +20,8 @@ def map_to_Game(variant_name):
     switcher: dict = {
         'standard': GameStandard,
         'solo': GameSolo,
+        'bettel': GameBettel,
+        'piccolo': GamePiccolo
     }
 
     return switcher.get(variant_name, "Invalid variant name")
@@ -43,11 +45,8 @@ class CegoEnv(Env):
         self.default_game_config = DEFAULT_GAME_CONFIG
 
         # select the proper game variant
-        variant = config['game_variant'] if 'game_variant' in config else 'standard'
+        variant = config['game_variant'] if 'game_variant' in config else DEFAULT_GAME_CONFIG['game_variant']
         self.game = map_to_Game(variant)()
-
-        # select wheater the game payoffs are judged by points or by wins
-        self.game.judge_by_points = config['game_judge_by_points'] if 'game_judge_by_points' in config else 0
 
         super().__init__(config)
         self.state_shape = [[336] for _ in range(self.num_players)]
