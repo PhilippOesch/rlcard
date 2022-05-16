@@ -3,7 +3,7 @@ from collections import OrderedDict
 
 import rlcard
 from rlcard.envs import Env
-from rlcard.games.cego import GameStandard, GameSolo, GameBettel, GamePiccolo
+from rlcard.games.cego import GameStandard, GameSolo, GameBettel, GamePiccolo, GameUltimo
 from rlcard.games.cego.utils import ACTION_LIST, ACTION_SPACE
 from rlcard.games.cego.utils import cards2list, encode_observation_var1
 
@@ -12,7 +12,7 @@ DEFAULT_GAME_CONFIG = {
     'game_variant': 'standard',
     # 0: judge by points, 1: judge by game, 2: judge by game var2
     'game_judge_by_points': 2,
-    'game_activate_heuristic': False,
+    'game_activate_heuristic': True,
 }
 
 
@@ -21,7 +21,8 @@ def map_to_Game(variant_name):
         'standard': GameStandard,
         'solo': GameSolo,
         'bettel': GameBettel,
-        'piccolo': GamePiccolo
+        'piccolo': GamePiccolo,
+        'ultimo': GameUltimo
     }
 
     return switcher.get(variant_name, "Invalid variant name")

@@ -111,21 +111,24 @@ class CegoGame(ABC):
         '''
 
         if self.round.is_over:
-            self.trick_history.append(cards2list(self.round.trick.copy()))
-            self.last_round_winner_idx = self.round.winner_idx
-            self.points = self.judger.update_points(
-                self.points,
-                self.players,
-                self.last_round_winner_idx,
-                self.round.trick.copy()
-            )
-            self.round.start_new_round(self.last_round_winner_idx)
-            self.round_counter += 1
+            self.on_round_over()
 
         player_id = self.round.current_player_idx
         state = self.get_state(player_id)
 
         return state, player_id
+
+    def on_round_over(self) -> None:
+        self.trick_history.append(cards2list(self.round.trick.copy()))
+        self.last_round_winner_idx = self.round.winner_idx
+        self.points = self.judger.update_points(
+            self.points,
+            self.players,
+            self.last_round_winner_idx,
+            self.round.trick.copy()
+        )
+        self.round.start_new_round(self.last_round_winner_idx)
+        self.round_counter += 1
 
     def step_back(self) -> bool:
         if len(self.history) > 0:
