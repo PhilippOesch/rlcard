@@ -16,7 +16,7 @@ from rlcard.utils import (
 
 args = {
     "_seed": 12,
-    "_models": ["experiments/cego_dmc_standard/dmc/0_21004800.pth",
+    "_models": ["experiments/cego_dmc_standard/dmc/0_27686400.pth",
                 "random", "random", "random"],
     "_env_name": "cego",
     "_game_variant": "standard",
