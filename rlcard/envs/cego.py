@@ -23,6 +23,7 @@ def map_to_Game(variant_name):
         'bettel': GameBettel,
         'piccolo': GamePiccolo,
         'ultimo': GameUltimo
+        # TODD: Raeuber
     }
 
     return switcher.get(variant_name, "Invalid variant name")

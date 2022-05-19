@@ -19,7 +19,7 @@ args = {
     "_models": ["experiments/cego_dmc_standard/dmc/0_56806400.pth",
                 "experiments/cego_dmc_standard/dmc/1_56806400.pth", 
                 "experiments/cego_dmc_standard/dmc/2_56806400.pth", 
-                "experiments/cego_dmc_standard/dmc/3_56806400.pth"],
+                "random"],
     "_env_name": "cego",
     "_game_variant": "standard",
     "_game_judge_by_points": 2,
