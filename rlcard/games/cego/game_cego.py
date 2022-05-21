@@ -53,6 +53,7 @@ class CegoGameStandard(Game):
             0,
             self.players[0].valued_cards
         )
+        self.blind_cards= self.players[0].valued_cards
 
         # Count the round. There are 4 rounds in each game.
         self.round_counter = 0

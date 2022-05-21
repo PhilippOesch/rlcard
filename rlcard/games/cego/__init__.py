@@ -3,7 +3,6 @@ from rlcard.games.cego.judger_cego import CegoJudgerStandard as JudgerStandard
 from rlcard.games.cego.judger_bettel import CegoJudgerBettel as JudgerBettel
 from rlcard.games.cego.judger_piccolo import CegoJudgerPiccolo as JudgerPiccolo
 from rlcard.games.cego.judger_ultimo import CegoJudgerUltimo as JudgerUltimo
-from rlcard.games.cego.judger_raeuber import CegoJudgerRaeuber as JudgerRaeuber
 from rlcard.games.cego.dealer import CegoDealer as Dealer
 from rlcard.games.cego.player import CegoPlayer as Player
 from rlcard.games.cego.round import CegoRound as Round
@@ -13,4 +12,3 @@ from rlcard.games.cego.game_solo import CegoGameSolo as GameSolo
 from rlcard.games.cego.game_bettel import CegoGameBettel as GameBettel
 from rlcard.games.cego.game_piccolo import CegoGamePiccolo as GamePiccolo
 from rlcard.games.cego.game_ultimo import CegoGameUltimo as GameUltimo
-from rlcard.games.cego.game_raeuber import CegoGameRaeuber as GameRaeuber

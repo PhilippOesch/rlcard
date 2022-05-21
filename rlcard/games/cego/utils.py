@@ -1,7 +1,11 @@
 import numpy as np
 import json
 import os
+import csv
+import matplotlib.pyplot as plt
 from collections import OrderedDict
+
+import random
 
 import rlcard
 
@@ -135,7 +139,7 @@ def set_observation(obs, plane, indexes):
         obs[plane][index] = 1
 
 
-def encode_observation_var0(state, is_raeuber= False):
+def encode_observation_var0(state):
     ''' the shape of this encoding is (228)
 
     Parameters:
@@ -176,12 +180,12 @@ def encode_observation_var0(state, is_raeuber= False):
 
     obs[trick_cards_idx] = 1
 
-    encode_obs_game_info(state, obs, 216, is_raeuber)
+    encode_obs_game_info(state, obs, 216)
 
     return obs
 
 
-def encode_observation_var1(state, is_raeuber= False):
+def encode_observation_var1(state):
     ''' the shape of this encoding is (336)
 
     Parameters:
@@ -223,12 +227,12 @@ def encode_observation_var1(state, is_raeuber= False):
     for i in range(len(state["trick"])):
         obs[162 + (i*54) + ACTION_SPACE[state["trick"][i]]] = 1
 
-    encode_obs_game_info(state, obs, 324, is_raeuber)
+    encode_obs_game_info(state, obs, 324)
 
     return obs
 
 
-def encode_observation_var2(state, is_raeuber= False):
+def encode_observation_var2(state):
     ''' the shape of this encoding is (228)
 
     Parameters:
@@ -271,12 +275,12 @@ def encode_observation_var2(state, is_raeuber= False):
 
     obs[trick_cards_idx] = 1
 
-    encode_obs_game_info(state, obs, 216, is_raeuber)
+    encode_obs_game_info(state, obs, 216)
 
     return obs
 
 
-def encode_observation_var3(state, is_raeuber= False):
+def encode_observation_var3(state):
     ''' the shape of this encoding is (282)
 
     Parameters:
@@ -323,7 +327,7 @@ def encode_observation_var3(state, is_raeuber= False):
     if len(state["trick"]) > 0:
         obs[216 + ACTION_SPACE[state["trick"][0]]] = 1
 
-    encode_obs_game_info(state, obs, 270, is_raeuber)
+    encode_obs_game_info(state, obs, 270)
 
     return obs
 
@@ -370,19 +374,61 @@ def encode_observation_var4(state):
 
     return obs
 
+def encode_observation_perfect_information(state, is_raeuber= False):
+    ''' the shape of this encoding is (498)
 
-def encode_obs_game_info(state, obs, start_idx, is_raeuber= False):
+    Parameters:
+        - state (dict): the state of the game
+
+    Returns:
+        - obs (list): the observation
+
+    Observation Representation
+        - [0-53] cards player 0
+        - [54-107] cards player 1
+        - [108-161] cards player 2
+        - [162-215] cards player 3
+        - [216-269] out_of_game_cards
+        - [270-323] winner of trick
+        - [324-377] first trick card
+        - [378-431] second trick card
+        - [432-485] third trick card
+        - [486-497] Game Information
+            - [486-489]: who is part of the team
+            - [490-493]: who wins the current round
+            - [494-497]: player who started the trick round
+    '''
+    obs = np.zeros((498), dtype=int)
+
+    for i in range(len(state['hand_cards'])):
+        hand_cards_idx= [i*54 +ACTION_SPACE[card] for card in state['hand_cards'][i]]
+        obs[hand_cards_idx] = 1
+
+    known_cards_idxs = get_known_cards(
+        None, state['valued_cards'], state['played_tricks'], state['trick'], 216)
+
+    obs[known_cards_idxs] = 1
+
+    if state['winner_card'] != 'None':
+        obs[270 + ACTION_SPACE[state['winner_card']]] = 1
+
+    for i in range(len(state["trick"])):
+        obs[324 + (i*54) + ACTION_SPACE[state["trick"][i]]] = 1
+
+    encode_obs_game_info(state, obs, 486, is_raeuber)
+
+    return obs
+
+
+def encode_obs_game_info(state, obs, start_idx):
     winner_idx = state['winner']
     start_player_idx = state['start_player']
     current_player_idx = state['current_player']
 
-    if is_raeuber:
-        obs[start_idx+current_player_idx]
+    if current_player_idx == 0:
+        obs[start_idx] = 1
     else:
-        if current_player_idx == 0:
-            obs[start_idx] = 1
-        else:
-            obs[[start_idx+1, start_idx+2, start_idx+3]] = 1
+        obs[[start_idx+1, start_idx+2, start_idx+3]] = 1
 
     if winner_idx != None:
         obs[start_idx+4 + winner_idx] = 1
@@ -405,3 +451,61 @@ def valid_cego(cego_player_cards) -> bool:
 
     value = cards2value(cego_player_cards)
     return value >= 15
+
+def save_args_params(args):
+    if not os.path.exists(args["log_dir"]):
+        os.makedirs(args["log_dir"])
+
+    with open(args["log_dir"] + '/model_params.txt', 'w') as f:
+        for key, value in args.items():
+            f.write("{}: {}\n".format(key, value))
+
+def create_cego_dmc_graph(model_path):
+    file = open(model_path + '/dmc/logs.csv')
+
+    csvreader= csv.DictReader(file)
+
+    y = []
+    x_cego = []
+    x_other = []
+    tick = 0
+
+    for row in csvreader:
+        if isfloat(row['mean_episode_return_1']):
+            x_cego.append(float(row['mean_episode_return_0']))
+            y.append(tick)
+            tick += 1
+        if isfloat(row['mean_episode_return_1']):
+            x_other.append(float(row['mean_episode_return_1']))
+
+    fig, ax = plt.subplots()
+    ax.plot(y, x_cego, label='Cego Player')
+    ax.plot(y, x_other, label='Other Players')
+    ax.set(xlabel='Tick', ylabel='reward')
+    ax.legend()
+    ax.grid()
+
+    fig.savefig(model_path+ '/fig.png')
+
+def isfloat(num):
+    try:
+        float(num)
+        return True
+    except ValueError:
+        return False
+
+def get_random_search_args(args):
+    res = {}
+
+    for val in args:
+        res[val] = random.choice(args[val])
+
+    return res
+
+def args_to_str(args):
+    res = ''
+
+    for val in args:
+        res += '{}_{}_'.format(val, args[val])
+
+    return res

@@ -1,20 +1,28 @@
 autopep8==1.6.0
+certifi==2022.5.18.1
+charset-normalizer==2.0.12
 cycler==0.11.0
 fonttools==4.33.3
 gitdb==4.0.9
 GitPython==3.1.27
+idna==3.3
 kiwisolver==1.4.2
 matplotlib==3.5.1
 numpy==1.22.3
 packaging==21.3
+pi==0.1.2
 Pillow==9.1.0
 pycodestyle==2.8.0
 pyparsing==3.0.8
 python-dateutil==2.8.2
--e git+https://github.com/PhilippOesch/rlcard.git@469be0615e4e8cbf12b175ccbc79b66419ce71f0#egg=rlcard
+requests==2.27.1
+-e git+https://github.com/PhilippOesch/rlcard.git@28b35a29406895174ee01ab04a33f0d5eae6f659#egg=rlcard
 six==1.16.0
 smmap==5.0.0
 termcolor==1.1.0
 toml==0.10.2
 torch==1.11.0
+torchaudio==0.11.0
+torchvision==0.12.0
 typing_extensions==4.2.0
+urllib3==1.26.9

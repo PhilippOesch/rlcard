@@ -59,6 +59,7 @@ class CegoGame(ABC):
         self.num_players = game_config['game_num_players']
         self.activate_heuristic = game_config['game_activate_heuristic']
         self.judge_by_points = game_config['game_judge_by_points']
+        self.with_perfect_information = game_config['game_with_perfect_information']
 
     def init_game(self) -> tuple[dict, Any]:
         raise NotImplementedError

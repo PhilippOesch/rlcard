@@ -3,7 +3,7 @@ import torch
 import rlcard
 from rlcard.agents.dmc_agent import DMCTrainer
 
-from training_utils import save_args_params
+from rlcard.games.cego.utils import save_args_params
 
 from rlcard.utils import (
     set_seed,
