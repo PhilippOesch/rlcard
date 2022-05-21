@@ -3,7 +3,7 @@ from collections import OrderedDict
 
 import rlcard
 from rlcard.envs import Env
-from rlcard.games.cego import GameStandard, GameSolo, GameBettel, GamePiccolo, GameUltimo
+from rlcard.games.cego import GameStandard, GameSolo, GameBettel, GamePiccolo, GameUltimo, GameRaeuber
 from rlcard.games.cego.utils import ACTION_LIST, ACTION_SPACE
 from rlcard.games.cego.utils import cards2list, encode_observation_var1
 
@@ -22,7 +22,8 @@ def map_to_Game(variant_name):
         'solo': GameSolo,
         'bettel': GameBettel,
         'piccolo': GamePiccolo,
-        'ultimo': GameUltimo
+        'ultimo': GameUltimo,
+        'raeuber': GameRaeuber
         # TODD: Raeuber
     }
 
@@ -61,8 +62,10 @@ class CegoEnv(Env):
         extracted_state: dict = OrderedDict()
         legal_actions: OrderedDict = self._get_legal_actions()
 
+        is_raeuber_game = self.game.__class__.__name__ == 'GameRaeuber'
+
         # setup extracted state
-        extracted_state['obs'] = encode_observation_var1(state)
+        extracted_state['obs'] = encode_observation_var1(state, is_raeuber_game)
         extracted_state['legal_actions'] = legal_actions
         extracted_state['raw_obs'] = state
         extracted_state['raw_legal_actions'] = [

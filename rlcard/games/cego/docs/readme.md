@@ -128,7 +128,7 @@ The Environment currently allows the following configurations:
   * "bettel"
   * "piccolo"
   * "utlimo"
-  * ```diff ! TODO: Räuber Variant```
+  * "raeuber"
 * **game_judge_by_points** (int): 
   * *0* (default): The payoffs of the game will be judged by the points the players gets. 
   * *1*: The payoffs will be judged by weather the player wins or loses. If the player loses the payoff is **0**, if the player wins the payoff is **1**.

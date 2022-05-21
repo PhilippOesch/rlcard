@@ -135,7 +135,7 @@ def set_observation(obs, plane, indexes):
         obs[plane][index] = 1
 
 
-def encode_observation_var0(state):
+def encode_observation_var0(state, is_raeuber= False):
     ''' the shape of this encoding is (228)
 
     Parameters:
@@ -176,12 +176,12 @@ def encode_observation_var0(state):
 
     obs[trick_cards_idx] = 1
 
-    encode_obs_game_info(state, obs, 216)
+    encode_obs_game_info(state, obs, 216, is_raeuber)
 
     return obs
 
 
-def encode_observation_var1(state):
+def encode_observation_var1(state, is_raeuber= False):
     ''' the shape of this encoding is (336)
 
     Parameters:
@@ -223,12 +223,12 @@ def encode_observation_var1(state):
     for i in range(len(state["trick"])):
         obs[162 + (i*54) + ACTION_SPACE[state["trick"][i]]] = 1
 
-    encode_obs_game_info(state, obs, 324)
+    encode_obs_game_info(state, obs, 324, is_raeuber)
 
     return obs
 
 
-def encode_observation_var2(state):
+def encode_observation_var2(state, is_raeuber= False):
     ''' the shape of this encoding is (228)
 
     Parameters:
@@ -271,12 +271,12 @@ def encode_observation_var2(state):
 
     obs[trick_cards_idx] = 1
 
-    encode_obs_game_info(state, obs, 216)
+    encode_obs_game_info(state, obs, 216, is_raeuber)
 
     return obs
 
 
-def encode_observation_var3(state):
+def encode_observation_var3(state, is_raeuber= False):
     ''' the shape of this encoding is (282)
 
     Parameters:
@@ -323,7 +323,7 @@ def encode_observation_var3(state):
     if len(state["trick"]) > 0:
         obs[216 + ACTION_SPACE[state["trick"][0]]] = 1
 
-    encode_obs_game_info(state, obs, 270)
+    encode_obs_game_info(state, obs, 270, is_raeuber)
 
     return obs
 
@@ -371,15 +371,18 @@ def encode_observation_var4(state):
     return obs
 
 
-def encode_obs_game_info(state, obs, start_idx):
+def encode_obs_game_info(state, obs, start_idx, is_raeuber= False):
     winner_idx = state['winner']
     start_player_idx = state['start_player']
     current_player_idx = state['current_player']
 
-    if current_player_idx == 0:
-        obs[start_idx] = 1
+    if is_raeuber:
+        obs[start_idx+current_player_idx]
     else:
-        obs[[start_idx+1, start_idx+2, start_idx+3]] = 1
+        if current_player_idx == 0:
+            obs[start_idx] = 1
+        else:
+            obs[[start_idx+1, start_idx+2, start_idx+3]] = 1
 
     if winner_idx != None:
         obs[start_idx+4 + winner_idx] = 1

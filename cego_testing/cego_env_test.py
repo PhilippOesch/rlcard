@@ -8,7 +8,7 @@ env = rlcard.make(
     'cego',
     config={
         'seed': 10,
-        'game_variant': 'piccolo',
+        'game_variant': 'raeuber',
         'game_activate_heuristic': False,
         'game_judge_by_points': 2,
     })
