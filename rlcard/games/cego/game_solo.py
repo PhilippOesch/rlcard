@@ -21,7 +21,10 @@ class CegoGameSolo(Game):
         self.points = [0 for _ in range(self.num_players)]
 
         # Initialize a dealer that can deal cards
-        self.dealer = Dealer(self.np_random)
+        if self.activate_heuristic:
+            self.dealer = Dealer(self.np_random, 'solo')
+        else:
+            self.dealer = Dealer(self.np_random)
 
         # Initialize players to play the game
         self.players = [Player(i, self.np_random)

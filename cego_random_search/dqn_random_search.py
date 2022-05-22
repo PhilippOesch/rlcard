@@ -17,7 +17,7 @@ from rlcard.utils import (
     set_seed,
 )  # import some useful functions
 
-random_search_iterations = 30
+random_search_iterations = 20
 
 # arguments for the random search
 args = {
@@ -26,18 +26,18 @@ args = {
     "game_variant": ["standard"],
     "game_activate_heuristic": [True],
     "seed": [12],
-    "replay_memory_size": [20000, 50000, 100000],
-    "update_target_estimator_every": [500, 1000, 2000],
+    "replay_memory_size": [50000, 100000, 200000],
+    "update_target_estimator_every": [1000, 2000, 10000],
     "discount_factor": [0.75, 0.8, 0.95, 0.99],
     "epsilon_start": [1.0],
     "epsilon_end": [0.1, 0.05, 0.01],
-    "epsilon_decay_steps": [10000],
-    "batch_size": [32, 64, 128],
-    "mlp_layers": [[512, 512], [512, 512, 512], [512, 512, 512, 512]],
+    "epsilon_decay_steps": [100000],
+    "batch_size": [32, 64],
+    "mlp_layers": [[512, 512, 512], [512, 256, 128], [512, 512]],
     "num_eval_games": [1000],
-    "num_episodes": [20000],
-    "evaluate_every": [100],
-    "learning_rate": [0.001, 0.0005, 0.0001, 0.00005]
+    "num_episodes": [100000],
+    "evaluate_every": [1000],
+    "learning_rate": [0.0001, 0.00005, 0.00001, 0.000005]
 }
 
 

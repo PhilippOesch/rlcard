@@ -139,7 +139,7 @@ def set_observation(obs, plane, indexes):
         obs[plane][index] = 1
 
 
-def encode_observation_var0(state):
+def encode_observation_var0(state, is_raeuber=False):
     ''' the shape of this encoding is (228)
 
     Parameters:
@@ -180,12 +180,12 @@ def encode_observation_var0(state):
 
     obs[trick_cards_idx] = 1
 
-    encode_obs_game_info(state, obs, 216)
+    encode_obs_game_info(state, obs, 216, is_raeuber)
 
     return obs
 
 
-def encode_observation_var1(state):
+def encode_observation_var1(state, is_raeuber=False):
     ''' the shape of this encoding is (336)
 
     Parameters:
@@ -227,12 +227,12 @@ def encode_observation_var1(state):
     for i in range(len(state["trick"])):
         obs[162 + (i*54) + ACTION_SPACE[state["trick"][i]]] = 1
 
-    encode_obs_game_info(state, obs, 324)
+    encode_obs_game_info(state, obs, 324, is_raeuber)
 
     return obs
 
 
-def encode_observation_var2(state):
+def encode_observation_var2(state, is_raeuber=False):
     ''' the shape of this encoding is (228)
 
     Parameters:
@@ -275,12 +275,12 @@ def encode_observation_var2(state):
 
     obs[trick_cards_idx] = 1
 
-    encode_obs_game_info(state, obs, 216)
+    encode_obs_game_info(state, obs, 216, is_raeuber)
 
     return obs
 
 
-def encode_observation_var3(state):
+def encode_observation_var3(state, is_raeuber=False):
     ''' the shape of this encoding is (282)
 
     Parameters:
@@ -327,12 +327,12 @@ def encode_observation_var3(state):
     if len(state["trick"]) > 0:
         obs[216 + ACTION_SPACE[state["trick"][0]]] = 1
 
-    encode_obs_game_info(state, obs, 270)
+    encode_obs_game_info(state, obs, 270, is_raeuber)
 
     return obs
 
 
-def encode_observation_var4(state):
+def encode_observation_var4(state, is_raeuber=False):
     ''' the shape of this encoding is (282)
 
     Parameters:
@@ -370,11 +370,12 @@ def encode_observation_var4(state):
     for i in range(len(state["trick"])):
         obs[108 + (i*54) + ACTION_SPACE[state["trick"][i]]] = 1
 
-    encode_obs_game_info(state, obs, 270)
+    encode_obs_game_info(state, obs, 270, is_raeuber)
 
     return obs
 
-def encode_observation_perfect_information(state, is_raeuber= False):
+
+def encode_observation_perfect_information(state, is_raeuber=False):
     ''' the shape of this encoding is (498)
 
     Parameters:
@@ -401,7 +402,8 @@ def encode_observation_perfect_information(state, is_raeuber= False):
     obs = np.zeros((498), dtype=int)
 
     for i in range(len(state['hand_cards'])):
-        hand_cards_idx= [i*54 +ACTION_SPACE[card] for card in state['hand_cards'][i]]
+        hand_cards_idx = [i*54 + ACTION_SPACE[card]
+                          for card in state['hand_cards'][i]]
         obs[hand_cards_idx] = 1
 
     known_cards_idxs = get_known_cards(
@@ -420,15 +422,18 @@ def encode_observation_perfect_information(state, is_raeuber= False):
     return obs
 
 
-def encode_obs_game_info(state, obs, start_idx):
+def encode_obs_game_info(state, obs, start_idx, is_raeuber=False):
     winner_idx = state['winner']
     start_player_idx = state['start_player']
     current_player_idx = state['current_player']
 
-    if current_player_idx == 0:
-        obs[start_idx] = 1
+    if is_raeuber:
+        obs[current_player_idx] = 1
     else:
-        obs[[start_idx+1, start_idx+2, start_idx+3]] = 1
+        if current_player_idx == 0:
+            obs[start_idx] = 1
+        else:
+            obs[[start_idx+1, start_idx+2, start_idx+3]] = 1
 
     if winner_idx != None:
         obs[start_idx+4 + winner_idx] = 1
@@ -447,10 +452,12 @@ def valid_cego(cego_player_cards) -> bool:
     Returns:
         - valid (bool): The base is that the player has
             at least 15 points on his hand.
+            - http://cegofreunde.jimdofree.com/taktik-und-tipps/
     '''
 
     value = cards2value(cego_player_cards)
     return value >= 15
+
 
 def save_args_params(args):
     if not os.path.exists(args["log_dir"]):
@@ -460,10 +467,11 @@ def save_args_params(args):
         for key, value in args.items():
             f.write("{}: {}\n".format(key, value))
 
+
 def create_cego_dmc_graph(model_path):
     file = open(model_path + '/dmc/logs.csv')
 
-    csvreader= csv.DictReader(file)
+    csvreader = csv.DictReader(file)
 
     y = []
     x_cego = []
@@ -485,7 +493,8 @@ def create_cego_dmc_graph(model_path):
     ax.legend()
     ax.grid()
 
-    fig.savefig(model_path+ '/fig.png')
+    fig.savefig(model_path + '/fig.png')
+
 
 def isfloat(num):
     try:
@@ -493,6 +502,7 @@ def isfloat(num):
         return True
     except ValueError:
         return False
+
 
 def get_random_search_args(args):
     res = {}
@@ -502,6 +512,7 @@ def get_random_search_args(args):
 
     return res
 
+
 def args_to_str(args):
     res = ''
 
@@ -509,3 +520,44 @@ def args_to_str(args):
         res += '{}_{}_'.format(val, args[val])
 
     return res
+
+
+def valid_ultimo(cego_player_cards) -> bool:
+    ''' This function checks if it is possible 
+    for the ultimo player to play ultimo.
+
+    Parameters:
+        - cego_player_cards (list): the cards of the cego player
+
+    Returns:
+        - valid (bool): Player has 1-trump on his hand
+    '''
+
+    return "1-trump" in cards2list(cego_player_cards)
+
+
+def valid_solo(cego_player_cards) -> bool:
+    ''' This function checks if it would be valid for the 
+    for the solo player to play solo.
+
+    Parameters:
+        - cego_player_cards (list): the cards of the cego player
+
+    Returns:
+        - valid (bool): if player has 7 trumps, two trumps >= 17 and 2 colors 
+            or 8 trumps
+            - https://www.cego-online.de/tl_files/documents/CegoSpielregelndef1301224mit%20Anhang.pdf
+    '''
+
+    trumps = [card for card in cego_player_cards if card.suit == 'trump']
+    trumps_higher_17 = [card for card in trumps if card.suit == 'trump'
+                        and (card.rank == 'gstiess' or int(card.rank) >= 17)]
+    colors = set(
+        [card.suit for card in cego_player_cards if card.suit != 'trump'])
+
+    if len(trumps) >= 8:
+        return True
+    elif len(trumps) == 7 and len(trumps_higher_17) and len(colors) == 2:
+        return True
+
+    return False
