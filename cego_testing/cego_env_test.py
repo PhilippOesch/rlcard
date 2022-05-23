@@ -7,9 +7,9 @@ from rlcard.agents.human_agents.cego_human_agent import HumanAgent, _print_actio
 env = rlcard.make(
     'cego',
     config={
-        'seed': 10,
-        'game_variant': 'piccolo',
-        'game_activate_heuristic': False,
+        'seed': 12,
+        'game_variant': 'standard',
+        'game_activate_heuristic': True,
         'game_judge_by_points': 1,
     })
 
