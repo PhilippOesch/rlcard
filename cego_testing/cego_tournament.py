@@ -48,6 +48,8 @@ def evaluate(_seed, _models, _env_name, _game_variant, _game_judge_by_points, _g
     # Seed numpy, torch, random
     set_seed(_seed)
 
+    all_rewards= []
+
     # Make the environment with seed
     env = rlcard.make(
         _env_name,

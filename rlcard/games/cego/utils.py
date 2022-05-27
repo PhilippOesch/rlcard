@@ -522,6 +522,18 @@ def args_to_str(args):
     return res
 
 
+def load_model(model_path, env=None, position=None, device=None):
+    import torch
+    if os.path.isfile(model_path):  # Torch model
+        agent = torch.load(model_path, map_location=device)
+        agent.set_device(device)
+    elif model_path == 'random':  # Random model
+        from rlcard.agents import RandomAgent
+        agent = RandomAgent(num_actions=env.num_actions)
+
+    return agent
+
+
 def valid_ultimo(cego_player_cards) -> bool:
     ''' This function checks if it is possible 
     for the ultimo player to play ultimo.

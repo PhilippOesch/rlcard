@@ -51,7 +51,6 @@ def train(_log_dir, _env_name, _game_judge_by_points, _seed, _hidden_layers_size
           _q_epsilon_decay_steps, _q_batch_size, _q_train_every,
           _q_mlp_layer, _num_eval_games=10000, _num_episodes=1000,
           _evaluate_every=100):
-    pass
 
     # Check whether gpu is available
     device = get_device()
