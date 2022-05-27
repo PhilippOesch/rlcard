@@ -13,7 +13,9 @@ sonar-project.properties
 .coverage*
 docs/rst
 docs/sphinx
+random_search_results
 experiments/
 dist/
 rlcard/games/doudizhu/jsondata/
 rlcard/agents/gin_rummy_human_agent/gui_cards/cards_png
+
