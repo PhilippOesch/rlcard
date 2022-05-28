@@ -25,12 +25,12 @@ args = {
     "seed": [12],
     "game_variant": ["standard"],
     "game_activate_heuristic": [True],
-    "hidden_layers_sizes": [[256, 256],[512, 512], [512, 512, 512]],
+    "hidden_layers_sizes": [[128, 128],[256, 256],[512, 512], [512, 512, 512]],
     "reservoir_buffer_capacity": [20000, 50000, 100000],
     "anticipatory_param": [0.1, 0.25, 0.5],
     "batch_size": [256, 128, 64],
     "train_every": [1],
-    "rl_learning_rate": [0.1, 0.01, 0.001, 0.0001, 0.00001],
+    "rl_learning_rate": [0.1, 0.05, 0.01, 0.001, 0.0001, 0.00001],
     "sl_learning_rate": [0.005, 0.001, 0.0001, 0.00001],
     "min_buffer_size_to_learn": [100],
     "q_replay_memory_size": [20000, 100000, 200000],
@@ -39,10 +39,10 @@ args = {
     "q_discount_factor":[0.75, 0.8, 0.95, 0.99],
     "q_epsilon_start":[0.06, 0.1],
     "q_epsilon_end":[0, 0.01],
-    "q_epsilon_decay_steps":[int(1e6)],
-    "q_batch_size":[32, 64],
+    "q_epsilon_decay_steps":[int(50000)],
+    "q_batch_size":[32, 64, 128],
     "q_train_every":[1],
-    "q_mlp_layer":[[512, 512], [512, 512, 512], [512, 256, 128]],
+    "q_mlp_layer":[[256, 256],[512, 512], [512, 512, 512], [512, 256, 128]],
     "num_eval_games": [1000],
     "num_episodes": [50000],
     "evaluate_every": [500]
@@ -179,4 +179,4 @@ def train(log_dir, env_name, game_judge_by_points, game_variant, game_activate_h
     print('Model saved in', save_path)
 
 if __name__ == '__main__':
-    randomSearch(args, 'random_search_results/nfsp', random_search_iterations)
+    randomSearch(args, 'random_search_results/nfsp_2', random_search_iterations)
