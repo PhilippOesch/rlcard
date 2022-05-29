@@ -62,3 +62,8 @@ Parametersets:
 - num_episodes": [100000],
 - evaluate_every": [1000],
 - learning_rate: 0.0001, 0.00001, 0.00005
+
+## Further Testing after the first tests. Another game pointing variant was tested for 10 episodes
+
+- game_judge_by_points: 0 - Count with cego points
+- game_judge_by_points: 2 - Count won games

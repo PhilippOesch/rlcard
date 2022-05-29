@@ -21,7 +21,7 @@ random_search_iterations = 20
 
 args = {
     "env_name": ["cego"],
-    "game_judge_by_points": [1],
+    "game_judge_by_points": [0],
     "seed": [12],
     "game_variant": ["standard"],
     "game_activate_heuristic": [True],
@@ -40,7 +40,7 @@ args = {
     "q_epsilon_start":[0.06, 0.1],
     "q_epsilon_end":[0, 0.01],
     "q_epsilon_decay_steps":[int(50000)],
-    "q_batch_size":[32, 64, 128],
+    "q_batch_size":[32, 64],
     "q_train_every":[1],
     "q_mlp_layer":[[256, 256],[512, 512], [512, 512, 512], [512, 256, 128]],
     "num_eval_games": [1000],
@@ -179,4 +179,4 @@ def train(log_dir, env_name, game_judge_by_points, game_variant, game_activate_h
     print('Model saved in', save_path)
 
 if __name__ == '__main__':
-    randomSearch(args, 'random_search_results/nfsp_2', random_search_iterations)
+    randomSearch(args, 'random_search_results/nfsp_point_var_0', random_search_iterations)

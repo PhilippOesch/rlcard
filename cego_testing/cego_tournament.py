@@ -16,20 +16,20 @@ from rlcard.utils import (
 
 args = {
     "_seed": 12,
-    "_models": ["random",
+    "_models": ["experiments/cego_dmc_standard/dmc/0_56806400.pth",
                 "random", 
                 "random", 
                 "random"],
     "_env_name": "cego",
     "_game_variant": "standard",
-    "_game_judge_by_points": 1,
+    "_game_judge_by_points": 0,
     "_game_activate_heuristic": True,
     "_num_games": 1000,
 }
 
 
 def load_model(model_path, env=None, position=None, device=None):
-    import torch
+    agent= None
     if os.path.isfile(model_path):  # Torch model
         agent = torch.load(model_path, map_location=device)
         agent.set_device(device)
