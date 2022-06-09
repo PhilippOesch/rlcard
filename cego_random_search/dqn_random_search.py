@@ -22,7 +22,7 @@ random_search_iterations = 20
 # arguments for the random search
 args = {
     "env_name": ["cego"],
-    "game_judge_by_points": [1],
+    "game_judge_by_points": [0],
     "game_variant": ["standard"],
     "game_activate_heuristic": [True],
     "seed": [12],
@@ -160,4 +160,5 @@ def save_search_set(random_search_folder, args_string):
         f.write(args_string + "\n")
 
 if __name__ == '__main__':
-    randomSearch(args, 'random_search_results/dqn', random_search_iterations)
+    os.environ["CUDA_VISIBLE_DEVICES"] = "cpu"
+    randomSearch(args, 'random_search_results/dqn_point_var_0', random_search_iterations)
