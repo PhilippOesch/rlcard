@@ -77,6 +77,8 @@ def get_known_cards(hand, valued_cards, tricks_played, current_trick, start_idx=
     if current_trick is not None:
         known_cards.extend(current_trick)
     card_idxs = [start_idx + ACTION_SPACE[card] for card in known_cards]
+    
+    # print("cards:", card_idxs)
     return card_idxs
 
 
@@ -171,7 +173,7 @@ def encode_observation_var0(state, is_raeuber=False):
     known_cards_idxs = get_known_cards(
         state['hand'], state['valued_cards'], state['played_tricks'], state['trick'], 54)
 
-    obs[range(54, 107)] = 1
+    obs[range(54, 108)] = 1
     # unset all cards that are knowingly out of the game
     obs[known_cards_idxs] = 0
 
@@ -217,7 +219,7 @@ def encode_observation_var1(state, is_raeuber=False):
     known_cards_idxs = get_known_cards(
         state['hand'], state['valued_cards'], state['played_tricks'], state['trick'], 54)
 
-    obs[range(54, 107)] = 1
+    obs[range(54, 108)] = 1
     # unset all cards that are out of the game
     obs[known_cards_idxs] = 0
 
@@ -261,7 +263,7 @@ def encode_observation_var2(state, is_raeuber=False):
 
     obs[hand_cards_idx] = 1
 
-    obs[range(54, 107)] = 1
+    obs[range(54, 108)] = 1
     # unset all cards that are out of the game
     obs[known_cards_idxs] = 0
 
@@ -310,7 +312,7 @@ def encode_observation_var3(state, is_raeuber=False):
 
     obs[hand_cards_idx] = 1
 
-    obs[range(54, 107)] = 1
+    obs[range(54, 108)] = 1
     # unset all cards that are out of the game
     obs[known_cards_idxs] = 0
 
