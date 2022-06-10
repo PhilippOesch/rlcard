@@ -263,7 +263,7 @@ def encode_observation_var2(state, is_raeuber=False):
 
     obs[hand_cards_idx] = 1
 
-    obs[range(54, 108)] = 1
+    obs[range(54,108)] = 1
     # unset all cards that are out of the game
     obs[known_cards_idxs] = 0
 
@@ -365,7 +365,7 @@ def encode_observation_var4(state, is_raeuber=False):
     known_cards_idxs = get_known_cards(
         state['hand'], state['valued_cards'], state['played_tricks'], state['trick'], 54)
 
-    obs[range(54, 107)] = 1
+    obs[range(54, 108)] = 1
     # unset all cards that are out of the game
     obs[known_cards_idxs] = 0
 
