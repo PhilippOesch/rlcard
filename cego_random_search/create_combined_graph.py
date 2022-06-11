@@ -2,6 +2,8 @@ import json
 import os
 import csv
 import matplotlib.pyplot as plt
+from scipy import stats
+import torch
 
 import rlcard
 
@@ -13,12 +15,12 @@ from rlcard.utils import (
     tournament,
 )
 
-path_to_models= 'random_search_results/dqn'
+path_to_models= 'random_search_results/dqn_point_var_0'
 
 seeds= [12, 17, 20, 30, 33]
 env_name= 'cego'
 game_variant= 'standard'
-game_judge_by_points= 1
+game_judge_by_points= 0
 game_activate_heuristic= True
 num_games= 1000
 
@@ -72,7 +74,8 @@ def compare_model_in_tournament(path_to_models):
             continue
 
         # Check whether gpu is available
-        device = get_device()
+        # device = get_device()
+        device = torch.device("cpu")
 
         iterations_rewards = []
 
@@ -114,13 +117,77 @@ def compare_model_in_tournament(path_to_models):
             }
         )
 
-    all_rewards.sort(key= lambda x: x['avg_reward'], reverse= True);
+    # all_rewards.sort(key= lambda x: x['avg_reward'], reverse= True);
 
-    with open(path_to_models+'/tournament_result.json', 'w') as f:
-        json.dump(all_rewards, f, indent=4)
+    # with open(path_to_models+'/tournament_result.json', 'w') as f:
+    #     json.dump(all_rewards, f, indent=4)
 
-            
+    sort_by_key_and_save_array(all_rewards, 'avg_reward', path_to_models+'/tournament_result.json', True)
+
+
+def read_performance(model_dir, max= 79, min= 0):
+    if not os.path.exists(model_dir+ '/performance.csv'):
+        return None, None, None, None
+    
+    file = open(model_dir+ '/performance.csv')
+    csvreader = csv.reader(file)
+    header = next(csvreader)
+    x = []
+    y = []
+    for row in csvreader:
+        x.append(row[0])
+        y.append(row[1]/(79+min))
+
+
+    slope, intercept, r, p, std_err = stats.linregress(x, y)
+    line= get_linear_function(x, slope, intercept)
+
+    return slope, line, y, x
+
+
+def get_linear_function(x, slope, intercept):
+    line= slope * x + intercept
+    return list(map(line, x))
+
+
+def compare_training_steep(path_to_models, max_value= 79, min_value= 0):
+
+
+    model_dirs= [x[0] for x in os.walk(path_to_models)]
+    idx= 0
+
+    slopes= []
+
+    for model_dir in model_dirs:
+        slope, line, y, x= read_performance(model_dir, max_value, min_value) 
+        if slope is None:
+            continue
+
+        slopes.append({
+            'model': model_dir,
+            'slope': slope,
+        })
+
+        fig, ax = plt.subplots()
+        ax.set(xlabel='timestep', ylabel='reward_normalized (max:1, min:0)')
+        ax.plot(x, y, label= "model_"+str(idx), linewidth=2)
+        ax.plot(x, line, label= "linear regression: "+str(idx+ i-5), linewidth=2)
+        ax.legend()
+        ax.grid()
+        fig.savefig(path_to_models + '/model_dir_lin_reg_'+str(idx) +'.png', dpi=200)
+
+        idx+= 1
+
+    sort_by_key_and_save_array(slopes, 'slope', path_to_models+'/lin_reg_slope_result_sorted.json', True)
+
+
+def sort_by_key_and_save_array(array, key, path, descending= True):
+    array.sort(key= lambda x: x[key], reverse= descending);
+
+    with open(path, 'w') as f:
+        json.dump(array, f, indent=4)
+
 
 if __name__ == '__main__':
-    create_combined_graph(path_to_models, 5)
+    # create_combined_graph(path_to_models, 5)
     compare_model_in_tournament(path_to_models)
