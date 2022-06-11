@@ -186,25 +186,71 @@ class TestObsStateCegoKnowledgeStart(unittest.TestCase):
         ])
 
         trajectory, _ = env.run(is_training=False)
-        expected_cego= 33 # cards the cego player knows (54-21)
-        expected_other= 43 # cards the other players know (54-11)
+        expected_cego_0= 33 # cards the cego player knows (54-21)
+        expected_other_1= 42 # cards the other players know (54-11)
+        expected_other_2= 41
+        expected_other_3= 40
 
-        print()
+        cards_0= sum(trajectory[0][0]['obs'][54:108])
+        cards_1= sum(trajectory[1][0]['obs'][54:108])
+        cards_2= sum(trajectory[2][0]['obs'][54:108])
+        cards_3= sum(trajectory[3][0]['obs'][54:108])
 
-        # print(sum(trajectory[0][0]['obs'][54:108]))
-        # print(trajectory[0][0]['obs'][54:108])
-        print()
-        print(trajectory[1][0]['obs'][:54])
-        print(trajectory[1][0]['obs'][54:108])
-        print(trajectory[2][0]['obs'][:54])
-        print(trajectory[2][0]['obs'][54:108])
-        print(sum(trajectory[2][0]['obs'][53:107]))
-        print(sum(trajectory[3][0]['obs'][53:107]))
+        self.assertEqual(expected_cego_0, cards_0)
+        self.assertEqual(expected_other_1, cards_1)
+        self.assertEqual(expected_other_2, cards_2)
+        self.assertEqual(expected_other_3, cards_3)
 
-        # self.assertEqual(expected_cego, end_cards_0)
-        # # self.assertEqual(expected_other, end_cards_1)
-        # self.assertEqual(expected_other, end_cards_2)
-        # self.assertEqual(expected_other, end_cards_3)
+
+class TestObsStateCegoKnowledgeEnd(unittest.TestCase):
+    def test_obs_state_cego_knowledge_end(self):
+        env = rlcard.make(
+            "cego",
+            config={
+                'seed': 12,
+                'game_variant': "standard",
+                'game_activate_heuristic': True,
+                'game_judge_by_points': 0
+            }
+        )
+        env.set_agents([
+            RandomAgent(num_actions=env.num_actions) for _ in range(env.num_players)
+        ])
+
+        trajectory, _ = env.run(is_training=False)
+        expected_cego= 0 # cards the cego player knows (54-21)
+        expected_other= 10 # cards the other players know (54-11)
+
+        cards_0= sum(trajectory[0][-1]['obs'][54:108])
+        cards_1= sum(trajectory[1][-1]['obs'][54:108])
+        cards_2= sum(trajectory[2][-1]['obs'][54:108])
+        cards_3= sum(trajectory[3][-1]['obs'][54:108])
+
+        self.assertEqual(expected_cego, cards_0)
+        self.assertEqual(expected_other, cards_1)
+        self.assertEqual(expected_other, cards_2)
+        self.assertEqual(expected_other, cards_3)
+
+class TestObsStateCegoHeuristic(unittest.TestCase):
+    def test_obs_state_cego_knowledge_end(self):
+        env = rlcard.make(
+            "cego",
+            config={
+                'seed': 12,
+                'game_variant': "standard",
+                'game_activate_heuristic': True,
+                'game_judge_by_points': 0
+            }
+        )
+        env.set_agents([
+            RandomAgent(num_actions=env.num_actions) for _ in range(env.num_players)
+        ])
+
+        env.game.init_game()
+
+        cego_card_value= cards2value(env.game.players[0].hand)
+        expected= 15
+        self.assertGreaterEqual(cego_card_value, expected)
 
 if __name__ == '__main__':
     unittest.main()
