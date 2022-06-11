@@ -17,7 +17,8 @@ from rlcard.utils import (
     set_seed,
 )  # import some useful functions
 
-random_search_iterations = 20
+random_search_iterations = 10
+ALL_DL_AGENTS = False
 
 args = {
     "env_name": ["cego"],
@@ -25,28 +26,29 @@ args = {
     "seed": [12],
     "game_variant": ["standard"],
     "game_activate_heuristic": [True],
-    "hidden_layers_sizes": [[128, 128],[256, 256],[512, 512], [512, 512, 512]],
-    "reservoir_buffer_capacity": [20000, 50000, 100000],
-    "anticipatory_param": [0.1, 0.25, 0.5],
-    "batch_size": [256, 128, 64],
+    "hidden_layers_sizes": [[128, 128], [256, 256], [512, 512], [512, 512, 512]],
+    "reservoir_buffer_capacity": [20000, 50000, 100000, 200000],
+    "anticipatory_param": [0.1, 0.2, 0.25, 0.35, 0.5],
+    "batch_size": [128, 64, 32],
     "train_every": [1],
-    "rl_learning_rate": [0.1, 0.05, 0.01, 0.001, 0.0001, 0.00001],
-    "sl_learning_rate": [0.005, 0.001, 0.0001, 0.00001],
+    "rl_learning_rate": [1e-05],
+    "sl_learning_rate": [0.001, 0.0001, 0.00005, 0.00001, 0.000005],
     "min_buffer_size_to_learn": [100],
-    "q_replay_memory_size": [20000, 100000, 200000],
-    "q_replay_memory_init_size":[100],
-    "q_update_target_estimator_every":[1000, 2000, 10000],
-    "q_discount_factor":[0.75, 0.8, 0.95, 0.99],
-    "q_epsilon_start":[0.06, 0.1],
-    "q_epsilon_end":[0, 0.01],
-    "q_epsilon_decay_steps":[int(50000)],
-    "q_batch_size":[32, 64],
-    "q_train_every":[1],
-    "q_mlp_layer":[[256, 256],[512, 512], [512, 512, 512], [512, 256, 128]],
+    "q_replay_memory_size": [100000],
+    "q_replay_memory_init_size": [100],
+    "q_update_target_estimator_every": [10000],
+    "q_discount_factor": [0.95],
+    "q_epsilon_start": [1],
+    "q_epsilon_end": [0.1],
+    "q_epsilon_decay_steps": [int(50000)],
+    "q_batch_size": [32],
+    "q_train_every": [1],
+    "q_mlp_layer": [[512, 512]],
     "num_eval_games": [1000],
     "num_episodes": [50000],
     "evaluate_every": [500]
 }
+
 
 def randomSearch(args: dict, random_search_folder: str, random_search_iterations: int):
     set_of_searches = init_search_set(random_search_folder)
@@ -66,9 +68,10 @@ def randomSearch(args: dict, random_search_folder: str, random_search_iterations
         train(**training_args)
         save_search_set(random_search_folder, args_as_string)
 
+
 def init_search_set(random_search_folder):
     res = set()
-    if os.path.exists(random_search_folder+ "/search_set.txt"):
+    if os.path.exists(random_search_folder + "/search_set.txt"):
         with open(random_search_folder + "/search_set.txt", "r") as f:
             search_set = set(f.read().splitlines())
 
@@ -79,13 +82,14 @@ def init_search_set(random_search_folder):
 
 
 def save_search_set(random_search_folder, args_string):
-    if not os.path.exists(random_search_folder+ "/search_set.txt"):
-        open(random_search_folder+ "/search_set.txt", 'a').close()
+    if not os.path.exists(random_search_folder + "/search_set.txt"):
+        open(random_search_folder + "/search_set.txt", 'a').close()
 
-    with open(random_search_folder+ "/search_set.txt", 'a') as f:
+    with open(random_search_folder + "/search_set.txt", 'a') as f:
         f.write(args_string + "\n")
 
-def train(log_dir, env_name, game_judge_by_points, game_variant, game_activate_heuristic, 
+
+def train(log_dir, env_name, game_judge_by_points, game_variant, game_activate_heuristic,
           seed, hidden_layers_sizes, reservoir_buffer_capacity,
           anticipatory_param, batch_size, train_every, rl_learning_rate, sl_learning_rate,
           min_buffer_size_to_learn, q_replay_memory_size, q_replay_memory_init_size,
@@ -111,29 +115,29 @@ def train(log_dir, env_name, game_judge_by_points, game_variant, game_activate_h
 
     agents = []
 
-    nfsp_agent= NFSPAgent(
-            num_actions=env.num_actions,
-            state_shape=env.state_shape[0],
-            hidden_layers_sizes=hidden_layers_sizes,
-            reservoir_buffer_capacity= reservoir_buffer_capacity,
-            anticipatory_param= anticipatory_param,
-            batch_size= batch_size,
-            train_every= train_every,
-            rl_learning_rate= rl_learning_rate,
-            sl_learning_rate= sl_learning_rate,
-            min_buffer_size_to_learn= min_buffer_size_to_learn,
-            q_replay_memory_size= q_replay_memory_size,
-            q_replay_memory_init_size= q_replay_memory_init_size,
-            q_update_target_estimator_every= q_update_target_estimator_every,
-            q_discount_factor= q_discount_factor,
-            q_epsilon_start= q_epsilon_start,
-            q_epsilon_end= q_epsilon_end,
-            q_epsilon_decay_steps= q_epsilon_decay_steps,
-            q_batch_size= q_batch_size,
-            q_train_every= q_train_every,
-            q_mlp_layers=q_mlp_layer,
-            device=device,
-        )
+    nfsp_agent = NFSPAgent(
+        num_actions=env.num_actions,
+        state_shape=env.state_shape[0],
+        hidden_layers_sizes=hidden_layers_sizes,
+        reservoir_buffer_capacity=reservoir_buffer_capacity,
+        anticipatory_param=anticipatory_param,
+        batch_size=batch_size,
+        train_every=train_every,
+        rl_learning_rate=rl_learning_rate,
+        sl_learning_rate=sl_learning_rate,
+        min_buffer_size_to_learn=min_buffer_size_to_learn,
+        q_replay_memory_size=q_replay_memory_size,
+        q_replay_memory_init_size=q_replay_memory_init_size,
+        q_update_target_estimator_every=q_update_target_estimator_every,
+        q_discount_factor=q_discount_factor,
+        q_epsilon_start=q_epsilon_start,
+        q_epsilon_end=q_epsilon_end,
+        q_epsilon_decay_steps=q_epsilon_decay_steps,
+        q_batch_size=q_batch_size,
+        q_train_every=q_train_every,
+        q_mlp_layers=q_mlp_layer,
+        device=device,
+    )
     agents.append(nfsp_agent)
 
     for _ in range(1, env.num_players):
@@ -178,5 +182,7 @@ def train(log_dir, env_name, game_judge_by_points, game_variant, game_activate_h
     torch.save(nfsp_agent, save_path)
     print('Model saved in', save_path)
 
+
 if __name__ == '__main__':
-    randomSearch(args, 'random_search_results/nfsp_point_var_0', random_search_iterations)
+    randomSearch(args, 'random_search_results/nfsp_point_var_0_tuned_dqn',
+                 random_search_iterations)
