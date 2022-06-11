@@ -4,6 +4,7 @@ import csv
 import matplotlib.pyplot as plt
 from scipy import stats
 import torch
+import ntpath
 
 import rlcard
 
@@ -15,7 +16,8 @@ from rlcard.utils import (
     tournament,
 )
 
-path_to_models= 'random_search_results/dqn_point_var_0'
+sub_path= 'random_search_results/'
+path_to_models= sub_path+'/dqn_point_var_1'
 
 seeds= [12, 17, 20, 30, 33]
 env_name= 'cego'
@@ -135,33 +137,40 @@ def read_performance(model_dir, max= 79, min= 0):
     x = []
     y = []
     for row in csvreader:
-        x.append(row[0])
-        y.append(row[1]/(79+min))
+        if(len(row)== 0):
+            continue
+        x.append(int(row[0]))
+        y.append(float(row[1])/float(max+min))
 
 
     slope, intercept, r, p, std_err = stats.linregress(x, y)
-    line= get_linear_function(x, slope, intercept)
 
-    return slope, line, y, x
+    return slope, intercept, y, x
 
+def get_ys(x, slope, intercept):
+    ys= []
+    for x_i in x:
+        ys.append(slope*x_i+intercept)
 
-def get_linear_function(x, slope, intercept):
-    line= slope * x + intercept
-    return list(map(line, x))
+    return ys
 
+def path_leaf(path):
+    return ntpath.split(path)
 
-def compare_training_steep(path_to_models, max_value= 79, min_value= 0):
-
-
+def compare_training_slope(path_to_models, max_value= 79, min_value= 0):
     model_dirs= [x[0] for x in os.walk(path_to_models)]
-    idx= 0
 
     slopes= []
 
+    if not os.path.exists(path_to_models + '/lin_reg_graphs/'):
+        os.mkdir(path_to_models + '/lin_reg_graphs/')
+
     for model_dir in model_dirs:
-        slope, line, y, x= read_performance(model_dir, max_value, min_value) 
-        if slope is None:
+        slope, intercept, y, x= read_performance(model_dir, max_value, min_value) 
+        if x is None:
             continue
+
+        dir_name= path_leaf(model_dir)[1]
 
         slopes.append({
             'model': model_dir,
@@ -170,13 +179,12 @@ def compare_training_steep(path_to_models, max_value= 79, min_value= 0):
 
         fig, ax = plt.subplots()
         ax.set(xlabel='timestep', ylabel='reward_normalized (max:1, min:0)')
-        ax.plot(x, y, label= "model_"+str(idx), linewidth=2)
-        ax.plot(x, line, label= "linear regression: "+str(idx+ i-5), linewidth=2)
+        ax.plot(x, y, label= dir_name, linewidth=2)
+        ax.plot(x, get_ys(x, slope, intercept) , label= "linear regression: "+dir_name, linewidth=2)
         ax.legend()
         ax.grid()
-        fig.savefig(path_to_models + '/model_dir_lin_reg_'+str(idx) +'.png', dpi=200)
+        fig.savefig(path_to_models + '/lin_reg_graphs/lin_reg_'+dir_name +'.png', dpi=200)
 
-        idx+= 1
 
     sort_by_key_and_save_array(slopes, 'slope', path_to_models+'/lin_reg_slope_result_sorted.json', True)
 
@@ -188,6 +196,69 @@ def sort_by_key_and_save_array(array, key, path, descending= True):
         json.dump(array, f, indent=4)
 
 
+def get_total_ranking(save_folder, paths_to_models):
+    array_rewards= []
+    array_slopes= []
+
+    slope_rankings= {}
+    reward_rankings= {}
+    total_ranks= []
+
+    # print(paths_to_models)
+
+    for path in paths_to_models:
+        file = open(path+ "/tournament_result.json")
+
+        array_rewards.extend(json.load(file))
+
+        otherfile = open(path+ "/lin_reg_slope_result_sorted.json")
+
+        array_slopes.extend(json.load(otherfile))
+
+    array_rewards.sort(key= lambda x: x["avg_reward"], reverse= True);
+    array_slopes.sort(key= lambda x: x["slope"], reverse= True);
+
+    # for i in range(len(array_rewards)):
+    #     array_rewards[i]["rank"]= i+1
+
+    # print(array_rewards)
+
+    # for i in range(len(array_slopes)):
+    #     array_slopes[i]["rank"]= i+1
+
+   
+    for idx, reward in enumerate(array_rewards):
+        reward_rankings[reward['model']]= {
+            'rank': idx+1,
+            'avg_reward': reward['avg_reward'],
+        }
+
+    for idx, slope in enumerate(array_slopes):
+        slope_rankings[slope['model']]= {
+            'rank': idx+1,
+            'slope': slope['slope'],
+        }
+
+    print(reward_rankings)
+
+    for model in reward_rankings:
+        # print("Current_Model:", model)
+        print(model)
+        # print(slope_rankings[model]['rank'])
+        total_ranks.append({
+            "model": model,
+            "rank": reward_rankings[model]['rank']*0.5+slope_rankings[model]['rank']*0.5,
+            "avg_reward": reward_rankings[model]['avg_reward'],
+            "slope": slope_rankings[model]['slope']*100000,
+        })
+
+    sort_by_key_and_save_array(total_ranks, 'rank', save_folder+'/total_ranking.json', False)
+
+
 if __name__ == '__main__':
     # create_combined_graph(path_to_models, 5)
-    compare_model_in_tournament(path_to_models)
+    compare_training_slope(path_to_models, 1, 0)
+    get_total_ranking('random_search_results/',[
+        'random_search_results/dqn_point_var_1',
+        'random_search_results/dqn_point_var_0'
+    ])
