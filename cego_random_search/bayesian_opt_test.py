@@ -48,7 +48,8 @@ max_concurrency = 8
 
 
 def train_dqn(config):
-    device = get_device()
+    # device = get_device()
+    device = torch.device("cpu")
     print(device)
 
     set_seed(config['seed'])
@@ -130,6 +131,7 @@ if __name__ == '__main__':
 
     # print(isExist)
 
+    os.environ["CUDA_VISIBLE_DEVICES"] = ""
     algo = HEBOSearch(
         random_state_seed=config['seed'],
         max_concurrent=max_concurrency
@@ -147,7 +149,7 @@ if __name__ == '__main__':
         local_dir= config["log_dir"],
         name="HEBO_search_experiment",
         trial_name_creator=trial_name_id,
-        num_samples=10,
+        num_samples=5,
         time_budget_s=21600
     )
 
