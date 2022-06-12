@@ -14,6 +14,8 @@ DEFAULT_GAME_CONFIG = {
     'game_judge_by_points': 2,
     'game_activate_heuristic': True,
     'game_with_perfect_information': False,
+    # what player should be traines
+    'game_train_players': [False, False, False, False]
 }
 
 
@@ -46,6 +48,7 @@ class CegoEnv(Env):
         '''
         self.name = 'cego'
         self.default_game_config = DEFAULT_GAME_CONFIG
+        self.game_train_players = config['game_train_players'] if 'game_train_players' in config else DEFAULT_GAME_CONFIG['game_train_players']
 
         # select the proper game variant
         variant = config['game_variant'] if 'game_variant' in config else DEFAULT_GAME_CONFIG['game_variant']
@@ -57,6 +60,51 @@ class CegoEnv(Env):
         else:
             self.state_shape = [[336] for _ in range(self.num_players)]
         self.action_shape = [None for _ in range(self.num_players)]
+
+    def run(self, is_training=False):
+        '''
+        Override the run method of the Env class
+        '''
+        trajectories = [[] for _ in range(self.num_players)]
+        state, player_id = self.reset()
+
+        # Loop to play the game
+        trajectories[player_id].append(state)
+        while not self.is_over():
+            # Agent plays
+
+            if not self.game_train_players[player_id]:
+                action, _ = self.agents[player_id].eval_step(state)
+            else:
+                action = self.agents[player_id].step(state)
+            # if not is_training:
+            #     action, _ = self.agents[player_id].eval_step(state)
+            # else:
+            #     action = self.agents[player_id].step(state)
+
+            # Environment steps
+            next_state, next_player_id = self.step(
+                action, self.agents[player_id].use_raw)
+            # Save action
+            trajectories[player_id].append(action)
+
+            # Set the state and player
+            state = next_state
+            player_id = next_player_id
+
+            # Save state.
+            if not self.game.is_over():
+                trajectories[player_id].append(state)
+
+        # Add a final state to all the players
+        for player_id in range(self.num_players):
+            state = self.get_state(player_id)
+            trajectories[player_id].append(state)
+
+        # Payoffs
+        payoffs = self.get_payoffs()
+
+        return trajectories, payoffs
 
     def _extract_state(self, state) -> OrderedDict:
         ''' Extract the observation for each player

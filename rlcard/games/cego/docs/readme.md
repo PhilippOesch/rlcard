@@ -135,3 +135,6 @@ The Environment currently allows the following configurations:
   * *2*: The payoffs will be judged by weather the player wins or loses. If the player loses the payoff is **-1**, if the player wins the payoff is **1**.
 * **game_activate_heuristic** (bool): take into account heuristic for the game variant if possible
 
+Update:
+
+* Im adjusting the env class to decide which agent I want to train and which not.

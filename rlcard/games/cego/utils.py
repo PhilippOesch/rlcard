@@ -77,7 +77,7 @@ def get_known_cards(hand, valued_cards, tricks_played, current_trick, start_idx=
     if current_trick is not None:
         known_cards.extend(current_trick)
     card_idxs = [start_idx + ACTION_SPACE[card] for card in known_cards]
-    
+
     # print("cards:", card_idxs)
     return card_idxs
 
@@ -263,7 +263,7 @@ def encode_observation_var2(state, is_raeuber=False):
 
     obs[hand_cards_idx] = 1
 
-    obs[range(54,108)] = 1
+    obs[range(54, 108)] = 1
     # unset all cards that are out of the game
     obs[known_cards_idxs] = 0
 
@@ -532,6 +532,7 @@ def load_model(model_path, env=None, position=None, device=None):
     elif model_path == 'random':  # Random model
         from rlcard.agents import RandomAgent
         agent = RandomAgent(num_actions=env.num_actions)
+    print("loaded model: {}".format(model_path))
 
     return agent
 
