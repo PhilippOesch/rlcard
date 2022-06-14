@@ -260,8 +260,9 @@ def get_total_ranking(save_folder, paths_to_models):
 if __name__ == '__main__':
     # create_combined_graph(path_to_models, 5)
     # compare_training_slope(path_to_models, 1, 0)
-    # get_total_ranking('random_search_results/',[
-    #     'random_search_results/nfsp_point_var_1',
-    #     'random_search_results/nfsp_point_var_0'
-    # ])
-    compare_training_slope('random_search_results/nfsp_point_var_0_tuned_dqn_against_dqn', 79, 0)
+    # compare_training_slope('random_search_results/nfsp_point_var_0_tuned_dqn_against_dqn', 79, 0)
+    get_total_ranking('random_search_results/',[
+        'random_search_results/nfsp_point_var_0_tuned_dqn_against_dqn'
+    ])
+    # nfsp_point_var_0_tuned_dqn_against_dqn
+    # compare_training_slope('random_search_results/nfsp_point_var_0_tuned_dqn_against_dqn', 79, 0)
