@@ -17,7 +17,7 @@ from rlcard.utils import (
 )
 
 sub_path= 'random_search_results/'
-path_to_models= sub_path+'/dqn_point_var_1'
+path_to_models= sub_path+'/nfsp_point_var_1'
 
 seeds= [12, 17, 20, 30, 33]
 env_name= 'cego'
@@ -245,9 +245,11 @@ def get_total_ranking(save_folder, paths_to_models):
         # print("Current_Model:", model)
         print(model)
         # print(slope_rankings[model]['rank'])
+        print(reward_rankings[model]['rank'])
+        print(slope_rankings[model]['rank'])
         total_ranks.append({
             "model": model,
-            "rank": reward_rankings[model]['rank']*0.5+slope_rankings[model]['rank']*0.5,
+            "rank": (reward_rankings[model]['rank']*0.5)+(slope_rankings[model]['rank']*0.5),
             "avg_reward": reward_rankings[model]['avg_reward'],
             "slope": slope_rankings[model]['slope']*100000,
         })
@@ -257,8 +259,9 @@ def get_total_ranking(save_folder, paths_to_models):
 
 if __name__ == '__main__':
     # create_combined_graph(path_to_models, 5)
-    compare_training_slope(path_to_models, 1, 0)
-    get_total_ranking('random_search_results/',[
-        'random_search_results/dqn_point_var_1',
-        'random_search_results/dqn_point_var_0'
-    ])
+    # compare_training_slope(path_to_models, 1, 0)
+    # get_total_ranking('random_search_results/',[
+    #     'random_search_results/nfsp_point_var_1',
+    #     'random_search_results/nfsp_point_var_0'
+    # ])
+    compare_training_slope('random_search_results/nfsp_point_var_0_tuned_dqn_against_dqn', 79, 0)

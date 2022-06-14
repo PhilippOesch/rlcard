@@ -73,10 +73,14 @@ class CegoEnv(Env):
         while not self.is_over():
             # Agent plays
 
-            if not self.game_train_players[player_id]:
-                action, _ = self.agents[player_id].eval_step(state)
+
+            if is_training:
+                if not self.game_train_players[player_id]:
+                    action, _ = self.agents[player_id].eval_step(state)
+                else:
+                    action = self.agents[player_id].step(state)
             else:
-                action = self.agents[player_id].step(state)
+                action, _ = self.agents[player_id].eval_step(state)
             # if not is_training:
             #     action, _ = self.agents[player_id].eval_step(state)
             # else:
