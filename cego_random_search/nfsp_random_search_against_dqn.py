@@ -17,7 +17,7 @@ from rlcard.utils import (
     set_seed,
 )  # import some useful functions
 
-random_search_iterations = 10
+random_search_iterations = 20
 opponent_agents = [
     "random_search_results/dqn_point_var_0/model_4/model.pth",
     "random_search_results/dqn_point_var_0/model_4/model.pth",

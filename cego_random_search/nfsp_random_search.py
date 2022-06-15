@@ -17,7 +17,7 @@ from rlcard.utils import (
     set_seed,
 )  # import some useful functions
 
-random_search_iterations = 10
+random_search_iterations = 20
 ALL_DL_AGENTS = False
 
 args = {
@@ -26,6 +26,7 @@ args = {
     "seed": [12],
     "game_variant": ["standard"],
     "game_activate_heuristic": [True],
+    "game_train_players": [[True, True, True, True]],
     "hidden_layers_sizes": [[128, 128], [256, 256], [512, 512], [512, 512, 512]],
     "reservoir_buffer_capacity": [20000, 50000, 100000, 200000],
     "anticipatory_param": [0.1, 0.2, 0.25, 0.35, 0.5],
@@ -90,7 +91,7 @@ def save_search_set(random_search_folder, args_string):
 
 
 def train(log_dir, env_name, game_judge_by_points, game_variant, game_activate_heuristic,
-          seed, hidden_layers_sizes, reservoir_buffer_capacity,
+          game_train_players, seed, hidden_layers_sizes, reservoir_buffer_capacity,
           anticipatory_param, batch_size, train_every, rl_learning_rate, sl_learning_rate,
           min_buffer_size_to_learn, q_replay_memory_size, q_replay_memory_init_size,
           q_update_target_estimator_every, q_discount_factor, q_epsilon_start, q_epsilon_end,
@@ -109,7 +110,19 @@ def train(log_dir, env_name, game_judge_by_points, game_variant, game_activate_h
             'seed': seed,
             'game_variant': game_variant,
             'game_activate_heuristic': game_activate_heuristic,
-            'game_judge_by_points': game_judge_by_points
+            'game_judge_by_points': game_judge_by_points,
+            'game_train_players': game_train_players
+        }
+    )
+
+    tournament_env = env = rlcard.make(
+        env_name,
+        config={
+            'seed': seed,
+            'game_variant': game_variant,
+            'game_activate_heuristic': game_activate_heuristic,
+            'game_judge_by_points': game_judge_by_points,
+            'game_train_players': [False, False, False, False]
         }
     )
 
@@ -164,7 +177,7 @@ def train(log_dir, env_name, game_judge_by_points, game_variant, game_activate_h
             # Evaluate the performance.s.
             if episode % evaluate_every == 0:
                 logger.log_performance(
-                    env.timestep,
+                    tournament_env.timestep,
                     tournament(
                         env,
                         num_eval_games,
@@ -184,5 +197,5 @@ def train(log_dir, env_name, game_judge_by_points, game_variant, game_activate_h
 
 
 if __name__ == '__main__':
-    randomSearch(args, 'random_search_results/nfsp_point_var_0_tuned_dqn',
+    randomSearch(args, 'random_search_results/          nfsp_point_var_0_tuned_dqn_second_try',
                  random_search_iterations)
