@@ -115,17 +115,6 @@ def train(log_dir, env_name, game_judge_by_points, game_variant, game_activate_h
         }
     )
 
-    tournament_env = env = rlcard.make(
-        env_name,
-        config={
-            'seed': seed,
-            'game_variant': game_variant,
-            'game_activate_heuristic': game_activate_heuristic,
-            'game_judge_by_points': game_judge_by_points,
-            'game_train_players': [False, False, False, False]
-        }
-    )
-
     agents = []
 
     nfsp_agent = NFSPAgent(
@@ -177,7 +166,7 @@ def train(log_dir, env_name, game_judge_by_points, game_variant, game_activate_h
             # Evaluate the performance.s.
             if episode % evaluate_every == 0:
                 logger.log_performance(
-                    tournament_env.timestep,
+                    env.timestep,
                     tournament(
                         env,
                         num_eval_games,

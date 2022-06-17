@@ -17,7 +17,7 @@ from rlcard.utils import (
     set_seed,
 )  # import some useful functions
 
-random_search_iterations = 20
+random_search_iterations = 10
 opponent_agents = [
     "random_search_results/dqn_point_var_0/model_4/model.pth",
     "random_search_results/dqn_point_var_0/model_4/model.pth",
@@ -120,6 +120,17 @@ def train(log_dir, env_name, game_judge_by_points, game_variant, game_activate_h
         }
     )
 
+    # create a seperate env for evaluation
+    tournament_env = env = rlcard.make(
+        env_name,
+        config={
+            'seed': seed,
+            'game_variant': game_variant,
+            'game_activate_heuristic': game_activate_heuristic,
+            'game_judge_by_points': game_judge_by_points,
+        }
+    )
+
     agents = []
 
     nfsp_agent = NFSPAgent(
@@ -150,6 +161,11 @@ def train(log_dir, env_name, game_judge_by_points, game_variant, game_activate_h
     for model in opponent_agents:
         agents.append(load_model(model, env, device=device))
 
+    tournament_agents = [nfsp_agent]
+    for _ in range(1, env.num_players):
+        agents.append(RandomAgent(num_actions=env.num_actions))
+    tournament_env.set_agents(tournament_agents)
+
     env.set_agents(agents)
 
     # Start training
@@ -173,7 +189,7 @@ def train(log_dir, env_name, game_judge_by_points, game_variant, game_activate_h
                 logger.log_performance(
                     env.timestep,
                     tournament(
-                        env,
+                        tournament_env,
                         num_eval_games,
                     )[0]
                 )
@@ -191,5 +207,5 @@ def train(log_dir, env_name, game_judge_by_points, game_variant, game_activate_h
 
 
 if __name__ == '__main__':
-    randomSearch(args, 'random_search_results/nfsp_point_var_0_tuned_dqn_against_dqn',
+    randomSearch(args, 'random_search_results/nfsp_point_var_0_tuned_dqn_against_dqn_second_try',
                  random_search_iterations)
