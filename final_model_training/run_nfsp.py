@@ -153,7 +153,7 @@ def train(log_dir, env_name, game_judge_by_points, game_variant, game_activate_h
                 save_path = os.path.join(
                     log_dir + "/checkpoint_"+str(checkpoint_count), 'model.pth')
                 torch.save(log_dir, save_path)
-                plot_curve(csv_path, fig_path, "DQN")
+                plot_curve(csv_path, fig_path, "NFSP")
                 checkpoint_count += 1
                 print('Model saved in', save_path)
 
