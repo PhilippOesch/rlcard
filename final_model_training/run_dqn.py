@@ -114,7 +114,7 @@ def train(log_dir, env_name, game_variant, game_activate_heuristic,
                     )[0]
                 )
 
-            if episode % save_model_every == 0:
+            if episode % save_model_every == 0 or episode == 0:
                 logger.save_csv()
                 os.mkdir(log_dir + "/checkpoint_"+str(checkpoint_count))
                 csv_path, fig_path = logger.csv_path, log_dir + \
@@ -124,21 +124,6 @@ def train(log_dir, env_name, game_variant, game_activate_heuristic,
                 torch.save(log_dir, save_path)
                 plot_curve(csv_path, fig_path, "DQN")
                 checkpoint_count += 1
-
-        # Get the paths
-        # csv_path, fig_path = logger.csv_path, logger.fig_path
-
-
-def init_search_set(random_search_folder):
-    res = set()
-    if os.path.exists(random_search_folder + "/search_set.txt"):
-        with open(random_search_folder + "/search_set.txt", "r") as f:
-            search_set = set(f.read().splitlines())
-
-            for val in search_set:
-                res.add(val)
-
-    return res
 
 
 if __name__ == '__main__':
