@@ -36,8 +36,8 @@ args = {
     "mlp_layers": [512, 512],
     "num_eval_games": 1000,
     "num_episodes": 1000000,
-    "evaluate_every": 50,
-    "save_model_every": 100,
+    "evaluate_every": 1000,
+    "save_model_every": 50000,
     "learning_rate": 1e-05,
 }
 
@@ -88,7 +88,7 @@ def train(log_dir, env_name, game_variant, game_activate_heuristic,
 
     env.set_agents(agents)  # set agents to the environment
 
-    checkpoint_count= 0          
+    checkpoint_count = 0
 
     # Start training
     with MyLogger(log_dir) as logger:
@@ -113,12 +113,14 @@ def train(log_dir, env_name, game_variant, game_activate_heuristic,
                         num_eval_games,
                     )[0]
                 )
-            
+
             if episode % save_model_every == 0:
                 logger.save_csv()
-                os.mkdir(log_dir+ "/checkpoint_"+str(checkpoint_count))
-                csv_path, fig_path = logger.csv_path, log_dir+ "/checkpoint_" + str(checkpoint_count)+"/fig.png"
-                save_path = os.path.join(log_dir+ "/checkpoint_"+str(checkpoint_count), 'model.pth')
+                os.mkdir(log_dir + "/checkpoint_"+str(checkpoint_count))
+                csv_path, fig_path = logger.csv_path, log_dir + \
+                    "/checkpoint_" + str(checkpoint_count)+"/fig.png"
+                save_path = os.path.join(
+                    log_dir + "/checkpoint_"+str(checkpoint_count), 'model.pth')
                 torch.save(log_dir, save_path)
                 plot_curve(csv_path, fig_path, "DQN")
                 checkpoint_count += 1
@@ -126,9 +128,10 @@ def train(log_dir, env_name, game_variant, game_activate_heuristic,
         # Get the paths
         # csv_path, fig_path = logger.csv_path, logger.fig_path
 
+
 def init_search_set(random_search_folder):
     res = set()
-    if os.path.exists(random_search_folder+ "/search_set.txt"):
+    if os.path.exists(random_search_folder + "/search_set.txt"):
         with open(random_search_folder + "/search_set.txt", "r") as f:
             search_set = set(f.read().splitlines())
 
