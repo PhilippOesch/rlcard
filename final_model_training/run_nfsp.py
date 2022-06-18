@@ -42,6 +42,7 @@ args = {
     "q_epsilon_decay_steps": 100000,
     "q_batch_size": 32,
     "train_every": 1,
+    "q_train_every": 1,
     "q_mlp_layer": [512, 512],
     "num_eval_games": 1000,
     "num_episodes": 1000000,
