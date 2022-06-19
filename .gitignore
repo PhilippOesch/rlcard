@@ -13,8 +13,8 @@ sonar-project.properties
 .coverage*
 docs/rst
 docs/sphinx
-experiments/
 final_models/
+experiments/
 random_search_results/
 bayesian_opt_result/
 dist/

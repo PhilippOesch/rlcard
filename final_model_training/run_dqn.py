@@ -18,6 +18,7 @@ from rlcard.utils import (
 )  # import some useful functions
 
 # arguments for the random search
+# dqn_point_var_0/model_4
 args = {
     "log_dir": "final_models/dqn_cego_player_0",
     "env_name": "cego",

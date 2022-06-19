@@ -18,6 +18,7 @@ from rlcard.utils import (
 )  # import some useful functions
 
 # arguments for the random search
+# nfsp_poinr_var_0_tuned_dqn/model_12
 args = {
     "log_dir": "final_models/nfsp_cego_player_0",
     "env_name": "cego",
@@ -112,6 +113,7 @@ def train(log_dir, env_name, game_judge_by_points, game_variant, game_activate_h
     with MyLogger(log_dir) as logger:
         prev_avg_reward = 0
         cur_avg_reward = 0
+        cur_avg_steps = 1
 
         for episode in range(num_episodes):
 
@@ -138,7 +140,8 @@ def train(log_dir, env_name, game_judge_by_points, game_variant, game_activate_h
                     tournament_reward
                 )
                 cur_avg_reward = (tournament_reward + cur_avg_reward *
-                                  ((episode % evaluate_every)-1)) / (episode % evaluate_every)
+                                  (cur_avg_steps-1) / cur_avg_steps)
+                cur_avg_steps += 1
 
             if episode % save_model_every == 0 or episode == 0:
                 if(prev_avg_reward > cur_avg_reward):
@@ -146,6 +149,7 @@ def train(log_dir, env_name, game_judge_by_points, game_variant, game_activate_h
 
                 prev_avg_reward = cur_avg_reward
                 cur_avg_reward = 0
+                cur_avg_steps = 1
 
                 logger.save_csv()
                 os.mkdir(log_dir + "/checkpoint_"+str(checkpoint_count))
