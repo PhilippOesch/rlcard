@@ -16,12 +16,13 @@ from rlcard.utils import (
 
 args = {
     "_seed": 12,
-    "_models": ["experiments/cego_dmc_standard/dmc/0_56806400.pth",
-                "random", 
-                "random", 
+    "_models": ["final_models/dmc_cego/dmc/0_511859200.pth",
+                "final_models/dmc_cego/dmc/1_511859200.pth",
+                "random",
                 "random"],
     "_env_name": "cego",
     "_game_variant": "standard",
+    "_game_train_players": [False, False, False, False],
     "_game_judge_by_points": 0,
     "_game_activate_heuristic": True,
     "_num_games": 1000,
@@ -29,7 +30,7 @@ args = {
 
 
 def load_model(model_path, env=None, position=None, device=None):
-    agent= None
+    agent = None
     if os.path.isfile(model_path):  # Torch model
         agent = torch.load(model_path, map_location=device)
         agent.set_device(device)
@@ -40,7 +41,7 @@ def load_model(model_path, env=None, position=None, device=None):
     return agent
 
 
-def evaluate(_seed, _models, _env_name, _game_variant, _game_judge_by_points, _game_activate_heuristic, _num_games):
+def evaluate(_seed, _models, _env_name, _game_variant, _game_train_players, _game_judge_by_points, _game_activate_heuristic, _num_games):
 
     # Check whether gpu is available
     device = get_device()
@@ -48,7 +49,7 @@ def evaluate(_seed, _models, _env_name, _game_variant, _game_judge_by_points, _g
     # Seed numpy, torch, random
     set_seed(_seed)
 
-    all_rewards= []
+    all_rewards = []
 
     # Make the environment with seed
     env = rlcard.make(
@@ -57,7 +58,8 @@ def evaluate(_seed, _models, _env_name, _game_variant, _game_judge_by_points, _g
             'seed': _seed,
             'game_variant': _game_variant,
             'game_judge_by_points': _game_judge_by_points,
-            'game_activate_heuristic': _game_activate_heuristic
+            'game_activate_heuristic': _game_activate_heuristic,
+            'game_train_players': _game_train_players
         }
     )
 

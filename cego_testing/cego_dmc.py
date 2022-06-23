@@ -59,12 +59,14 @@ def train(env_name, game_variant, game_judge_by_points, game_activate_heuristic,
         }
     )
 
+    print("env_state:", env.state_shape)
+
     trainer = DMCTrainer(
         env=env,
         cuda=cuda,
         xpid=xpid,
         load_model=load_model,
-        save_interval= save_interval,
+        save_interval=save_interval,
         num_actor_devices=num_actor_devices,
         num_actors=num_actors,
         training_device=training_device,

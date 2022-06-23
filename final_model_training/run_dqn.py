@@ -93,6 +93,10 @@ def train(log_dir, env_name, game_variant, game_activate_heuristic,
 
     # Start training
     with MyLogger(log_dir) as logger:
+        prev_avg_reward = 0
+        cur_avg_reward = 0
+        cur_avg_steps = 1
+
         for episode in range(num_episodes):
 
             # Generate data from the environment
@@ -107,22 +111,35 @@ def train(log_dir, env_name, game_variant, game_activate_heuristic,
 
             # Evaluate the performance.
             if episode % evaluate_every == 0:
+                tournament_reward = tournament(
+                    env,
+                    num_eval_games,
+                )[0]
+
                 logger.log_performance(
                     env.timestep,
-                    tournament(
-                        env,
-                        num_eval_games,
-                    )[0]
+                    tournament_reward
                 )
 
+                cur_avg_reward = (tournament_reward + cur_avg_reward *
+                                  (cur_avg_steps-1) / cur_avg_steps)
+                cur_avg_steps += 1
+
             if episode % save_model_every == 0 or episode == 0:
+                if(prev_avg_reward > cur_avg_reward):
+                    break
+
+                prev_avg_reward = cur_avg_reward
+                cur_avg_reward = 0
+                cur_avg_steps = 1
+
                 logger.save_csv()
                 os.mkdir(log_dir + "/checkpoint_"+str(checkpoint_count))
                 csv_path, fig_path = logger.csv_path, log_dir + \
                     "/checkpoint_" + str(checkpoint_count)+"/fig.png"
                 save_path = os.path.join(
                     log_dir + "/checkpoint_"+str(checkpoint_count), 'model.pth')
-                torch.save(log_dir, save_path)
+                torch.save(dqn_agent, save_path)
                 plot_curve(csv_path, fig_path, "DQN")
                 checkpoint_count += 1
 
