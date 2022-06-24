@@ -1,6 +1,7 @@
 import json
 import os
 import matplotlib.pyplot as plt
+from rlcard.games.cego.utils import load_model
 from scipy import stats
 from rlcard.agents import (
     DQNAgent,
@@ -82,25 +83,6 @@ def compare_model_in_tournament(path, path_to_models):
     with open(path, 'w') as f:
         json.dump(all_rewards, f, indent=4)
 
-
-# def sort_by_key_and_save_array(array, key, path, descending=True):
-#     array.sort(key=lambda x: x[key], reverse=descending)
-
-#     with open(path, 'w') as f:
-#         json.dump(array, f, indent=4)
-
-
-def load_model(model_path, env=None, position=None, device=None):
-    if os.path.isfile(model_path):  # Torch model
-        print("test")
-        import torch
-        agent = torch.load(model_path, map_location=device)
-        agent.set_device(device)
-    elif model_path == 'random':  # Random model
-        from rlcard.agents import RandomAgent
-        agent = RandomAgent(num_actions=env.num_actions)
-    
-    return agent
 
 if __name__ == '__main__':
     models1= [
