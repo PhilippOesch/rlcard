@@ -18,13 +18,13 @@ args = {
     "game_train_players": [True, True, True, True],
     'cuda': '',
     'seed': 20,
-    'load_model': True,
+    'load_model': False,
     'xpid': 'dmc',
     'save_interval': 30,
     'num_actor_devices': 1,
     'num_actors': 5,
     'training_device': '0',
-    'log_dir': 'final_models/dmc_cego_player_0_vs_random',
+    'log_dir': 'final_models/dmc_cego_player_0_focus',
     'total_frames': 100000000000,
     'exp_epsilon': 0.01,
     'batch_size': 32,
@@ -36,7 +36,8 @@ args = {
     'alpha': 0.99,
     'momentum': 0,
     'epsilon': 0.00001,
-    'use_random_agents': [False, True, True, True]
+    'focus_player': True,
+    'player_to_focus': 0
 }
 
 
@@ -44,7 +45,7 @@ def train(env_name, game_variant, game_judge_by_points, game_activate_heuristic,
           cuda, seed, load_model, xpid, save_interval, num_actor_devices, num_actors,
           training_device, log_dir, total_frames, exp_epsilon,
           batch_size, unroll_length, num_buffers, num_threads,
-          max_grad_norm, learning_rate, alpha, momentum, epsilon, use_random_agents):
+          max_grad_norm, learning_rate, alpha, momentum, epsilon, focus_player, player_to_focus):
 
     device = get_device()
     print(device)
@@ -85,7 +86,8 @@ def train(env_name, game_variant, game_judge_by_points, game_activate_heuristic,
         alpha=alpha,
         momentum=momentum,
         epsilon=epsilon,
-        use_random_agents=use_random_agents
+        focus_player=focus_player,
+        player_to_focus=player_to_focus
     )
 
     trainer.start()

@@ -1,12 +1,12 @@
 # Copyright 2021 RLCard Team of Texas A&M University
 # Copyright 2021 DouZero Team of Kwai
-# 
+#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #    http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,12 +18,13 @@ import numpy as np
 import torch
 from torch import nn
 
+
 class DMCNet(nn.Module):
     def __init__(
         self,
         state_shape,
         action_shape,
-        mlp_layers=[512,512,512,512,512]
+        mlp_layers=[512, 512, 512, 512, 512]
     ):
         super().__init__()
         input_dim = np.prod(state_shape) + np.prod(action_shape)
@@ -42,18 +43,20 @@ class DMCNet(nn.Module):
         values = self.fc_layers(x).flatten()
         return values
 
+
 class DMCAgent:
     def __init__(
         self,
         state_shape,
         action_shape,
-        mlp_layers=[512,512,512,512,512],
+        mlp_layers=[512, 512, 512, 512, 512],
         exp_epsilon=0.01,
         device="0",
     ):
         self.use_raw = False
         self.device = 'cuda:'+device if device != "cpu" else "cpu"
-        self.net = DMCNet(state_shape, action_shape, mlp_layers).to(self.device)
+        self.net = DMCNet(state_shape, action_shape,
+                          mlp_layers).to(self.device)
         self.exp_epsilon = exp_epsilon
         self.action_shape = action_shape
 
@@ -75,7 +78,8 @@ class DMCAgent:
         action = action_keys[action_idx]
 
         info = {}
-        info['values'] = {state['raw_legal_actions'][i]: float(values[i]) for i in range(len(action_keys))}
+        info['values'] = {state['raw_legal_actions'][i]: float(
+            values[i]) for i in range(len(action_keys))}
 
         return action, info
 
@@ -121,24 +125,36 @@ class DMCAgent:
     def set_device(self, device):
         self.device = device
 
+
 class DMCModel:
     def __init__(
         self,
         state_shape,
         action_shape,
-        mlp_layers=[512,512,512,512,512],
+        mlp_layers=[512, 512, 512, 512, 512],
         exp_epsilon=0.01,
-        device=0
+        device=0,
+        focus_player=False,
+        player_to_focus=0
     ):
         self.agents = []
         for player_id in range(len(state_shape)):
-            agent = DMCAgent(
-                state_shape[player_id],
-                action_shape[player_id],
-                mlp_layers,
-                exp_epsilon,
-                device,
-            )
+            if focus_player and player_to_focus == player_id:
+                agent = DMCAgent(
+                    state_shape[player_id],
+                    action_shape[player_id],
+                    mlp_layers,
+                    exp_epsilon,
+                    device,
+                )
+            else:
+                agent = DMCAgent(
+                    state_shape[player_id],
+                    action_shape[player_id],
+                    [512],
+                    exp_epsilon,
+                    device,
+                )
             self.agents.append(agent)
 
     def share_memory(self):

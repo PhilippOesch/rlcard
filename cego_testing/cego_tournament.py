@@ -17,9 +17,9 @@ from rlcard.utils import (
 args = {
     "_seed": 12,
     "_models": ["random",
-                "final_models/dmc_cego/dmc/1_1000192000.pth",
-                "final_models/dmc_cego/dmc/2_1000192000.pth",
-                "final_models/dmc_cego/dmc/3_1000192000.pth"],
+                "final_models/dmc_cego/dmc/1_1123993600.pth",
+                "random",
+                "random"],
     "_env_name": "cego",
     "_game_variant": "standard",
     "_game_train_players": [False, False, False, False],

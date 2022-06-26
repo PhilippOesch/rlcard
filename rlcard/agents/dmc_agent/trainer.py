@@ -1,12 +1,12 @@
 # Copyright 2021 RLCard Team of Texas A&M University
 # Copyright 2021 DouZero Team of Kwai
-# 
+#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #    http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -39,9 +39,11 @@ from .pettingzoo_utils import (
     act_pettingzoo,
 )
 
+
 def compute_loss(logits, targets):
     loss = ((logits - targets)**2).mean()
     return loss
+
 
 def learn(
     position,
@@ -55,12 +57,14 @@ def learn(
     lock
 ):
     """Performs a learning (optimization) step."""
-    device = "cuda:"+str(training_device) if training_device != "cpu" else "cpu"
+    device = "cuda:" + \
+        str(training_device) if training_device != "cpu" else "cpu"
     state = torch.flatten(batch['state'].to(device), 0, 1).float()
     action = torch.flatten(batch['action'].to(device), 0, 1).float()
     target = torch.flatten(batch['target'].to(device), 0, 1)
     episode_returns = batch['episode_return'][batch['done']]
-    mean_episode_return_buf[position].append(torch.mean(episode_returns).to(device))
+    mean_episode_return_buf[position].append(
+        torch.mean(episode_returns).to(device))
 
     with lock:
         values = agent.forward(state, action)
@@ -80,7 +84,7 @@ def learn(
         return stats
 
 
-class DMCTrainer:    
+class DMCTrainer:
     """
     Deep Monte-Carlo
 
@@ -105,6 +109,7 @@ class DMCTrainer:
         momentum (float): RMSProp momentum
         epsilon (float): RMSProp epsilon
     """
+
     def __init__(
         self,
         env,
@@ -127,7 +132,9 @@ class DMCTrainer:
         learning_rate=0.0001,
         alpha=0.99,
         momentum=0,
-        epsilon=0.00001
+        epsilon=0.00001,
+        focus_player=False,
+        player_to_focus=0
     ):
         self.env = env
 
@@ -154,7 +161,7 @@ class DMCTrainer:
         self.num_buffers = num_buffers
         self.num_threads = num_threads
         self.max_grad_norm = max_grad_norm
-        self.learning_rate =learning_rate
+        self.learning_rate = learning_rate
         self.alpha = alpha
         self.momentum = momentum
         self.epsilon = epsilon
@@ -164,7 +171,8 @@ class DMCTrainer:
             self.num_players = self.env.num_players
             self.action_shape = self.env.action_shape
             if self.action_shape[0] == None:  # One-hot encoding
-                self.action_shape = [[self.env.num_actions] for _ in range(self.num_players)]
+                self.action_shape = [[self.env.num_actions]
+                                     for _ in range(self.num_players)]
 
             def model_func(device):
                 return DMCModel(
@@ -172,6 +180,8 @@ class DMCTrainer:
                     self.action_shape,
                     exp_epsilon=self.exp_epsilon,
                     device=str(device),
+                    focus_player=focus_player,
+                    player_to_focus=player_to_focus
                 )
         else:
             self.num_players = self.env.num_agents
@@ -184,9 +194,10 @@ class DMCTrainer:
                 )
         self.model_func = model_func
 
-        self.mean_episode_return_buf = [deque(maxlen=100) for _ in range(self.num_players)]
+        self.mean_episode_return_buf = [
+            deque(maxlen=100) for _ in range(self.num_players)]
 
-        if cuda == "": # Use CPU
+        if cuda == "":  # Use CPU
             self.device_iterator = ['cpu']
             self.training_device = "cpu"
         else:
@@ -252,18 +263,21 @@ class DMCTrainer:
         # Load models if any
         if self.load_model and os.path.exists(self.checkpointpath):
             checkpoint_states = torch.load(
-                    self.checkpointpath,
-                    map_location="cuda:"+str(self.training_device) if self.training_device != "cpu" else "cpu"
+                self.checkpointpath,
+                map_location="cuda:" +
+                str(self.training_device) if self.training_device != "cpu" else "cpu"
             )
             for p in range(self.num_players):
-                learner_model.get_agent(p).load_state_dict(checkpoint_states["model_state_dict"][p])
-                optimizers[p].load_state_dict(checkpoint_states["optimizer_state_dict"][p])
+                learner_model.get_agent(p).load_state_dict(
+                    checkpoint_states["model_state_dict"][p])
+                optimizers[p].load_state_dict(
+                    checkpoint_states["optimizer_state_dict"][p])
                 for device in self.device_iterator:
-                    models[device].get_agent(p).load_state_dict(learner_model.get_agent(p).state_dict())
+                    models[device].get_agent(p).load_state_dict(
+                        learner_model.get_agent(p).state_dict())
             stats = checkpoint_states["stats"]
             frames = checkpoint_states["frames"]
             log.info(f"Resuming preempted job, current stats:\n{stats}")
-
 
         # Starting actor processes
         for device in self.device_iterator:
@@ -312,7 +326,8 @@ class DMCTrainer:
                     free_queue[device][p].put(m)
 
         threads = []
-        locks = {device: [threading.Lock() for _ in range(self.num_players)] for device in self.device_iterator}
+        locks = {device: [threading.Lock() for _ in range(self.num_players)]
+                 for device in self.device_iterator}
         position_locks = [threading.Lock() for _ in range(self.num_players)]
 
         for device in self.device_iterator:
@@ -327,7 +342,7 @@ class DMCTrainer:
                             position,
                             locks[device][position],
                             position_locks[position])
-                        )
+                    )
                     thread.start()
                     threads.append(thread)
 
