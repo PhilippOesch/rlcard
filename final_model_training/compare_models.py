@@ -123,14 +123,14 @@ if __name__ == '__main__':
     # compare_model_in_tournament(
     #     "final_models/nfsp_vs_dqn_t_result.json", models_nfsp_vs_dqn)
 
-    models_dmc_vs_dqn = [
-        dmc_model_path,
-        dqn_model_path,
-        "random",
-        "random",
-    ]
-    compare_model_in_tournament(
-        "final_models/dmc_vs_dqn_t_result.json", models_dmc_vs_dqn)
+    # models_dmc_vs_dqn = [
+    #     dmc_model_path,
+    #     dqn_model_path,
+    #     "random",
+    #     "random",
+    # ]
+    # compare_model_in_tournament(
+    #     "final_models/dmc_vs_dqn_t_result.json", models_dmc_vs_dqn)
 
     models_dqn_vs_dmc = [
         dqn_model_path,
