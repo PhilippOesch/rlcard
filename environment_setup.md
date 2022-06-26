@@ -1,12 +1,13 @@
 ### Create Virtual environment
 
-
 #### Linux
-```bash
-virtualenv venv
+
+```
+bash virtualenv venv
 ```
 
 #### Windows
+
 ```bash
 python -m venv ./venv
 ```

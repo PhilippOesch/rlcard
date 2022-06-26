@@ -1,5 +1,6 @@
 from rlcard.games.cego.utils import load_model
 import rlcard
+from rlcard.agents.dmc_agent.model import DMCAgent
 import torch
 from rlcard.utils import (
     get_device,
@@ -10,7 +11,7 @@ game_variant = 'standard'
 game_judge_by_points = 0
 game_activate_heuristic = True
 game_train_env = [False, False, False, False]
-path = "final_models/dmc_cego/dmc/0_608972800.pth"
+path = "final_models/dmc_cego/dmc/0_800985600.pth"
 
 
 def main():
@@ -26,10 +27,12 @@ def main():
             'game_train_env': game_train_env
         }
     )
-    dummy_input = torch.zeros(1, 336)
-
+    dummy_input = torch.randn(size=(336, 54))
     model = load_model(path, env, 0, device)
-    torch.onnx.export(model, dummy_input, 'onnx_model.onnx', verbore= True)
+    model_scripted = torch.jit.script(model)
+    model_scripted.save('model_scripted.pt')
+    # print(model_script)
+    # torch.onnx.export(model_script, dummy_input, 'onnx_model.onnx', verbose= True)
 
 
 if __name__ == '__main__':

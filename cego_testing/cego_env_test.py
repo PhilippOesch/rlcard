@@ -10,7 +10,7 @@ env = rlcard.make(
         'seed': 12,
         'game_variant': 'standard',
         'game_activate_heuristic': True,
-        'game_judge_by_points': 1,
+        'game_judge_by_points': 0,
     })
 
 human_agent = HumanAgent(num_actions=env.num_actions)

@@ -16,8 +16,8 @@ from rlcard.utils import (
 
 args = {
     "_seed": 12,
-    "_models": ["final_models/dmc_cego/dmc/0_511859200.pth",
-                "final_models/dmc_cego/dmc/1_511859200.pth",
+    "_models": ["random",
+                "random",
                 "random",
                 "random"],
     "_env_name": "cego",

@@ -16,7 +16,7 @@ args = {
     'game_judge_by_points': 0,
     'game_activate_heuristic': True,
     "game_train_players": [True, True, True, True],
-    'cuda': 'gpu',
+    'cuda': '',
     'seed': 20,
     'load_model': True,
     'xpid': 'dmc',
@@ -24,7 +24,7 @@ args = {
     'num_actor_devices': 1,
     'num_actors': 5,
     'training_device': '0',
-    'log_dir': 'final_models/dmc_cego',
+    'log_dir': 'final_models/dmc_cego_player_0_vs_random',
     'total_frames': 100000000000,
     'exp_epsilon': 0.01,
     'batch_size': 32,
@@ -35,7 +35,8 @@ args = {
     'learning_rate': 0.0001,
     'alpha': 0.99,
     'momentum': 0,
-    'epsilon': 0.00001
+    'epsilon': 0.00001,
+    'use_random_agents': [False, True, True, True]
 }
 
 
@@ -43,7 +44,7 @@ def train(env_name, game_variant, game_judge_by_points, game_activate_heuristic,
           cuda, seed, load_model, xpid, save_interval, num_actor_devices, num_actors,
           training_device, log_dir, total_frames, exp_epsilon,
           batch_size, unroll_length, num_buffers, num_threads,
-          max_grad_norm, learning_rate, alpha, momentum, epsilon):
+          max_grad_norm, learning_rate, alpha, momentum, epsilon, use_random_agents):
 
     device = get_device()
     print(device)
@@ -60,6 +61,8 @@ def train(env_name, game_variant, game_judge_by_points, game_activate_heuristic,
             'game_train_players': game_train_players
         }
     )
+
+    print("input_shape:", env.state_shape)
 
     trainer = DMCTrainer(
         env=env,
@@ -81,7 +84,8 @@ def train(env_name, game_variant, game_judge_by_points, game_activate_heuristic,
         learning_rate=learning_rate,
         alpha=alpha,
         momentum=momentum,
-        epsilon=epsilon
+        epsilon=epsilon,
+        use_random_agents=use_random_agents
     )
 
     trainer.start()

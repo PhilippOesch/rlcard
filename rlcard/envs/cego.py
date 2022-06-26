@@ -72,14 +72,15 @@ class CegoEnv(Env):
         trajectories[player_id].append(state)
         while not self.is_over():
             # Agent plays
-
-
             if is_training:
                 if not self.game_train_players[player_id]:
+                    # print("state:", state)
                     action, _ = self.agents[player_id].eval_step(state)
                 else:
+                    # print("state:", state)
                     action = self.agents[player_id].step(state)
             else:
+                # print("state:", state)
                 action, _ = self.agents[player_id].eval_step(state)
             # if not is_training:
             #     action, _ = self.agents[player_id].eval_step(state)
@@ -131,12 +132,15 @@ class CegoEnv(Env):
                 is_raeuber_game
             )
         # setup extracted state
-        extracted_state['obs'] = encode_observation_var1(state)
+        # extracted_state['obs'] = encode_observation_var1(state)
+        # print(extracted_state['obs'] )
         extracted_state['legal_actions'] = legal_actions
         extracted_state['raw_obs'] = state
         extracted_state['raw_legal_actions'] = [
             a for a in state['legal_actions']]
         extracted_state['action_record'] = self.action_recorder
+        # print()
+        # print("raw_legal_actions", extracted_state['raw_legal_actions'])
 
         return extracted_state
 

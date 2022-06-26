@@ -525,8 +525,9 @@ def args_to_str(args):
 
 
 def load_model(model_path, env=None, position=None, device=None):
-    import torch
+    agent = None
     if os.path.isfile(model_path):  # Torch model
+        import torch
         agent = torch.load(model_path, map_location=device)
         agent.set_device(device)
     elif model_path == 'random':  # Random model
