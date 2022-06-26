@@ -22,7 +22,7 @@ args = {
     'xpid': 'dmc',
     'save_interval': 30,
     'num_actor_devices': 1,
-    'num_actors': 8,
+    'num_actors': 5,
     'training_device': '0',
     'log_dir': 'final_models/dmc_cego_player_0_focus',
     'total_frames': 100000000000,
