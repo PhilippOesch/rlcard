@@ -1,7 +1,7 @@
 import torch
 
 import rlcard
-from rlcard.agents.dmc_agent import DMCTrainer
+from rlcard.agents.dmc_agent.trainer_with_random import RandomDMCTrainer
 
 from rlcard.games.cego.utils import save_args_params
 
@@ -15,10 +15,10 @@ args = {
     'game_variant': 'standard',
     'game_judge_by_points': 0,
     'game_activate_heuristic': True,
-    "game_train_players": [True, True, True, True],
+    "game_train_players": [True, False, False, False],
     'cuda': '',
     'seed': 20,
-    'load_model': True,
+    'load_model': False,
     'xpid': 'dmc',
     'save_interval': 30,
     'num_actor_devices': 1,
@@ -64,7 +64,7 @@ def train(env_name, game_variant, game_judge_by_points, game_activate_heuristic,
 
     print("input_shape:", env.state_shape)
 
-    trainer = DMCTrainer(
+    trainer = RandomDMCTrainer(
         env=env,
         cuda=cuda,
         xpid=xpid,
@@ -85,7 +85,7 @@ def train(env_name, game_variant, game_judge_by_points, game_activate_heuristic,
         alpha=alpha,
         momentum=momentum,
         epsilon=epsilon,
-        use_random_agents=use_random_agents
+        use_random=use_random_agents
     )
 
     trainer.start()

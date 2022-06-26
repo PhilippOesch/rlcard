@@ -27,6 +27,7 @@ num_games = 50000
 dqn_model_path = "final_models/dqn_cego_player_0/checkpoint_4/model.pth"
 nfsp_model_path = "final_models/nfsp_cego_player_0/checkpoint_4/model.pth"
 dmc_model_path = "final_models/dmc_cego/dmc/0_1123993600.pth"
+dmc_model2_path = "final_models/dmc_cego/dmc/1_1123993600.pth"
 
 
 def compare_model_in_tournament(path, path_to_models):
@@ -91,33 +92,69 @@ if __name__ == '__main__':
     #     "random",
     # ]
     # compare_model_in_tournament("final_models/dqn_t_result.json", models_dqn)
-    models_nfsp = [
-        nfsp_model_path,
-        "random",
-        "random",
-        "random",
-    ]
-    compare_model_in_tournament("final_models/nfsp_t_result.json", models_nfsp)
-    models_dmc = [
+    # models_nfsp = [
+    #     nfsp_model_path,
+    #     "random",
+    #     "random",
+    #     "random",
+    # ]
+    # compare_model_in_tournament("final_models/nfsp_t_result.json", models_nfsp)
+    # models_dmc = [
+    #     dmc_model_path,
+    #     "random",
+    #     "random",
+    #     "random"
+    # ]
+    # compare_model_in_tournament("final_models/dmc_t_result.json", models_dmc)
+    # models_dqn_vs_nfsp = [
+    #     dqn_model_path,
+    #     nfsp_model_path,
+    #     "random",
+    #     "random",
+    # ]
+    # compare_model_in_tournament(
+    #     "final_models/dqn_vs_nfsp_t_result.json", models_dqn_vs_nfsp)
+    # models_nfsp_vs_dqn = [
+    #     nfsp_model_path,
+    #     dqn_model_path,
+    #     "random",
+    #     "random",
+    # ]
+    # compare_model_in_tournament(
+    #     "final_models/nfsp_vs_dqn_t_result.json", models_nfsp_vs_dqn)
+
+    models_dmc_vs_dqn = [
         dmc_model_path,
-        "random",
-        "random",
-        "random"
-    ]
-    compare_model_in_tournament("final_models/dmc_t_result.json", models_dmc)
-    models_dqn_vs_nfsp = [
-        dqn_model_path,
-        nfsp_model_path,
-        "random",
-        "random",
-    ]
-    compare_model_in_tournament(
-        "final_models/dqn_vs_nfsp_t_result.json", models_dqn_vs_nfsp)
-    models_nfsp_vs_dqn = [
-        nfsp_model_path,
         dqn_model_path,
         "random",
         "random",
     ]
     compare_model_in_tournament(
-        "final_models/nfsp_vs_dqn_t_result.json", models_nfsp_vs_dqn)
+        "final_models/dmc_vs_dqn_t_result.json", models_dmc_vs_dqn)
+
+    models_dqn_vs_dmc = [
+        dqn_model_path,
+        dmc_model2_path,
+        "random",
+        "random",
+    ]
+    compare_model_in_tournament(
+        "final_models/dqn_vs_dmc_t_result.json", models_dqn_vs_dmc)
+
+    models_dmc_vs_nfsp = [
+        dmc_model_path,
+        nfsp_model_path,
+        "random",
+        "random",
+    ]
+    compare_model_in_tournament(
+        "final_models/dmc_vs_nfsp_t_result.json", models_dmc_vs_nfsp)
+
+    models_nfsp_vs_dmc = [
+        nfsp_model_path,
+        dmc_model2_path,
+        "random",
+        "random",
+    ]
+    compare_model_in_tournament(
+        "final_models/nfsp_vs_dmc_t_result.json", models_nfsp_vs_dmc)
