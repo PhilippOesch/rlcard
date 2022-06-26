@@ -17,15 +17,15 @@ from rlcard.utils import (
 args = {
     "_seed": 12,
     "_models": ["random",
-                "random",
-                "random",
-                "random"],
+                "final_models/dmc_cego/dmc/1_1000192000.pth",
+                "final_models/dmc_cego/dmc/2_1000192000.pth",
+                "final_models/dmc_cego/dmc/3_1000192000.pth"],
     "_env_name": "cego",
     "_game_variant": "standard",
     "_game_train_players": [False, False, False, False],
     "_game_judge_by_points": 0,
     "_game_activate_heuristic": True,
-    "_num_games": 1000,
+    "_num_games": 5000,
 }
 
 
