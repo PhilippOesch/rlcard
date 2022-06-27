@@ -18,7 +18,7 @@ args = {
     "game_train_players": [True, True, True, True],
     'cuda': '',
     'seed': 20,
-    'load_model': False,
+    'load_model': True,
     'xpid': 'dmc',
     'save_interval': 30,
     'num_actor_devices': 1,

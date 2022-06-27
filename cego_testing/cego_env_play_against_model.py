@@ -24,15 +24,14 @@ env = rlcard.make(
 
 device = get_device()
 
-dmc_agent = load_model(
-    "final_models/dmc_cego_player_0_focus/dmc/0_478460800.pth", env, 0, device)
 human_agent = HumanAgent(num_actions=env.num_actions)
+random1 = RandomAgent(num_actions=env.num_actions)
 random2 = RandomAgent(num_actions=env.num_actions)
 random3 = RandomAgent(num_actions=env.num_actions)
 
 env.set_agents([
-    dmc_agent,
     human_agent,
+    random1,
     random2,
     random3,
 ])
