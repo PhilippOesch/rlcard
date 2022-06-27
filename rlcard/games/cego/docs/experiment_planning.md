@@ -8,16 +8,16 @@
 
 ## Parameters Tuning
 
-[@zha\_rlcard\_2020](http://arxiv.org/abs/1910.04376), [@geron\_hands-machine\_2017](https://scholar.google.com/scholar?q=Hands-On%20Machine%20Learning%20with%20Scikit-Learn%20and%20TensorFlow%3A%20Concepts%2C%20Tools%2C%20and%20Techniques%20for%20Building%20Intelligent%20Systems%2C%20G%C3%A9ron), [@sutton\_reinforcement\_2018](https://scholar.google.com/scholar?q=Reinforcement%20Learning%2C%20second%20edition%3A%20An%20Introduction%2C%20Sutton), [@mnih\_playing\_2013](http://arxiv.org/abs/1312.5602), [@heinrich\_deep\_2016](http://arxiv.org/abs/1603.01121)
+[@zha_rlcard_2020](http://arxiv.org/abs/1910.04376), [@geron_hands-machine_2017](https://scholar.google.com/scholar?q=Hands-On%20Machine%20Learning%20with%20Scikit-Learn%20and%20TensorFlow%3A%20Concepts%2C%20Tools%2C%20and%20Techniques%20for%20Building%20Intelligent%20Systems%2C%20G%C3%A9ron), [@sutton_reinforcement_2018](https://scholar.google.com/scholar?q=Reinforcement%20Learning%2C%20second%20edition%3A%20An%20Introduction%2C%20Sutton), [@mnih_playing_2013](http://arxiv.org/abs/1312.5602), [@heinrich_deep_2016](http://arxiv.org/abs/1603.01121)
 
 ### DQN
 
 - **Replay Memory Size** (int): Size of the experience replay memory (used for decoupling consecutive samples)
-- **update\_target\_estimator_every**: Step-Interval in which Q-Estimator is updated to target estimator
+- **update_target_estimator_every**: Step-Interval in which Q-Estimator is updated to target estimator
 - **discount factor** (float): Rate at which future rewards matter within reward calculation vor Q-Values
 - **epsilon_start** (float): epsilon value at the start (Chance of taking a random action rather then the best action). This value decays over time
 - **epsilon_end** (float): Min epsilon at the end of decay
-- **epsilon\_decay\_steps** (int): Number of steps to decay epsilon.
+- **epsilon_decay_steps** (int): Number of steps to decay epsilon.
 - **batch size** (int): Size of batches to sample from replay memory
 - **evaluate every** (int): How often to evaluate the network (Doesnt have any effect on training, only on documentation).
 - **train every** (int): Training interval (most likely the value of 1).
@@ -35,9 +35,9 @@
 - **train every**: Train SL-Policy Interval
 - **rl learning rate**: Learning Rate of the RL-Agent (RL-Agent = DQN)
 - **sl learning rate**: Learning Rate of the Average Policy
-- **min\_buffer\_size\_to\_learn**: The Minimum Buffer size to learn for average policy.
+- **min_buffer_size_to_learn**: The Minimum Buffer size to learn for average policy.
 
-Within NFSP there also lies the problem, that the original Agent consists of 2 NN. One for the average policy and one for the RL-Policy [@heinrich_deep_2016](http://arxiv.org/abs/1603.01121). The original paper also recommends to train with one NFSP-Agent per player. That would mean that for one training 8 NN would be involved. 
+Within NFSP there also lies the problem, that the original Agent consists of 2 NN. One for the average policy and one for the RL-Policy [@heinrich_deep_2016](http://arxiv.org/abs/1603.01121). The original paper also recommends to train with one NFSP-Agent per player. That would mean that for one training 8 NN would be involved.
 
 Discussion.
 
@@ -58,10 +58,11 @@ Discussion.
 - **epsilon** (float): RMSProp epsilon
 
 DMC:
-* An episode is randomly sampled
-* Calculate Q Values
-* Update Q Table with return averages
-* parallelizable
+
+- An episode is randomly sampled
+- Calculate Q Values
+- Update Q Table with return averages
+- parallelizable
 
 ## Adjustability within the game environment
 
@@ -72,12 +73,12 @@ The current representation of the so called observation state is (6, 54) Tuple. 
 
 ### A Description of each plane:
 
-| indexes | Description |
-| --- | --- |
-| 0-53 | The cards on the players hand |
-| 54-107 | The card that currently wins the trick |
-| 108-161 | All the cards within the current trick |
-| 162-215 | All the cards that haven't been played jet and may still be played by other players |
+| indexes | Description                                                                                                                                                                                                                                                                      |
+| ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 0-53    | The cards on the players hand                                                                                                                                                                                                                                                    |
+| 54-107  | The card that currently wins the trick                                                                                                                                                                                                                                           |
+| 108-161 | All the cards within the current trick                                                                                                                                                                                                                                           |
+| 162-215 | All the cards that haven't been played jet and may still be played by other players                                                                                                                                                                                              |
 | 216-227 | **This plane encodes other game specific information.**<br>**\[216-219\]**: The players within the same team have the value 1.<br>**\[220-223\]**: The player who would win the round is encoded.<br>**\[224-227\]**: The player who started the current trick round is encoded. |
 
 ### Alternatives for Encoding:
@@ -181,15 +182,15 @@ It can be seen that the trajectory of the training rewards is slightly up but he
 
 **Model as Player 0**
 
-- *Player Party Reward*: **-0.02202**
-- *Other Party Reward*: **0.02202**
+- _Player Party Reward_: **-0.02202**
+- _Other Party Reward_: **0.02202**
 
-Despite the reward still being negative, it is still an improvement compared to the *~-0,077* expected from a random player.
+Despite the reward still being negative, it is still an improvement compared to the _~-0,077_ expected from a random player.
 
 **Model as Player 1**
 
-- *Player Party Reward*: **0.10226**
-- *Other Party Reward*: **-0.10226**
+- _Player Party Reward_: **0.10226**
+- _Other Party Reward_: **-0.10226**
 
 Again despite that the model has not been trained for this particular player, there is still an improvement visible compared with random players.
 
@@ -197,7 +198,7 @@ This Phenomenon may be fourther analysed.
 
 ### Training of Model with DMC
 
-For Testing a DMC Model for the game variant cego was trained with the parameters from this paper [@zha\_douzero\_2021](http://arxiv.org/abs/2106.06135). The implemented heuristic was used.
+For Testing a DMC Model for the game variant cego was trained with the parameters from this paper [@zha_douzero_2021](http://arxiv.org/abs/2106.06135). The implemented heuristic was used.
 
 **Learning Trajectory**
 
@@ -210,30 +211,30 @@ This Figure shows that the Training Trajectory in the beginning of the training 
 Game Comparison Size: 10000
 State Encoding Style: Alternative 1
 
-*Player 0 Model against random agents*
+_Player 0 Model against random agents_
 
-* Cego Player: 0.1066
-* Other Players: -0.1066
+- Cego Player: 0.1066
+- Other Players: -0.1066
 
-*Player 1 Model against random agents*
+_Player 1 Model against random agents_
 
-* Cego Player: **-0.1002**
-* Other Players: **0.1002**
+- Cego Player: **-0.1002**
+- Other Players: **0.1002**
 
-*Player 0 Model vs Player 1 model with random agents*
+_Player 0 Model vs Player 1 model with random agents_
 
-* Cego Player: **0.0234**
-* Other Players: **-0.0234**
+- Cego Player: **0.0234**
+- Other Players: **-0.0234**
 
-*Player 0 Model vs Player 1 and Player 2 model with one random agent*
+_Player 0 Model vs Player 1 and Player 2 model with one random agent_
 
-* Cego Player: **-0.058**
-* Other Players: **0.058**
+- Cego Player: **-0.058**
+- Other Players: **0.058**
 
-*All Player Models against another*
+_All Player Models against another_
 
-* Cego Player: **-0.132**
-* Other Players: **0.132**
+- Cego Player: **-0.132**
+- Other Players: **0.132**
 
 **Observation and Interpretation**
 
@@ -249,7 +250,7 @@ The Result of DMC are very promising and with longer training even better result
 
 ## Algorithm Evaluation
 
-While **DQN** and **NFSP** may need proper Hyper parameter-Tuning [@zha\_rlcard\_2020](http://arxiv.org/abs/1910.04376). DMC seems to get better over time [@zha\_douzero\_2021](http://arxiv.org/abs/2106.06135).
+While **DQN** and **NFSP** may need proper Hyper parameter-Tuning [@zha_rlcard_2020](http://arxiv.org/abs/1910.04376). DMC seems to get better over time [@zha_douzero_2021](http://arxiv.org/abs/2106.06135).
 
 First For **DQN** and **NFSP** it should be check, what impact the position of the player has. The first player is always the cego player. The other players are the opponents in counterclockwise play direction, relative to player 0, the cego player. The Players with indexes 1-3 are in the same team.
 
@@ -260,8 +261,8 @@ Idea:
 - Train Agent for each index: 0-3
 - Take the Agent from index 1 replace him with the positions 2 and 3.
 - Take the trained models from 2 and 3 and compare, weather the Agent 1 receives roughly the same rewards.
-    - If this is the case. It may be feasible for stage 2 to just train 2 Agents for each Algorithm.
-    - If its not the case. Every Algorithm needs 4 Trained Models. One for each player.
+  - If this is the case. It may be feasible for stage 2 to just train 2 Agents for each Algorithm.
+  - If its not the case. Every Algorithm needs 4 Trained Models. One for each player.
 
 ### Idea
 
@@ -284,20 +285,20 @@ Idea:
 
 #### Sampling Random Combinations
 
-* Create A set of different hyper parameters
-* sample random combinations from that set
-* less computation then grid search
+- Create A set of different hyper parameters
+- sample random combinations from that set
+- less computation then grid search
 
 #### Bayesian Optimization
 
-[@frazier\_tutorial\_2018](http://arxiv.org/abs/1807.02811)
+[@frazier_tutorial_2018](http://arxiv.org/abs/1807.02811)
 
 - Set of Machine Learning Method with the goal of optimizing a black box model.
 - Uses a system rather then brute force to optimize the hyper parameters.
 - Based on Bayes Theorem
 - Is useful ...
-    - for Environments with many hyper parameters (which is the case for these models).
-    - When each models computing effort is large
+  - for Environments with many hyper parameters (which is the case for these models).
+  - When each models computing effort is large
 - Is most likely harder to implement then the other
 
 PS: Still needs more research.
@@ -305,7 +306,7 @@ PS: Still needs more research.
 ### Stage 1: Hyper Parameter Tuning
 
 1.  This Stage requires an evaluation of what parameters are important and what possible Values
-2.  Hyper parameter tune *each Algorithms* most important parameters (don't forget the observation-state)
+2.  Hyper parameter tune _each Algorithms_ most important parameters (don't forget the observation-state)
 3.  This Stage requires an evaluation of what parameters are important and what possible Values there are
 4.  Training Epochs each: 1e3-1e5
 5.  Eval every : 20 Epochs
@@ -323,7 +324,7 @@ PS: Still needs more research.
 ### Stage 3: Training of DMC Model
 
 1.  Train a DMC Model for **more then 1 Day**
-2.  Use the Hyper parameters from DouZero Paper [@zha\_douzero\_2021](http://arxiv.org/abs/2106.06135) or use hype parameter tuning.
+2.  Use the Hyper parameters from DouZero Paper [@zha_douzero_2021](http://arxiv.org/abs/2106.06135) or use hype parameter tuning.
 
 **The result should now be 3 Models: DQN, NFSP, DMC**
 
@@ -348,3 +349,13 @@ Compare The Models resulting from **Stage 2** and **Stage 3** within the RLCard 
 
 - AI is implemented in ActionScript
 - Implementing the AI within RLCard might require to much time for planning and realization.
+
+## DMC
+
+DMC seems to have problems with multiplayer games where teams are unevenly distributed. The disadvantaged side seems to not gain any learning effect while training and after a certain time is not able to improve.
+
+Solution:
+To solve that problem focus training was used. The focus is put towards the disadvantaged side. This effect is implemented by using less neurons and layers for agents of the advantaged side. This improves the training process of the disadvantaged side.
+
+Next Step:
+In the next step the NN are evenly matched and the weights of the disadvantaged side loaded. Then the training can be started.
