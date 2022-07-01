@@ -376,17 +376,13 @@ def valid_solo(solo_player_cards) -> bool:
             or 8 trumps
             - https://www.cego-online.de/tl_files/documents/CegoSpielregelndef1301224mit%20Anhang.pdf
     '''
-    print(cards2list(solo_player_cards))
 
     trumps = [card for card in solo_player_cards if card.suit == 'trump']
     trumps_higher_17 = [card for card in trumps if card.suit == 'trump'
                         and (card.rank == 'gstiess' or int(card.rank) >= 17)]
 
-    print("trumps:", cards2list(trumps))
-    print("trumps_higher_17:", cards2list(trumps_higher_17))
     colors = set(
         [card.suit for card in solo_player_cards if card.suit != 'trump'])
-    print("Colors:", colors)
 
     if len(trumps) >= 8:
         return True

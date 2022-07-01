@@ -20,8 +20,6 @@ class CegoGameSolo(Game):
     def init_game(self) -> tuple[dict, Any]:
         self.points = [0 for _ in range(self.num_players)]
 
-        print(self.activate_heuristic)
-
         # Initialize a dealer that can deal cards
         if self.activate_heuristic:
             self.dealer = Dealer(self.np_random, 'solo')

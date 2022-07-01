@@ -18,11 +18,11 @@ from rlcard.utils import (
 
 seeds = [12, 17, 20, 30, 33]
 env_name = 'cego'
-game_variant = 'standard'
+game_variant = 'solo'
 game_judge_by_points = 0
 game_activate_heuristic = True
 game_train_env = [False, False, False, False]
-num_games = 500
+num_games = 1000
 
 dqn_model_path = "final_models/dqn_cego_player_0/checkpoint_4/model.pth"
 nfsp_model_path = "final_models/nfsp_cego_player_0/checkpoint_4/model.pth"
@@ -103,12 +103,12 @@ if __name__ == '__main__':
     # compare_model_in_tournament("final_models/nfsp_t_result.json", models_nfsp)
     models_dmc = [
         "random",
-        dmc_model2_path,
+        "random",
         "random",
         "random"
     ]
     compare_model_in_tournament(
-        "final_models/dmc_t_result_test_5.json", models_dmc)
+        "final_models/dmc_t_result_test_heuristic.json", models_dmc)
     # models_dqn_vs_nfsp = [
     #     dqn_model_path,
     #     nfsp_model_path,

@@ -140,9 +140,10 @@ def train(log_dir, env_name, game_variant, game_activate_heuristic,
     torch.save(dqn_agent, save_path)
     print('Model saved in', save_path)
 
+
 def init_search_set(random_search_folder):
     res = set()
-    if os.path.exists(random_search_folder+ "/search_set.txt"):
+    if os.path.exists(random_search_folder + "/search_set.txt"):
         with open(random_search_folder + "/search_set.txt", "r") as f:
             search_set = set(f.read().splitlines())
 
@@ -153,12 +154,14 @@ def init_search_set(random_search_folder):
 
 
 def save_search_set(random_search_folder, args_string):
-    if not os.path.exists(random_search_folder+ "/search_set.txt"):
-        open(random_search_folder+ "/search_set.txt", 'a').close()
+    if not os.path.exists(random_search_folder + "/search_set.txt"):
+        open(random_search_folder + "/search_set.txt", 'a').close()
 
-    with open(random_search_folder+ "/search_set.txt", 'a') as f:
+    with open(random_search_folder + "/search_set.txt", 'a') as f:
         f.write(args_string + "\n")
+
 
 if __name__ == '__main__':
     os.environ["CUDA_VISIBLE_DEVICES"] = "cpu"
-    randomSearch(args, 'random_search_results/dqn_point_var_0', random_search_iterations)
+    randomSearch(args, 'random_search_results/dqn_point_var_0',
+                 random_search_iterations)

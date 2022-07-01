@@ -2,7 +2,7 @@ from rlcard.games.cego.utils import init_deck, valid_cego, valid_ultimo, valid_s
 
 
 class CegoDealer:
-    ''' The class to deal the cards to the players 
+    ''' The class to deal the cards to the players
 
     Class Attributes:
         - num_blind_cards: the number of blind cards
@@ -35,7 +35,6 @@ class CegoDealer:
         if heuristic == "solo":
             while not valid_solo(self.deck[43:54]):
                 self.shuffle()
-            print(cards2list(self.deck[43:54]))
 
     def shuffle(self) -> None:
         self.np_random.shuffle(self.deck)
