@@ -119,10 +119,11 @@ def set_cego_player_deck(player, blind_cards) -> None:
     sorted_hand = sorted(hand_cards, reverse=True)
 
     # generate new hand
-    new_hand = sorted_blinds[:] + sorted_hand[:1]
+    new_hand = sorted_blinds[:-1] + sorted_hand[0:2]
 
     # generate throw aways
-    throw_away = sorted_hand[1:]
+    throw_away = sorted_hand[2:]
+    throw_away.append(sorted_blinds[-1])
 
     # set player cards
     player.hand = new_hand
