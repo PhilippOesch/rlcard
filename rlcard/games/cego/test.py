@@ -3,7 +3,7 @@ import unittest
 import rlcard
 from rlcard.agents import RandomAgent
 from rlcard.games.cego.game_cego import CegoGameStandard as Game
-from rlcard.games.cego.utils import cards2value, encode_observation_var1
+from rlcard.games.cego.utils import cards2value, encode_observation_var1, cards2list
 
 
 def check_if_all_cards_are_unique(players: list) -> bool:
@@ -254,6 +254,8 @@ class TestObsStateCegoHeuristic(unittest.TestCase):
         env.game.init_game()
 
         cego_card_value = cards2value(env.game.players[0].og_hand_cards)
+        print(cards2list(env.game.players[0].og_hand_cards))
+        print(cards2list(env.game.players[0].hand))
         expected = 15
         self.assertGreaterEqual(cego_card_value, expected)
 

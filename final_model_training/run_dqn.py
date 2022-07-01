@@ -142,6 +142,15 @@ def train(log_dir, env_name, game_variant, game_activate_heuristic,
                 torch.save(dqn_agent, save_path)
                 plot_curve(csv_path, fig_path, "DQN")
                 checkpoint_count += 1
+                print('Model saved in', save_path)
+
+        logger.save_csv()
+        os.mkdir(log_dir + "/checkpoint_"+str(checkpoint_count))
+        csv_path, fig_path = logger.csv_path, log_dir
+        save_path = os.path.join(log_dir, 'model_final.pth')
+        torch.save(dqn_agent, save_path)
+        plot_curve(csv_path, fig_path, "DQN")
+        print('Model saved in', save_path)
 
 
 if __name__ == '__main__':

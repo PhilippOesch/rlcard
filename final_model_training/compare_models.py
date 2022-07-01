@@ -18,7 +18,7 @@ from rlcard.utils import (
 
 seeds = [12, 17, 20, 30, 33]
 env_name = 'cego'
-game_variant = 'solo'
+game_variant = 'standard'
 game_judge_by_points = 0
 game_activate_heuristic = True
 game_train_env = [False, False, False, False]
