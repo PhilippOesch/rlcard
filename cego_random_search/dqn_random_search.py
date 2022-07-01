@@ -31,12 +31,12 @@ args = {
     "discount_factor": [0.75, 0.8, 0.95, 0.99],
     "epsilon_start": [1.0],
     "epsilon_end": [0.1, 0.05, 0.01],
-    "epsilon_decay_steps": [100000],
+    "epsilon_decay_steps": [50000],
     "batch_size": [32, 64],
     "mlp_layers": [[512, 512, 512], [512, 256, 128], [512, 512]],
     "num_eval_games": [1000],
-    "num_episodes": [100000],
-    "evaluate_every": [1000],
+    "num_episodes": [50000],
+    "evaluate_every": [500],
     "learning_rate": [0.0001, 0.00005, 0.00001, 0.000005]
 }
 
@@ -163,5 +163,5 @@ def save_search_set(random_search_folder, args_string):
 
 if __name__ == '__main__':
     os.environ["CUDA_VISIBLE_DEVICES"] = "cpu"
-    randomSearch(args, 'random_search_results/dqn_point_var_0',
+    randomSearch(args, 'random_search_results/fix_random_search/dqn_point_var_0',
                  random_search_iterations)
