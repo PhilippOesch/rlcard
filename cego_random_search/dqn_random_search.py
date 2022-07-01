@@ -25,6 +25,7 @@ args = {
     "game_judge_by_points": [0],
     "game_variant": ["standard"],
     "game_activate_heuristic": [True],
+    "game_train_players": [[True, True, True, True]],
     "seed": [12],
     "replay_memory_size": [50000, 100000, 200000],
     "update_target_estimator_every": [1000, 2000, 10000],
@@ -61,7 +62,7 @@ def randomSearch(args: dict, random_search_folder: str, random_search_iterations
 
 
 def train(log_dir, env_name, game_variant, game_activate_heuristic,
-          game_judge_by_points, seed, replay_memory_size,
+          game_judge_by_points, game_train_players, seed, replay_memory_size,
           update_target_estimator_every, discount_factor,
           epsilon_start, epsilon_end, epsilon_decay_steps,
           batch_size, mlp_layers, num_eval_games,
@@ -79,7 +80,8 @@ def train(log_dir, env_name, game_variant, game_activate_heuristic,
             'seed': seed,
             'game_variant': game_variant,
             'game_activate_heuristic': game_activate_heuristic,
-            'game_judge_by_points': game_judge_by_points
+            'game_judge_by_points': game_judge_by_points,
+            'game_train_players': game_train_players
         }
     )
 
