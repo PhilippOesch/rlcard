@@ -212,7 +212,7 @@ class TestObsStateCegoKnowledgeEnd(unittest.TestCase):
         env = rlcard.make(
             "cego",
             config={
-                'seed': 12,
+                'seed': 15,
                 'game_variant': "standard",
                 'game_activate_heuristic': True,
                 'game_judge_by_points': 0
@@ -242,7 +242,6 @@ class TestObsStateCegoHeuristic(unittest.TestCase):
         env = rlcard.make(
             "cego",
             config={
-                'seed': 12,
                 'game_variant': "standard",
                 'game_activate_heuristic': True,
                 'game_judge_by_points': 0
@@ -254,9 +253,43 @@ class TestObsStateCegoHeuristic(unittest.TestCase):
 
         env.game.init_game()
 
-        cego_card_value = cards2value(env.game.players[0].hand)
+        cego_card_value = cards2value(env.game.players[0].og_hand_cards)
         expected = 15
         self.assertGreaterEqual(cego_card_value, expected)
+
+
+class TestValidSoloInfoState(unittest.TestCase):
+    def test_valid_solo_infostate(self):
+        env = rlcard.make(
+            "cego",
+            config={
+                'seed': 12,
+                'game_variant': "solo",
+                'game_activate_heuristic': True,
+                'game_judge_by_points': 0
+            }
+        )
+        env.set_agents([
+            RandomAgent(num_actions=env.num_actions) for _ in range(env.num_players)
+        ])
+
+        trajectory, _ = env.run(is_training=False)
+        # cards the cego players knows can be played (54-21)
+        expected_cego_0 = 43
+        # cards the other players know can be played (54-11)
+        expected_other_1 = 42
+        expected_other_2 = 41
+        expected_other_3 = 40
+
+        cards_0 = sum(trajectory[0][0]['obs'][54:108])
+        cards_1 = sum(trajectory[1][0]['obs'][54:108])
+        cards_2 = sum(trajectory[2][0]['obs'][54:108])
+        cards_3 = sum(trajectory[3][0]['obs'][54:108])
+
+        self.assertEqual(expected_cego_0, cards_0)
+        self.assertEqual(expected_other_1, cards_1)
+        self.assertEqual(expected_other_2, cards_2)
+        self.assertEqual(expected_other_3, cards_3)
 
 
 if __name__ == '__main__':

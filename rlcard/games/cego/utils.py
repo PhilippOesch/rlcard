@@ -112,6 +112,7 @@ def set_cego_player_deck(player, blind_cards) -> None:
 
     #  get hand cards
     hand_cards = player.hand
+    player.og_hand_cards = hand_cards
 
     # sort cards
     sorted_blinds = sorted(blind_cards, reverse=True)
@@ -139,52 +140,6 @@ def set_observation(obs, plane, indexes):
     '''
     for index in indexes:
         obs[plane][index] = 1
-
-
-def encode_observation_var0(state, is_raeuber=False):
-    ''' the shape of this encoding is (228)
-
-    Parameters:
-        - state (dict): the state of the game
-
-    Returns:
-        - obs (list): the observation
-
-    Observation Representation
-        - [0-53] own cards
-        - [54-107] cards playable by other players
-        - [108-161] winner of trick
-        - [162-215] cards in trick
-        - [216] Game Information
-            - [216-219]: who is part of the team
-            - [220-223]: who wins the current round
-            - [224-227]: player who started the trick round
-    '''
-    obs = np.zeros((228), dtype=int)
-
-    hand_cards_idx: list = []
-    trick_cards_idx: list = []
-
-    hand_cards_idx = [ACTION_SPACE[card] for card in state['hand']]
-    trick_cards_idx = [162 + ACTION_SPACE[card] for card in state['trick']]
-
-    obs[hand_cards_idx] = 1
-
-    known_cards_idxs = get_known_cards(
-        state['hand'], state['valued_cards'], state['played_tricks'], state['trick'], 54)
-
-    obs[range(54, 108)] = 1
-    # unset all cards that are knowingly out of the game
-    obs[known_cards_idxs] = 0
-
-    if state['winner_card'] != 'None':
-        obs[108 + ACTION_SPACE[state['winner_card']]] = 1
-
-    obs[trick_cards_idx] = 1
-
-    encode_obs_game_info(state, obs, 216, is_raeuber)
-
-    return obs
 
 
 def encode_observation_var1(state, is_raeuber=False):
@@ -230,149 +185,6 @@ def encode_observation_var1(state, is_raeuber=False):
         obs[162 + (i*54) + ACTION_SPACE[state["trick"][i]]] = 1
 
     encode_obs_game_info(state, obs, 324, is_raeuber)
-
-    return obs
-
-
-def encode_observation_var2(state, is_raeuber=False):
-    ''' the shape of this encoding is (228)
-
-    Parameters:
-        - state (dict): the state of the game
-
-    Returns:
-        - obs (list): the observation
-
-    Observation Representation
-        - [0-53] own cards
-        - [54-107] cards already out of the game
-        - [108-161] winner of trick
-        - [162-215] cards in trick
-        - [216] Game Information
-            - [216-219]: who is part of the team
-            - [220-223]: who wins the current round
-            - [224-227]: player who started the trick round
-    '''
-    obs = np.zeros((228), dtype=int)
-
-    hand_cards_idx: list = []
-    trick_cards_idx: list = []
-
-    hand_cards_idx = [ACTION_SPACE[card] for card in state['hand']]
-    trick_cards_idx = [162 + ACTION_SPACE[card] for card in state['trick']]
-
-    obs[hand_cards_idx] = 1
-
-    obs[range(54, 108)] = 1
-    # unset all cards that are out of the game
-    obs[known_cards_idxs] = 0
-
-    known_cards_idxs = get_known_cards(
-        state['hand'], state['valued_cards'], state['played_tricks'], state['trick'], 54)
-
-    obs[known_cards_idxs] = 1
-
-    if state['winner_card'] != 'None':
-        obs[108 + ACTION_SPACE[state['winner_card']]] = 1
-
-    obs[trick_cards_idx] = 1
-
-    encode_obs_game_info(state, obs, 216, is_raeuber)
-
-    return obs
-
-
-def encode_observation_var3(state, is_raeuber=False):
-    ''' the shape of this encoding is (282)
-
-    Parameters:
-        - state (dict): the state of the game
-
-    Returns:
-        - obs (list): the observation
-
-    Observation Representation
-        - [0-53] own cards
-        - [54-107] cards already out of the game
-        - [108-161] winner of trick
-        - [162-215] cards in trick
-        - [216-269] target card
-        - [270] Game Information
-            - [270-273]: who is part of the team
-            - [274-277]: who wins the current round
-            - [278-281]: player who started the trick round
-    '''
-    obs = np.zeros((228), dtype=int)
-
-    hand_cards_idx: list = []
-    trick_cards_idx: list = []
-
-    hand_cards_idx = [ACTION_SPACE[card] for card in state['hand']]
-    trick_cards_idx = [162 + ACTION_SPACE[card] for card in state['trick']]
-
-    obs[hand_cards_idx] = 1
-
-    obs[range(54, 108)] = 1
-    # unset all cards that are out of the game
-    obs[known_cards_idxs] = 0
-
-    known_cards_idxs = get_known_cards(
-        state['hand'], state['valued_cards'], state['played_tricks'], state['trick'], 54)
-
-    obs[known_cards_idxs] = 1
-
-    if state['winner_card'] != 'None':
-        obs[108 + ACTION_SPACE[state['winner_card']]] = 1
-
-    obs[trick_cards_idx] = 1
-
-    if len(state["trick"]) > 0:
-        obs[216 + ACTION_SPACE[state["trick"][0]]] = 1
-
-    encode_obs_game_info(state, obs, 270, is_raeuber)
-
-    return obs
-
-
-def encode_observation_var4(state, is_raeuber=False):
-    ''' the shape of this encoding is (282)
-
-    Parameters:
-            - state (dict): the state of the game
-
-    Returns:
-        - obs (list): the observation
-
-    Observation Representation
-        - [0-53] own cards
-        - [54-107] cards playable by other players
-        - [108-161] first trick card
-        - [162-215] second trick card
-        - [216-269] third trick card
-        - [270] Game Information
-            - [270-273]: who is part of the team
-            - [274-277]: who wins the current round
-            - [278-281]: player who started the trick round
-    '''
-    obs = np.zeros((282), dtype=int)
-
-    hand_cards_idx: list = []
-
-    hand_cards_idx = [ACTION_SPACE[card] for card in state['hand']]
-
-    obs[hand_cards_idx] = 1
-
-    known_cards_idxs = get_known_cards(
-        state['hand'], state['valued_cards'], state['played_tricks'], state['trick'], 54)
-
-    obs[range(54, 108)] = 1
-    # unset all cards that are out of the game
-    obs[known_cards_idxs] = 0
-
-    for i in range(len(state["trick"])):
-        obs[108 + (i*54) + ACTION_SPACE[state["trick"][i]]] = 1
-
-    encode_obs_game_info(state, obs, 270, is_raeuber)
 
     return obs
 
@@ -552,7 +364,7 @@ def valid_ultimo(cego_player_cards) -> bool:
     return "1-trump" in cards2list(cego_player_cards)
 
 
-def valid_solo(cego_player_cards) -> bool:
+def valid_solo(solo_player_cards) -> bool:
     ''' This function checks if it would be valid for the 
     for the solo player to play solo.
 
@@ -564,12 +376,17 @@ def valid_solo(cego_player_cards) -> bool:
             or 8 trumps
             - https://www.cego-online.de/tl_files/documents/CegoSpielregelndef1301224mit%20Anhang.pdf
     '''
+    print(cards2list(solo_player_cards))
 
-    trumps = [card for card in cego_player_cards if card.suit == 'trump']
+    trumps = [card for card in solo_player_cards if card.suit == 'trump']
     trumps_higher_17 = [card for card in trumps if card.suit == 'trump'
                         and (card.rank == 'gstiess' or int(card.rank) >= 17)]
+
+    print("trumps:", cards2list(trumps))
+    print("trumps_higher_17:", cards2list(trumps_higher_17))
     colors = set(
-        [card.suit for card in cego_player_cards if card.suit != 'trump'])
+        [card.suit for card in solo_player_cards if card.suit != 'trump'])
+    print("Colors:", colors)
 
     if len(trumps) >= 8:
         return True

@@ -17,6 +17,7 @@ class CegoPlayer:
             - np_random (numpy.random.RandomState): numpy random state
             - is_cego_player (bool): Whether the player is the cego player
         '''
+        self.og_hand_cards = []
         self.np_random = np_random
         self.player_id: int = player_id
         self.is_single_player: bool = is_single_player

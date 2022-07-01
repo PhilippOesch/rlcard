@@ -12,7 +12,7 @@ from rlcard.utils import (
 
 args = {
     'env_name': 'cego',
-    'game_variant': 'standard',
+    'game_variant': 'solo',
     'game_judge_by_points': 0,
     'game_activate_heuristic': True,
     "game_train_players": [True, True, True, True],
@@ -24,7 +24,7 @@ args = {
     'num_actor_devices': 1,
     'num_actors': 5,
     'training_device': '0',
-    'log_dir': 'final_models/dmc_cego_player_0_focus',
+    'log_dir': 'final_models/dmc_models/dmc_solo_player_0_focus',
     'total_frames': 100000000000,
     'exp_epsilon': 0.01,
     'batch_size': 32,
@@ -36,7 +36,7 @@ args = {
     'alpha': 0.99,
     'momentum': 0,
     'epsilon': 0.00001,
-    'focus_player': True,
+    'focus_player': False,
     'player_to_focus': 0
 }
 
