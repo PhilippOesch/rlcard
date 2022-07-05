@@ -350,7 +350,7 @@ def load_model(model_path, env=None, position=None, device=None):
     return agent
 
 
-def valid_ultimo(cego_player_cards) -> bool:
+def valid_ultimo(player_cards, strict=False) -> bool:
     ''' This function checks if it is possible 
     for the ultimo player to play ultimo.
 
@@ -360,8 +360,13 @@ def valid_ultimo(cego_player_cards) -> bool:
     Returns:
         - valid (bool): Player has 1-trump on his hand
     '''
+    has1_trump = "1-trump" in cards2list(player_cards)
+    trumps = [card for card in player_cards if card.suit == 'trump']
 
-    return "1-trump" in cards2list(cego_player_cards)
+    if strict:
+        return has1_trump and len(trumps) >= 8
+    else:
+        return has1_trump
 
 
 def valid_solo(solo_player_cards) -> bool:

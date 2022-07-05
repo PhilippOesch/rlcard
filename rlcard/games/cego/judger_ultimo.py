@@ -13,9 +13,9 @@ class CegoJudgerUltimo(Judger):
         self.np_random = np_random
         self.round_counter = 0
 
-    def update_points(self, points, players, winner_player_id, trick_cards, winner_card= None) -> list:
+    def update_points(self, points, players, winner_player_id, trick_cards, winner_card=None) -> list:
         self.round_counter += 1
-        if self.round_counter == 11 and winner_player_id == 0 and str(winner_card) == '1-trump':
+        if self.round_counter == 11 and str(winner_card) == '1-trump':
             points[0] += 1
 
         return points

@@ -26,11 +26,15 @@ class CegoDealer:
         self.np_random = np_random
         self.deck = init_deck()
         self.shuffle()
+
         if heuristic == "cego":
             while not valid_cego(self.deck[43:54]):
                 self.shuffle()
         if heuristic == "ultimo":
-            while not valid_ultimo(self.deck[43:54]):
+            while not valid_ultimo(self.deck[43:54], strict=False):
+                self.shuffle()
+        if heuristic == "ultimo_strict":
+            while not valid_ultimo(self.deck[43:54], strict=True):
                 self.shuffle()
         if heuristic == "solo":
             while not valid_solo(self.deck[43:54]):

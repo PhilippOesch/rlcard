@@ -18,18 +18,18 @@ from rlcard.utils import (
 
 seeds = [12, 17, 20, 30, 33]
 env_name = 'cego'
-game_variant = 'standard'
+game_variant = 'ultimo'
 game_judge_by_points = 0
-game_activate_heuristic = True
+game_activate_heuristic = False
 game_train_env = [False, False, False, False]
 num_games = 1000
 
 dqn_model_path = "final_models/dqn_cego_player_0/checkpoint_4/model.pth"
 nfsp_model_path = "final_models/nfsp_cego_player_0/checkpoint_4/model.pth"
-dmc_model_path = "final_models/dmc_models/dmc_cego_player_0_focus/dmc/0_1304032000.pth"
-dmc_model2_path = "final_models/dmc_models/dmc_cego_player_0_focus/dmc/1_1304032000.pth"
-dmc_model3_path = "final_models/dmc_models/dmc_cego_player_0_focus/dmc/2_1304032000.pth"
-dmc_model4_path = "final_models/dmc_models/dmc_cego_player_0_focus/dmc/3_1304032000.pth"
+dmc_model_path = "final_models/dmc_models/dmc_cego/dmc/0_2873113600.pth"
+dmc_model2_path = "final_models/dmc_models/dmc_cego/dmc/1_2873113600.pth"
+dmc_model3_path = "final_models/dmc_models/dmc_cego/dmc/2_2873113600.pth"
+dmc_model4_path = "final_models/dmc_models/dmc_cego/dmc/3_2873113600.pth"
 
 
 def compare_model_in_tournament(path, path_to_models):
@@ -101,14 +101,14 @@ if __name__ == '__main__':
     #     "random",
     # ]
     # compare_model_in_tournament("final_models/nfsp_t_result.json", models_nfsp)
-    models_dmc = [
-        "random",
+    models = [
+        dmc_model_path,
         "random",
         "random",
         "random"
     ]
     compare_model_in_tournament(
-        "final_models/dmc_t_result_test_heuristic.json", models_dmc)
+        "final_models/dmc_t_result_heuristic_cego.json", models)
     # models_dqn_vs_nfsp = [
     #     dqn_model_path,
     #     nfsp_model_path,

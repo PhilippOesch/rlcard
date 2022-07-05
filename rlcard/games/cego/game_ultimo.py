@@ -2,7 +2,7 @@ from rlcard.games.cego import Game
 
 from rlcard.games.cego import Dealer
 from rlcard.games.cego import Player
-from rlcard.games.cego import JudgerBettel
+from rlcard.games.cego import JudgerUltimo
 from rlcard.games.cego import Round
 from rlcard.games.cego import Game
 
@@ -12,9 +12,9 @@ from typing import Any
 
 
 class CegoGameUltimo(Game):
-    ''' This is the Bettel Variant of Cego
+    ''' This is the Ultimo Variant of Cego
 
-    The Player who plays alone (player 0) has to get exactly one trick
+    The Player who plays alone (player 0) has to win the last trick with the card "1-trump"
     '''
 
     def init_game(self) -> tuple[dict, Any]:
@@ -22,9 +22,9 @@ class CegoGameUltimo(Game):
 
         # Initialize a dealer that can deal cards
         if self.activate_heuristic:
-            self.dealer = Dealer(self.np_random, 'ultimo')
+            self.dealer = Dealer(self.np_random, 'ultimo_strict')
         else:
-            self.dealer = Dealer(self.np_random)
+            self.dealer = Dealer(self.np_random, 'ultimo')
 
         # Initialize players to play the game
         self.players = [Player(i, self.np_random)
@@ -33,7 +33,7 @@ class CegoGameUltimo(Game):
         # player 0 is the solo player
         self.players[0].is_single_player = True
 
-        self.judger = JudgerBettel(self.np_random)
+        self.judger = JudgerUltimo(self.np_random)
 
         # deal cards to player
         for i in range(self.num_players):
@@ -73,8 +73,14 @@ class CegoGameUltimo(Game):
 
     def is_over(self) -> bool:
         # if the player has more then one trick, the game is over
-        cardlist= cards2list(self.round.trick)
+        cardlist = cards2list(self.round.trick)
 
-        if '1-trump' in cardlist:
+        if '1-trump' in cardlist and self.round_counter+1 < Game.num_rounds:
             return True
         return self.round_counter >= Game.num_rounds
+
+    def get_payoffs(self) -> list:
+        if self.judge_by_points == 0:
+            return self.judger.judge_game_zero_to_one(self.points)
+        if self.judge_by_points == 1:
+            return self.judger.judge_game_minusone_to_one(self.points)
