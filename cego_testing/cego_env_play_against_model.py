@@ -46,7 +46,7 @@ print(env.action_shape)  # [None, None, None, None]
 if __name__ == "__main__":
     trajectories, payoffs = env.run(is_training=False)
 
-    # print(trajectories)
+    print(trajectories[3][-3])
 
     print("Payoffs:", payoffs)
 

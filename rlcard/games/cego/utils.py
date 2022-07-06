@@ -391,7 +391,7 @@ def valid_solo(solo_player_cards) -> bool:
 
     if len(trumps) >= 8:
         return True
-    elif len(trumps) == 7 and len(trumps_higher_17) >= 2 and len(colors) == 2:
+    elif len(trumps) == 7 and len(trumps_higher_17) >= 2 and len(colors) <= 2:  # fixed heuristic!
         return True
 
     return False

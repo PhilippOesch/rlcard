@@ -15,8 +15,10 @@ class CegoDealer:
     '''
 
     heuristics = {
-        "cego"
-        "ultimo"
+        "cego",
+        "ultimo",
+        "solo",
+        "ultimo_strict"
     }
 
     num_blind_cards = 10

@@ -26,10 +26,10 @@ num_games = 1000
 
 dqn_model_path = "final_models/dqn_cego_player_0/checkpoint_4/model.pth"
 nfsp_model_path = "final_models/nfsp_cego_player_0/checkpoint_4/model.pth"
-dmc_model_path = "final_models/dmc_models/dmc_cego/dmc/0_2873113600.pth"
-dmc_model2_path = "final_models/dmc_models/dmc_cego/dmc/1_2873113600.pth"
-dmc_model3_path = "final_models/dmc_models/dmc_cego/dmc/2_2873113600.pth"
-dmc_model4_path = "final_models/dmc_models/dmc_cego/dmc/3_2873113600.pth"
+dmc_model_path = "final_models/dmc_models/cego_ultimo/dmc/0_537203200.pth"
+dmc_model2_path = "final_models/dmc_models/cego_ultimo/dmc/1_537203200.pth"
+dmc_model3_path = "final_models/dmc_models/cego_ultimo/dmc/2_537203200.pth"
+dmc_model4_path = "final_models/dmc_models/cego_ultimo/dmc/3_537203200.pth"
 
 
 def compare_model_in_tournament(path, path_to_models):
@@ -102,13 +102,13 @@ if __name__ == '__main__':
     # ]
     # compare_model_in_tournament("final_models/nfsp_t_result.json", models_nfsp)
     models = [
-        dmc_model_path,
         "random",
-        "random",
-        "random"
+        dmc_model2_path,
+        dmc_model3_path,
+        dmc_model4_path
     ]
     compare_model_in_tournament(
-        "final_models/dmc_t_result_heuristic_cego.json", models)
+        "final_models/dmc_t_result_heuristic_utlimo.json", models)
     # models_dqn_vs_nfsp = [
     #     dqn_model_path,
     #     nfsp_model_path,
