@@ -1,4 +1,4 @@
-from rlcard.games.cego.utils import init_deck, valid_cego, valid_ultimo, valid_solo, cards2list
+from rlcard.games.cego.utils import init_deck, valid_cego, valid_ultimo, valid_solo, valid_solo_light
 
 
 class CegoDealer:

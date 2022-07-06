@@ -377,7 +377,7 @@ def valid_solo(solo_player_cards) -> bool:
         - cego_player_cards (list): the cards of the cego player
 
     Returns:
-        - valid (bool): if player has 7 trumps, two trumps >= 17 and 2 colors 
+        - valid (bool): if player has 7 trumps, two trumps >= 17 and 2 <= colors 
             or 8 trumps
             - https://www.cego-online.de/tl_files/documents/CegoSpielregelndef1301224mit%20Anhang.pdf
     '''
@@ -395,3 +395,18 @@ def valid_solo(solo_player_cards) -> bool:
         return True
 
     return False
+
+
+def valid_solo_light(solo_player_cards):
+    ''' This function checks if it would be valid for the 
+    for the solo player to play solo.
+
+    Parameters:
+        - cego_player_cards (list): the cards of the cego player
+
+    Returns:
+        - valid (bool): if player has at least 7 trumps
+            - https://www.cego-online.de/tl_files/documents/CegoSpielregelndef1301224mit%20Anhang.pdf
+    '''
+    trumps = [card for card in solo_player_cards if card.suit == 'trump']
+    return len(trumps) >= 7
