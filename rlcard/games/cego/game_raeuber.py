@@ -2,17 +2,19 @@ from rlcard.games.cego import Game
 
 from rlcard.games.cego import Dealer
 from rlcard.games.cego import Player
-from rlcard.games.cego import JudgerBettel
+from rlcard.games.cego import JudgerRaeuber
 from rlcard.games.cego import Round
 from rlcard.games.cego import Game
+
+from rlcard.games.cego.utils import cards2list
 
 from typing import Any
 
 
-class CegoGameBettel(Game):
-    ''' This is the Bettel Variant of Cego
+class CegoGameRaeuber(Game):
+    ''' This is the Raeuber Variant of Cego
 
-    The Player who plays alone (player 0) is not allowed to win a trick.
+    Players have to achieve the least amount of points
     '''
 
     def init_game(self) -> tuple[dict, Any]:
@@ -20,7 +22,10 @@ class CegoGameBettel(Game):
         self.winning_card_history = []
 
         # Initialize a dealer that can deal cards
-        self.dealer = Dealer(self.np_random)
+        if self.activate_heuristic:
+            self.dealer = Dealer(self.np_random)
+        else:
+            self.dealer = Dealer(self.np_random)
 
         # Initialize players to play the game
         self.players = [Player(i, self.np_random)
@@ -29,7 +34,7 @@ class CegoGameBettel(Game):
         # player 0 is the solo player
         self.players[0].is_single_player = True
 
-        self.judger = JudgerBettel(self.np_random)
+        self.judger = JudgerRaeuber(self.np_random)
 
         # deal cards to player
         for i in range(self.num_players):
@@ -54,7 +59,9 @@ class CegoGameBettel(Game):
 
         return state, self.round.current_player_idx
 
-    def is_over(self) -> bool:
-        if self.points[0] > 0:
-            return True
-        return self.round_counter >= Game.num_rounds
+    def get_payoffs(self) -> list:
+        if self.judge_by_points == 0:
+            return self.judger.judge_game_zero_to_one(self.points)
+        if self.judge_by_points == 1:
+            return self.judger.judge_game_minusone_to_one(self.points)
+        return self.judger.judge_game_minusone_to_one(self.points)

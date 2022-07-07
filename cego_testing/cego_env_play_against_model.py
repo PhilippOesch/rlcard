@@ -15,9 +15,8 @@ from rlcard.utils import (
 env = rlcard.make(
     'cego',
     config={
-        'seed': 18,
-        'game_variant': 'ultimo',
-        'game_activate_heuristic': True,
+        'game_variant': 'raeuber',
+        'game_activate_heuristic': False,
         'game_judge_by_points': 0,
         'game_train_players': [False, False, False, False]
     })
@@ -45,8 +44,6 @@ print(env.action_shape)  # [None, None, None, None]
 
 if __name__ == "__main__":
     trajectories, payoffs = env.run(is_training=False)
-
-    print(trajectories[3][-3])
 
     print("Payoffs:", payoffs)
 

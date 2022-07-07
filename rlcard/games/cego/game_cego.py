@@ -21,6 +21,7 @@ class CegoGameStandard(Game):
 
     def init_game(self) -> tuple[dict, Any]:
         self.points = [0 for _ in range(self.num_players)]
+        self.winning_card_history = []
 
         # Initialize a dealer that can deal cards
         if self.activate_heuristic:

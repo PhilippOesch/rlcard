@@ -49,6 +49,7 @@ class CegoGame(ABC):
         self.round_counter: int = None
         self.history: list = None
         self.trick_history: list = None
+        self.winning_card_history: list = None
         self.blind_cards: list = None
         self.last_round_winner_idx: int = None
         self.judge_by_points: int = 0
@@ -60,6 +61,7 @@ class CegoGame(ABC):
         self.activate_heuristic = game_config['game_activate_heuristic']
         self.judge_by_points = game_config['game_judge_by_points']
         self.with_perfect_information = game_config['game_with_perfect_information']
+        self.analysis_mode = game_config['game_analysis_mode']
 
     def init_game(self) -> tuple[dict, Any]:
         raise NotImplementedError
@@ -96,8 +98,9 @@ class CegoGame(ABC):
             the_trick_history = deepcopy(self.trick_history)
             the_playoffs = deepcopy(self.points)
             the_last_round_winner = deepcopy(self.last_round_winner_idx)
+            the_winning_card_history = deepcopy(self.winning_card_history)
             self.history.append(
-                (the_round, the_players, the_dealer, the_round_counter, the_trick_history, the_playoffs, the_last_round_winner))
+                (the_round, the_players, the_dealer, the_round_counter, the_trick_history, the_playoffs, the_last_round_winner, the_winning_card_history))
 
         # playing of a single step
         self.round.proceed_round(self.players, action)
@@ -128,13 +131,14 @@ class CegoGame(ABC):
             self.last_round_winner_idx,
             self.round.trick.copy()
         )
+        self.winning_card_history.append(self.round.winner_card)
         self.round.start_new_round(self.last_round_winner_idx)
         self.round_counter += 1
 
     def step_back(self) -> bool:
         if len(self.history) > 0:
             self.round, self.players, self.dealer, \
-                self.round_counter, self.trick_history, self.points, self.last_round_winner_idx = self.history.pop()
+                self.round_counter, self.trick_history, self.points, self.last_round_winner_idx, self.winning_card_history = self.history.pop()
             return True
         return False
 

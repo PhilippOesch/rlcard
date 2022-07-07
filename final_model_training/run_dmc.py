@@ -24,7 +24,7 @@ args = {
     'num_actor_devices': 1,
     'num_actors': 5,
     'training_device': '0',
-    'log_dir': 'final_models/dmc_models/dmc_solo_strict',
+    'log_dir': 'final_models/dmc_models/dmc_solo_soft_heuristic',
     'total_frames': 100000000000,
     'exp_epsilon': 0.01,
     'batch_size': 32,

@@ -3,7 +3,7 @@ from collections import OrderedDict
 
 import rlcard
 from rlcard.envs import Env
-from rlcard.games.cego import GameStandard, GameSolo, GameBettel, GamePiccolo, GameUltimo
+from rlcard.games.cego import GameStandard, GameSolo, GameBettel, GamePiccolo, GameUltimo, GameRaeuber
 from rlcard.games.cego.utils import ACTION_LIST, ACTION_SPACE
 from rlcard.games.cego.utils import cards2list, encode_observation_var1, encode_observation_perfect_information
 
@@ -15,7 +15,8 @@ DEFAULT_GAME_CONFIG = {
     'game_activate_heuristic': True,
     'game_with_perfect_information': False,
     # what player should be traines
-    'game_train_players': [False, False, False, False]
+    'game_train_players': [False, False, False, False],
+    'game_analysis_mode': False
 }
 
 
@@ -25,8 +26,8 @@ def map_to_Game(variant_name):
         'solo': GameSolo,
         'bettel': GameBettel,
         'piccolo': GamePiccolo,
-        'ultimo': GameUltimo
-        # TODD: Raeuber
+        'ultimo': GameUltimo,
+        'raeuber': GameRaeuber
     }
 
     return switcher.get(variant_name, "Invalid variant name")
@@ -109,6 +110,8 @@ class CegoEnv(Env):
         # Payoffs
         payoffs = self.get_payoffs()
 
+        if self.game.analysis_mode:
+            return trajectories, payoffs, self.get_perfect_information()
         return trajectories, payoffs
 
     def _extract_state(self, state) -> OrderedDict:
@@ -118,7 +121,7 @@ class CegoEnv(Env):
         extracted_state: dict = OrderedDict()
         legal_actions: OrderedDict = self._get_legal_actions()
 
-        is_raeuber_game = self.game.__class__.__name__ == 'GameRaeuber'
+        is_raeuber_game = self.game.__class__.__name__ == 'CegoGameRaeuber'
 
         perfect_info_state = self.get_perfect_information()
         if self.game.with_perfect_information:
@@ -189,4 +192,5 @@ class CegoEnv(Env):
         state['winner_card'] = str(self.game.round.winner_card) if str(
             self.game.round.winner_card) is not None else None
         state['start_player'] = self.game.round.starting_player_idx
+        state['winning_card_history'] = self.game.winning_card_history
         return state

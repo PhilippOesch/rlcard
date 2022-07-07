@@ -242,7 +242,7 @@ def encode_obs_game_info(state, obs, start_idx, is_raeuber=False):
     current_player_idx = state['current_player']
 
     if is_raeuber:
-        obs[current_player_idx] = 1
+        obs[start_idx+current_player_idx] = 1
     else:
         if current_player_idx == 0:
             obs[start_idx] = 1
