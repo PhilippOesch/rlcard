@@ -269,12 +269,19 @@ def get_total_ranking(save_folder, paths_to_models):
 
 if __name__ == '__main__':
     # compare_training_slope('random_search_results/nfsp_point_var_0_tuned_dqn_against_dqn', 79, 0)
-    get_total_ranking('random_search_results/', [
-        'random_search_results/nfsp_point_var_0_tuned_dqn'
-    ])
+
     # compare_training_slope(
     #     'random_search_results/nfsp_point_var_0_tuned_dqn', 79, 0)
     # compare_training_slope(
     #     'random_search_results/nfsp_point_var_0_tuned_dqn_against_dqn_second_try', 79, 0)
     # nfsp_point_var_0_tuned_dqn_against_dqn
     # compare_training_slope('random_search_results/nfsp_point_var_0_tuned_dqn_against_dqn', 79, 0)
+
+    compare_training_slope(
+        "random_search_results/fix_random_search/dqn_point_var_1")
+    compare_training_slope(
+        "random_search_results/fix_random_search/nfsp_point_var_0")
+    compare_training_slope(
+        "random_search_results/fix_random_search/nfsp_point_var_1")
+    # get_total_ranking("random_search_results/fix_random_search",
+    #                   ["random_search_results/fix_random_search/dqn_point_var_0"])

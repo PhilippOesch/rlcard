@@ -11,7 +11,7 @@ DEFAULT_GAME_CONFIG = {
     'game_num_players': 4,
     'game_variant': 'standard',
     # 0: judge by points, 1: judge by game, 2: judge by game var2
-    'game_judge_by_points': 2,
+    'game_judge_by_points': 0,
     'game_activate_heuristic': True,
     'game_with_perfect_information': False,
     # what player should be traines
