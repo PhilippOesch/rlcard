@@ -309,5 +309,25 @@ class TestUltimoPlayerHasGeiss(unittest.TestCase):
         self.assertEqual(True, contains_geiss)
 
 
+class TestRaeuberPoints(unittest.TestCase):
+    def test_raueber_points(self):
+        env = rlcard.make(
+            "cego",
+            config={
+                'game_variant': "raeuber",
+                'game_activate_heuristic': False,
+                'game_judge_by_points': 0
+            }
+        )
+        env.set_agents([
+            RandomAgent(num_actions=env.num_actions) for _ in range(env.num_players)
+        ])
+
+        trajectory, _ = env.run(is_training=False)
+        full_points = sum(env.game.points) + cards2value(env.game.blind_cards)
+
+        self.assertEqual(79, full_points)
+
+
 if __name__ == '__main__':
     unittest.main()

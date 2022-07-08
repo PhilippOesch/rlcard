@@ -39,7 +39,7 @@ class CegoDealer:
             while not valid_ultimo(self.deck[43:54], strict=True):
                 self.shuffle()
         if heuristic == "solo":
-            while not valid_solo(self.deck[43:54]):
+            while not valid_solo_light(self.deck[43:54]):
                 self.shuffle()
 
     def shuffle(self) -> None:
