@@ -20,6 +20,8 @@ class CegoGameUltimo(Game):
     def init_game(self) -> tuple[dict, Any]:
         self.points = [0 for _ in range(self.num_players)]
         self.winning_card_history = []
+        self.start_player_history = [0]
+        self.winning_player_history = []
 
         # Initialize a dealer that can deal cards
         if self.activate_heuristic:
@@ -70,6 +72,8 @@ class CegoGameUltimo(Game):
             self.round.winner_card
         )
         self.winning_card_history.append(self.round.winner_card)
+        self.winning_player_history.append(self.round.winner_idx)
+        self.start_player_history.append(self.round.winner_idx)
         self.round.start_new_round(self.last_round_winner_idx)
         self.round_counter += 1
 

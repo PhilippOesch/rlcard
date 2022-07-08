@@ -50,6 +50,8 @@ class CegoGame(ABC):
         self.history: list = None
         self.trick_history: list = None
         self.winning_card_history: list = None
+        self.start_player_history: list = None
+        self.winning_player_history: list = None
         self.blind_cards: list = None
         self.last_round_winner_idx: int = None
         self.judge_by_points: int = 0
@@ -99,8 +101,11 @@ class CegoGame(ABC):
             the_playoffs = deepcopy(self.points)
             the_last_round_winner = deepcopy(self.last_round_winner_idx)
             the_winning_card_history = deepcopy(self.winning_card_history)
+            the_start_player_history = deepcopy(self.start_player_history)
+            the_winning_player_history = deepcopy(self.winning_player_history)
             self.history.append(
-                (the_round, the_players, the_dealer, the_round_counter, the_trick_history, the_playoffs, the_last_round_winner, the_winning_card_history))
+                (the_round, the_players, the_dealer, the_round_counter, the_trick_history, the_playoffs,
+                 the_last_round_winner, the_winning_card_history, the_start_player_history, the_winning_player_history))
 
         # playing of a single step
         self.round.proceed_round(self.players, action)
@@ -132,13 +137,16 @@ class CegoGame(ABC):
             self.round.trick.copy()
         )
         self.winning_card_history.append(self.round.winner_card)
+        self.winning_player_history.append(self.round.winner_idx)
+        self.start_player_history.append(self.round.winner_idx)
         self.round.start_new_round(self.last_round_winner_idx)
         self.round_counter += 1
 
     def step_back(self) -> bool:
         if len(self.history) > 0:
             self.round, self.players, self.dealer, \
-                self.round_counter, self.trick_history, self.points, self.last_round_winner_idx, self.winning_card_history = self.history.pop()
+                self.round_counter, self.trick_history, self.points, self.last_round_winner_idx, \
+                self.winning_card_history, self.start_player_history, self.winning_player_history = self.history.pop()
             return True
         return False
 

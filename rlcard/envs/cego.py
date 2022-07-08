@@ -193,4 +193,6 @@ class CegoEnv(Env):
             self.game.round.winner_card) is not None else None
         state['start_player'] = self.game.round.starting_player_idx
         state['winning_card_history'] = self.game.winning_card_history
+        state['winning_player_history'] = self.game.winning_player_history
+        state['start_player_history'] = self.game.start_player_history
         return state
