@@ -22,7 +22,7 @@ ALL_DL_AGENTS = False
 
 args = {
     "env_name": ["cego"],
-    "game_judge_by_points": [0],
+    "game_judge_by_points": [1],
     "seed": [12],
     "game_variant": ["standard"],
     "game_activate_heuristic": [True],
@@ -186,5 +186,5 @@ def train(log_dir, env_name, game_judge_by_points, game_variant, game_activate_h
 
 
 if __name__ == '__main__':
-    randomSearch(args, 'random_search_results/          nfsp_point_var_0_tuned_dqn_second_try',
+    randomSearch(args, 'random_search_results/fix_random_search/nfsp_point_var_1',
                  random_search_iterations)

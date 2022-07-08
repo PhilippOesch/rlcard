@@ -20,9 +20,10 @@ from rlcard.utils import (
 random_search_iterations = 20
 
 # arguments for the random search
+
 args = {
     "env_name": ["cego"],
-    "game_judge_by_points": [0],
+    "game_judge_by_points": [1],
     "game_variant": ["standard"],
     "game_activate_heuristic": [True],
     "game_train_players": [[True, True, True, True]],
@@ -165,5 +166,5 @@ def save_search_set(random_search_folder, args_string):
 
 if __name__ == '__main__':
     os.environ["CUDA_VISIBLE_DEVICES"] = "cpu"
-    randomSearch(args, 'random_search_results/fix_random_search/dqn_point_var_0',
+    randomSearch(args, 'random_search_results/fix_random_search/dqn_point_var_1',
                  random_search_iterations)
