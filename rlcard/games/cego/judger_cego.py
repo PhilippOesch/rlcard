@@ -1,4 +1,4 @@
-from rlcard.games.cego.utils import cards2value
+from rlcard.games.cego.utility.game import cards2value
 from rlcard.games.cego import Judger
 
 

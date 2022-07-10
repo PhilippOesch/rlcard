@@ -1,5 +1,5 @@
 from rlcard.games.cego.card import CegoCard as Card
-from rlcard.games.cego.utils import cards2list
+from rlcard.games.cego.utility.game import cards2list
 
 
 class CegoRound:
@@ -135,4 +135,3 @@ class CegoRound:
         state['legal_actions'] = self.get_legal_actions(player)
         state['start_player'] = self.starting_player_idx
         return state
-

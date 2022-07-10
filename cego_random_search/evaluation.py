@@ -3,12 +3,13 @@ import os
 import csv
 import matplotlib.pyplot as plt
 from scipy import stats
+import numpy as np
 import torch
 import ntpath
 
 import rlcard
 
-from rlcard.games.cego.utils import load_model
+from rlcard.games.cego.utility.eval import load_model
 
 from rlcard.utils import (
     get_device,
@@ -27,46 +28,6 @@ game_activate_heuristic = True
 num_games = 1000
 
 
-def create_combined_graph(path_to_models, data_per_graph=10):
-    model_dirs = [x[0] for x in os.walk(path_to_models)]
-
-    ys = []
-    xs = []
-
-    i = 0
-
-    fig, ax = plt.subplots()
-    for model_dir in model_dirs:
-        if not os.path.exists(model_dir + '/performance.csv'):
-            continue
-
-        i += 1
-        ys.append([])
-        xs.append([])
-
-        file = open(model_dir + '/performance.csv')
-
-        csvreader = csv.DictReader(file)
-        for row in csvreader:
-            ys[(i-1) % data_per_graph].append(int(row['timestep']))
-            xs[(i-1) % data_per_graph].append(float(row['reward']))
-
-        if i % data_per_graph == 0:
-            fig, ax = plt.subplots()
-        ax.set(xlabel='timestep', ylabel='reward')
-        for idx in range(len(ys)):
-            ax.plot(ys[idx], xs[idx], label="model_" +
-                    str(idx + i-5), linewidth=2)
-        ax.legend()
-        ax.grid()
-
-        if i % data_per_graph == 0:
-            fig.savefig(path_to_models + '/fig' +
-                        str(i//data_per_graph) + '.png', dpi=200)
-            ys = []
-            xs = []
-
-
 def compare_model_in_tournament(path_to_models):
     model_dirs = [x[0] for x in os.walk(path_to_models)]
 
@@ -79,8 +40,6 @@ def compare_model_in_tournament(path_to_models):
         if not os.path.exists(model_dir + '/model.pth'):
             continue
 
-        # Check whether gpu is available
-        # device = get_device()
         device = torch.device("cpu")
 
         iterations_rewards = []
@@ -123,18 +82,13 @@ def compare_model_in_tournament(path_to_models):
             }
         )
 
-    # all_rewards.sort(key= lambda x: x['avg_reward'], reverse= True);
-
-    # with open(path_to_models+'/tournament_result.json', 'w') as f:
-    #     json.dump(all_rewards, f, indent=4)
-
     sort_by_key_and_save_array(
         all_rewards, 'avg_reward', path_to_models+'/tournament_result.json', True)
 
 
-def read_performance(model_dir, max=79, min=0):
+def read_performance(model_dir, max=79, min=0) -> tuple[object, object, object, object, object]:
     if not os.path.exists(model_dir + '/performance.csv'):
-        return None, None, None, None
+        return None, None, None, None, None
 
     file = open(model_dir + '/performance.csv')
     csvreader = csv.reader(file)
@@ -147,9 +101,10 @@ def read_performance(model_dir, max=79, min=0):
         x.append(int(row[0]))
         y.append(float(row[1])/float(max+min))
 
-    slope, intercept, r, p, std_err = stats.linregress(x, y)
+    result = stats.linregress(x, y)
+    std = np.std(y)
 
-    return slope, intercept, y, x
+    return result.slope, result.intercept, std, y, x
 
 
 def get_ys(x, slope, intercept):
@@ -168,12 +123,13 @@ def compare_training_slope(path_to_models, max_value=79, min_value=0):
     model_dirs = [x[0] for x in os.walk(path_to_models)]
 
     slopes = []
+    stds = []
 
     if not os.path.exists(path_to_models + '/lin_reg_graphs/'):
         os.mkdir(path_to_models + '/lin_reg_graphs/')
 
     for model_dir in model_dirs:
-        slope, intercept, y, x = read_performance(
+        slope, intercept, std, y, x = read_performance(
             model_dir, max_value, min_value)
         if x is None:
             continue
@@ -183,6 +139,11 @@ def compare_training_slope(path_to_models, max_value=79, min_value=0):
         slopes.append({
             'model': model_dir,
             'slope': slope,
+        })
+
+        stds.append({
+            'model': model_dir,
+            'std': std,
         })
 
         fig, ax = plt.subplots()
@@ -196,6 +157,9 @@ def compare_training_slope(path_to_models, max_value=79, min_value=0):
                     dir_name + '.png', dpi=200)
 
     sort_by_key_and_save_array(
+        stds, 'std', path_to_models+'/std_result_sorted.json', False)
+
+    sort_by_key_and_save_array(
         slopes, 'slope', path_to_models+'/lin_reg_slope_result_sorted.json', True)
 
 
@@ -206,15 +170,13 @@ def sort_by_key_and_save_array(array, key, path, descending=True):
         json.dump(array, f, indent=4)
 
 
-def get_total_ranking(save_folder, paths_to_models):
-    array_rewards = []
-    array_slopes = []
+def get_total_ranking(save_folder, paths_to_models, filename="total_ranking.json") -> None:
+    array_rewards: list[dict] = []
+    array_slopes: list[dict] = []
 
-    slope_rankings = {}
-    reward_rankings = {}
-    total_ranks = []
-
-    # print(paths_to_models)
+    slope_rankings: dict = {}
+    reward_rankings: dict = {}
+    total_ranks: list[dict] = []
 
     for path in paths_to_models:
         file = open(path + "/tournament_result.json")
@@ -227,14 +189,6 @@ def get_total_ranking(save_folder, paths_to_models):
 
     array_rewards.sort(key=lambda x: x["avg_reward"], reverse=True)
     array_slopes.sort(key=lambda x: x["slope"], reverse=True)
-
-    # for i in range(len(array_rewards)):
-    #     array_rewards[i]["rank"]= i+1
-
-    # print(array_rewards)
-
-    # for i in range(len(array_slopes)):
-    #     array_slopes[i]["rank"]= i+1
 
     for idx, reward in enumerate(array_rewards):
         reward_rankings[reward['model']] = {
@@ -251,11 +205,6 @@ def get_total_ranking(save_folder, paths_to_models):
     print(reward_rankings)
 
     for model in reward_rankings:
-        # print("Current_Model:", model)
-        print(model)
-        # print(slope_rankings[model]['rank'])
-        print(reward_rankings[model]['rank'])
-        print(slope_rankings[model]['rank'])
         total_ranks.append({
             "model": model,
             "rank": (reward_rankings[model]['rank']*0.5)+(slope_rankings[model]['rank']*0.5),
@@ -264,24 +213,15 @@ def get_total_ranking(save_folder, paths_to_models):
         })
 
     sort_by_key_and_save_array(
-        total_ranks, 'rank', save_folder+'/total_ranking.json', False)
+        total_ranks, 'rank', save_folder+"/"+filename, False)
 
 
 if __name__ == '__main__':
-    # compare_training_slope('random_search_results/nfsp_point_var_0_tuned_dqn_against_dqn', 79, 0)
-
-    # compare_training_slope(
-    #     'random_search_results/nfsp_point_var_0_tuned_dqn', 79, 0)
-    # compare_training_slope(
-    #     'random_search_results/nfsp_point_var_0_tuned_dqn_against_dqn_second_try', 79, 0)
-    # nfsp_point_var_0_tuned_dqn_against_dqn
-    # compare_training_slope('random_search_results/nfsp_point_var_0_tuned_dqn_against_dqn', 79, 0)
-
-    compare_training_slope(
-        "random_search_results/fix_random_search/dqn_point_var_1")
-    compare_training_slope(
-        "random_search_results/fix_random_search/nfsp_point_var_0")
-    compare_training_slope(
-        "random_search_results/fix_random_search/nfsp_point_var_1")
-    # get_total_ranking("random_search_results/fix_random_search",
-    #                   ["random_search_results/fix_random_search/dqn_point_var_0"])
+    get_total_ranking("random_search_results/fix_random_search",
+                      ["random_search_results/fix_random_search/dqn_point_var_0",
+                       "random_search_results/fix_random_search/dqn_point_var_1"],
+                      "total_ranking_dqn.json")
+    get_total_ranking("random_search_results/fix_random_search",
+                      ["random_search_results/fix_random_search/nfsp_point_var_0",
+                       "random_search_results/fix_random_search/nfsp_point_var_1"],
+                      "total_ranking_nfsp.json")

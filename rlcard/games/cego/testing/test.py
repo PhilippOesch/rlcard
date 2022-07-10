@@ -3,7 +3,7 @@ import unittest
 import rlcard
 from rlcard.agents import RandomAgent
 from rlcard.games.cego.game_cego import CegoGameStandard as Game
-from rlcard.games.cego.utils import cards2value, encode_observation_var1, cards2list, init_deck
+from rlcard.games.cego.utility.game import cards2value, cards2list
 
 
 def check_if_all_cards_are_unique(players: list) -> bool:
@@ -327,6 +327,32 @@ class TestRaeuberPoints(unittest.TestCase):
         full_points = sum(env.game.points) + cards2value(env.game.blind_cards)
 
         self.assertEqual(79, full_points)
+
+
+class TestRaeuberTeamState(unittest.TestCase):
+    def test_raueber_team_state(self):
+        env = rlcard.make(
+            "cego",
+            config={
+                'game_variant': "raeuber",
+                'game_activate_heuristic': False,
+                'game_judge_by_points': 0
+            }
+        )
+        env.set_agents([
+            RandomAgent(num_actions=env.num_actions) for _ in range(env.num_players)
+        ])
+
+        trajectory, _ = env.run(is_training=False)
+        team_info_0 = list(trajectory[0][0]['obs'][324:328])
+        team_info_1 = list(trajectory[1][0]['obs'][324:328])
+        team_info_2 = list(trajectory[2][0]['obs'][324:328])
+        team_info_3 = list(trajectory[3][0]['obs'][324:328])
+
+        self.assertEqual([1, 0, 0, 0], team_info_0)
+        self.assertEqual([0, 1, 0, 0], team_info_1)
+        self.assertEqual([0, 0, 1, 0], team_info_2)
+        self.assertEqual([0, 0, 0, 1], team_info_3)
 
 
 if __name__ == '__main__':

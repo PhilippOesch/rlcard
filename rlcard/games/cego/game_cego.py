@@ -1,6 +1,6 @@
 from rlcard.games.cego import Game
 
-from rlcard.games.cego.utils import set_cego_player_deck
+from rlcard.games.cego.utility.game import set_cego_player_deck
 from rlcard.games.cego import Dealer
 from rlcard.games.cego import Player
 from rlcard.games.cego import JudgerStandard

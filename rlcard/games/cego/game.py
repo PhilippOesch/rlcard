@@ -3,7 +3,7 @@ import numpy as np
 from typing import Any
 
 from abc import ABC
-from rlcard.games.cego.utils import cards2list
+from rlcard.games.cego.utility.game import cards2list
 from rlcard.games.cego import Dealer
 from rlcard.games.cego import Judger
 from rlcard.games.cego import Round

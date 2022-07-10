@@ -4,8 +4,8 @@ from collections import OrderedDict
 import rlcard
 from rlcard.envs import Env
 from rlcard.games.cego import GameStandard, GameSolo, GameBettel, GamePiccolo, GameUltimo, GameRaeuber
-from rlcard.games.cego.utils import ACTION_LIST, ACTION_SPACE
-from rlcard.games.cego.utils import cards2list, encode_observation_var1, encode_observation_perfect_information
+from rlcard.games.cego.utility.game import ACTION_LIST, ACTION_SPACE
+from rlcard.games.cego.utility.game import cards2list, encode_observation_var1, encode_observation_perfect_information
 
 DEFAULT_GAME_CONFIG = {
     'game_num_players': 4,

@@ -2,9 +2,9 @@
 
 import rlcard
 from rlcard.agents import RandomAgent
-from rlcard.agents.human_agents.cego_human_agent import HumanAgent, _print_action
+from rlcard.agents.human_agents.cego_human_agent import HumanAgent
 
-from rlcard.games.cego.utils import load_model, ACTION_SPACE, cards2list
+from rlcard.games.cego.utility.game import load_model, ACTION_SPACE, cards2list
 import os
 import json
 import matplotlib.pyplot as plt
@@ -37,7 +37,7 @@ env.set_agents(
 )
 
 
-def analyse_card_trick_win_propabilities(path):
+def analyse_card_trick_win_propabilities(path, env):
     '''
         if a trick was won who big is the chance that this card was the winner
     '''
@@ -68,7 +68,7 @@ def analyse_card_trick_win_propabilities(path):
         json.dump(sorted_by_prob, f, indent=4)
 
 
-def analyse_propability_a_card_wins_a_trick(path):
+def analyse_propability_a_card_wins_a_trick(path, env):
     trick_wins: dict = {}
 
     for key in ACTION_SPACE:
@@ -148,11 +148,5 @@ def analyse_first_mover_advantage(path):
 
 
 if __name__ == '__main__':
-    # analyse_card_trick_win_propabilities(
-    #     'analysis_results/trick_win_probs.json')
-    # analyse_propability_a_card_wins_a_trick(
-    #     "analysis_results/card_win_when_played_probs.json")
-    # analyse_first_mover_advantage("test")
-
     analyse_first_mover_advantage(
-        "analysis_results")
+        "analysis_results", env)

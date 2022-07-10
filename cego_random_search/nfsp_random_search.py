@@ -6,7 +6,8 @@ import rlcard
 from rlcard.agents import NFSPAgent
 from rlcard.agents.random_agent import RandomAgent
 
-from rlcard.games.cego.utils import get_random_search_args, args_to_str, save_args_params
+from rlcard.games.cego.utility.random_search import get_random_search_args, args_to_str
+from rlcard.games.cego.utility.training import save_args_params
 
 from rlcard.utils import (
     tournament,

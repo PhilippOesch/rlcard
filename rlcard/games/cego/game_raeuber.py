@@ -6,7 +6,7 @@ from rlcard.games.cego import JudgerRaeuber
 from rlcard.games.cego import Round
 from rlcard.games.cego import Game
 
-from rlcard.games.cego.utils import cards2list
+from rlcard.games.cego.utility.game import cards2list
 
 from typing import Any
 

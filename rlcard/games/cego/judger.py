@@ -1,5 +1,6 @@
-from rlcard.games.cego.utils import cards2value
+from rlcard.games.cego.utility.game import cards2value
 from abc import ABC
+
 
 class CegoJudger(ABC):
     ''' The abstract class to judge the winner of a round and the points of each player
@@ -18,7 +19,7 @@ class CegoJudger(ABC):
 
     def update_points(self, points, players, winner_player_id, trick_cards) -> list:
         ''' update the points of each player
-        
+
         Args:
             - points (list[int]): the current points of each player
             - players (list[Player]): the players
@@ -32,7 +33,7 @@ class CegoJudger(ABC):
 
     def judge_game_zero_to_one(self, points) -> list:
         ''' judge the game with zero to one reward
-        
+
         Args:
             - points (list[int]): the current points of each player
 
@@ -43,7 +44,7 @@ class CegoJudger(ABC):
 
     def judge_game_minusone_to_one(self, points) -> list:
         ''' judge the game with minus one to one reward
-        
+
         Args:
             - points (list[int]): the current points of each player
 

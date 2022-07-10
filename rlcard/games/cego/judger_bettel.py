@@ -1,4 +1,4 @@
-from rlcard.games.cego.utils import cards2value
+from rlcard.games.cego.utility.game import cards2value
 from rlcard.games.cego import Judger
 
 
@@ -31,7 +31,7 @@ class CegoJudgerBettel(Judger):
             return [1, 0, 0, 0]
 
     def judge_game_minusone_to_one(self, points) -> list:
-        if points[0]> 0:
+        if points[0] > 0:
             return [-1, 1, 1, 1]
-        else: 
+        else:
             return [1, -1, -1, -1]

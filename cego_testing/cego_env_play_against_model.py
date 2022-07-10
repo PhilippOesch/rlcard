@@ -4,7 +4,7 @@ import rlcard
 from rlcard.agents import RandomAgent
 from rlcard.agents.human_agents.cego_human_agent import HumanAgent, _print_action
 
-from rlcard.games.cego.utils import load_model
+from rlcard.games.cego.utility.training import load_model
 
 from rlcard.utils import (
     get_device,
