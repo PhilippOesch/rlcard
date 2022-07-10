@@ -1,4 +1,4 @@
-from rlcard.games.cego.utils import load_model
+from rlcard.games.cego.utility.game import load_model
 import rlcard
 from rlcard.agents.dmc_agent.model import DMCAgent
 import torch

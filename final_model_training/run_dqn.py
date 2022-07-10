@@ -6,7 +6,7 @@ import rlcard
 from rlcard.agents import DQNAgent
 from rlcard.agents.random_agent import RandomAgent
 
-from rlcard.games.cego.utils import get_random_search_args, args_to_str, save_args_params
+from rlcard.games.cego.utility.training import save_args_params
 
 from rlcard.utils import (
     tournament,
@@ -154,5 +154,6 @@ def train(log_dir, env_name, game_variant, game_activate_heuristic,
 
 
 if __name__ == '__main__':
+    save_args_params(args)
     os.environ["CUDA_VISIBLE_DEVICES"] = "cpu"
     train(**args)

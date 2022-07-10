@@ -6,7 +6,7 @@ import rlcard
 from rlcard.agents import NFSPAgent
 from rlcard.agents.random_agent import RandomAgent
 
-from rlcard.games.cego.utils import get_random_search_args, args_to_str, save_args_params
+from rlcard.games.cego.utility.training import save_args_params
 
 from rlcard.utils import (
     tournament,
@@ -29,10 +29,10 @@ args = {
     "seed": 20,  # training seed
     "hidden_layers_sizes": [512, 512],
     "reservoir_buffer_capacity": 100000,
-    "anticipatory_param": 0.2,
-    "batch_size": 128,
+    "anticipatory_param": 0.5,
+    "batch_size": 32,
     "rl_learning_rate": 1e-05,
-    "sl_learning_rate": 5e-05,
+    "sl_learning_rate": 0.0001,
     "min_buffer_size_to_learn": 100,
     "q_replay_memory_size": 100000,
     "q_replay_memory_init_size": 100,
@@ -172,5 +172,6 @@ def train(log_dir, env_name, game_judge_by_points, game_variant, game_activate_h
 
 
 if __name__ == '__main__':
+    save_args_params(args)
     os.environ["CUDA_VISIBLE_DEVICES"] = "cpu"
     train(**args)
