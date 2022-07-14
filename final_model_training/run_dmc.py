@@ -1,14 +1,14 @@
-import torch
-
+import time
 import rlcard
 from rlcard.agents.dmc_agent import DMCTrainer
 
-from rlcard.games.cego.utility.game import save_args_params
+from rlcard.games.cego.utility.training import save_args_params
 
 from rlcard.utils import (
     set_seed,
     get_device
 )  # import some useful functions
+
 
 args = {
     'env_name': 'cego',
@@ -20,12 +20,12 @@ args = {
     'seed': 20,
     'load_model': True,
     'xpid': 'dmc',
-    'save_interval': 30,
+    'save_interval': 100,
     'num_actor_devices': 1,
     'num_actors': 5,
     'training_device': '0',
-    'log_dir': 'final_models/dmc_models/dmc_solo_soft_heuristic',
-    'total_frames': 100000000000,
+    'log_dir': 'final_models/dmc_models/dmc_cego_final_player_0',
+    'total_frames': 2500000000,
     'exp_epsilon': 0.01,
     'batch_size': 32,
     'unroll_length': 100,
@@ -36,7 +36,7 @@ args = {
     'alpha': 0.99,
     'momentum': 0,
     'epsilon': 0.00001,
-    'focus_player': False,
+    'focus_player': True,
     'player_to_focus': 0
 }
 
@@ -94,5 +94,9 @@ def train(env_name, game_variant, game_judge_by_points, game_activate_heuristic,
 
 
 if __name__ == '__main__':
+    start = time.time()
     save_args_params(args)
     train(**args)
+    end = time.time()
+    total_time = end-start
+    print("Execution Time:", total_time)

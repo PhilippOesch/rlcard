@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import csv
 import os
 import json
+import rlcard
 
 from rlcard.games.cego.utility.game import ACTION_SPACE, cards2list
 
@@ -108,7 +109,19 @@ def create_combined_graph(path_to_models, data_per_graph=10):
             xs = []
 
 
-def play_tournament_and_update_rewards(rewards, env, path_to_models, num_games, device, seed=None):
+def play_tournament_and_update_rewards(rewards, game_Settings, path_to_models, num_games, seed=None):
+    device = get_device()
+
+    env = rlcard.make(
+        game_Settings["env_name"],
+        config={
+            'game_variant': game_Settings["game_variant"],
+            'game_judge_by_points': game_Settings["game_judge_by_points"],
+            'game_activate_heuristic': game_Settings["game_activate_heuristic"],
+            'game_train_env': game_Settings['game_train_env']
+        }
+    )
+
     if seed != None:
         set_seed(seed)
         env.seed(seed)
@@ -127,22 +140,19 @@ def play_tournament_and_update_rewards(rewards, env, path_to_models, num_games, 
         rewards[i] += tournament_reward[i]
 
 
-def compare_models_in_tournament(save_path, env, num_games, path_to_models, seeds=None) -> None:
-
-    device = get_device()
-
+def compare_models_in_tournament(save_path, games_settings, num_games, path_to_models, seeds=None) -> None:
     all_rewards: list = []
 
     iterations_rewards = [0 for _ in range(len(path_to_models))]
     num_iterations = len(seeds) if seeds != None else 1
 
     if seeds == None:
-        play_tournament_and_update_rewards(iterations_rewards, env, path_to_models,
-                                           num_games, device)
+        play_tournament_and_update_rewards(iterations_rewards, games_settings, path_to_models,
+                                           num_games)
     else:
         for seed in seeds:
-            play_tournament_and_update_rewards(iterations_rewards, env, path_to_models,
-                                               num_games, device, seed)
+            play_tournament_and_update_rewards(iterations_rewards, games_settings, path_to_models,
+                                               num_games, seed)
 
     average_rewards = [
         reward / num_iterations for reward in iterations_rewards]
