@@ -3,6 +3,9 @@ import csv
 import os
 import json
 import rlcard
+import ntpath
+import numpy as np
+from scipy import stats
 
 from rlcard.games.cego.utility.game import ACTION_SPACE, cards2list
 
@@ -109,7 +112,16 @@ def create_combined_graph(path_to_models, data_per_graph=10):
             xs = []
 
 
-def play_tournament_and_update_rewards(rewards, game_Settings, path_to_models, num_games, seed=None):
+def play_tournament_and_update_rewards(rewards, game_Settings, path_to_models, num_games, seed=None) -> None:
+    '''
+    Params:
+        rewards (list): Current rewards,
+        game_Settings (dict): Dictionary of the game settings
+        path_to_models (list): Paths to Models
+        num_games (int): Number of Games
+        seed (int): The random seed
+    '''
+
     device = get_device()
 
     env = rlcard.make(
@@ -275,3 +287,215 @@ def analyse_card_trick_win_propabilities(path, env, num_games):
 
     with open(path, 'w') as f:
         json.dump(sorted_by_prob, f, indent=4)
+
+
+def compare_rand_search_models_in_tournament(path_to_models, filename, seeds, env_params, num_games) -> None:
+    '''
+    Params:
+        path_to_models (list): paths to models
+        filename (str): Name of the result-file
+        seeds (list): random Seeds to test for each run
+        env_params (dict): Params of Environment,
+        num_games (int): Number of games to play for each random seed
+
+
+    env_params:
+        env_name (str): Environment Name
+        game_variant (str): Name of the Sub game
+        game_judge_by_points (int): Way to judge the points by
+        game_activate_heuristic (bool): Use Heuristic for game environments
+    '''
+    import torch
+
+    model_dirs = [x[0] for x in os.walk(path_to_models)]
+
+    i = 0
+
+    all_rewards = []
+
+    for model_dir in model_dirs:
+
+        if not os.path.exists(model_dir + '/model.pth'):
+            continue
+
+        device = torch.device("cpu")
+
+        iterations_rewards = []
+
+        for seed in seeds:
+            # Seed numpy, torch, random
+            set_seed(seed)
+
+            models = [model_dir + '/model.pth', 'random', 'random', 'random']
+
+            env = rlcard.make(
+                env_params['env_name'],
+                config={
+                    'seed': seed,
+                    'game_variant': env_params['game_variant'],
+                    'game_judge_by_points': env_params['game_judge_by_points'],
+                    'game_activate_heuristic': env_params['game_activate_heuristic']
+                }
+            )
+
+            agents = []
+            for position, model_path in enumerate(models):
+                agents.append(load_model(model_path, env, position, device))
+            env.set_agents(agents)
+
+            rewards = tournament(env, num_games)
+            for position, reward in enumerate(rewards):
+                print(position, models[position], reward)
+
+            iterations_rewards.append(
+                rewards[0]
+            )
+
+        average_rewards = sum(iterations_rewards) / len(iterations_rewards)
+
+        all_rewards.append(
+            {
+                'model': model_dir,
+                'avg_reward': average_rewards
+            }
+        )
+
+    sort_by_key_and_save_array(
+        all_rewards, 'avg_reward', path_to_models+'/'+ filename, True)
+
+
+def sort_by_key_and_save_array(array, key, path, descending=True):
+    array.sort(key=lambda x: x[key], reverse=descending)
+
+    with open(path, 'w') as f:
+        json.dump(array, f, indent=4)
+
+
+def get_total_ranking(save_folder, paths_to_models, filename="total_ranking.json") -> None:
+    array_rewards: list[dict] = []
+    array_slopes: list[dict] = []
+
+    slope_rankings: dict = {}
+    reward_rankings: dict = {}
+    total_ranks: list[dict] = []
+
+    for path in paths_to_models:
+        file = open(path + "/tournament_result.json")
+
+        array_rewards.extend(json.load(file))
+
+        otherfile = open(path + "/lin_reg_slope_result_sorted.json")
+
+        array_slopes.extend(json.load(otherfile))
+
+    array_rewards.sort(key=lambda x: x["avg_reward"], reverse=True)
+    array_slopes.sort(key=lambda x: x["slope"], reverse=True)
+
+    for idx, reward in enumerate(array_rewards):
+        reward_rankings[reward['model']] = {
+            'rank': idx+1,
+            'avg_reward': reward['avg_reward'],
+        }
+
+    for idx, slope in enumerate(array_slopes):
+        slope_rankings[slope['model']] = {
+            'rank': idx+1,
+            'slope': slope['slope'],
+        }
+
+    print(reward_rankings)
+
+    for model in reward_rankings:
+        total_ranks.append({
+            "model": model,
+            "rank": (reward_rankings[model]['rank']*0.5)+(slope_rankings[model]['rank']*0.5),
+            "avg_reward": reward_rankings[model]['avg_reward'],
+            "slope": slope_rankings[model]['slope']*100000,
+        })
+
+    sort_by_key_and_save_array(
+        total_ranks, 'rank', save_folder+"/"+filename, False)
+
+
+def read_performance(model_dir, max=79, min=0) -> tuple[object, object, object, object, object]:
+    if not os.path.exists(model_dir + '/performance.csv'):
+        return None, None, None, None, None
+
+    file = open(model_dir + '/performance.csv')
+    csvreader = csv.reader(file)
+    header = next(csvreader)
+    x = []
+    y = []
+    for row in csvreader:
+        if(len(row) == 0):
+            continue
+        x.append(int(row[0]))
+        y.append(float(row[1])/float(max+min))
+
+    result = stats.linregress(x, y)
+    std = np.std(y)
+
+    return result.slope, result.intercept, std, y, x
+
+
+def get_ys(x, slope, intercept):
+    ys = []
+    for x_i in x:
+        ys.append(slope*x_i+intercept)
+
+    return ys
+
+
+def path_leaf(path):
+    return ntpath.split(path)
+
+
+def compare_training_slope(path_to_models, max_value=79, min_value=0):
+    model_dirs = [x[0] for x in os.walk(path_to_models)]
+
+    slopes = []
+    stds = []
+
+    if not os.path.exists(path_to_models + '/lin_reg_graphs/'):
+        os.mkdir(path_to_models + '/lin_reg_graphs/')
+
+    for model_dir in model_dirs:
+        slope, intercept, std, y, x = read_performance(
+            model_dir, max_value, min_value)
+        if x is None:
+            continue
+
+        dir_name = path_leaf(model_dir)[1]
+
+        slopes.append({
+            'model': model_dir,
+            'slope': slope,
+        })
+
+        stds.append({
+            'model': model_dir,
+            'std': std,
+        })
+
+        fig, ax = plt.subplots()
+        ax.set(xlabel='timestep', ylabel='reward_normalized (max:1, min:0)')
+        ax.plot(x, y, label=dir_name, linewidth=2)
+        ax.plot(x, get_ys(x, slope, intercept),
+                label="linear regression: "+dir_name, linewidth=2)
+        ax.legend()
+        ax.grid()
+        fig.savefig(path_to_models + '/lin_reg_graphs/lin_reg_' +
+                    dir_name + '.png', dpi=200)
+
+    sort_by_key_and_save_array(
+        stds, 'std', path_to_models+'/std_result_sorted.json', False)
+
+    sort_by_key_and_save_array(
+        slopes, 'slope', path_to_models+'/lin_reg_slope_result_sorted.json', True)
+
+
+def sort_by_key_and_save_array(array, key, path, descending=True):
+    array.sort(key=lambda x: x[key], reverse=descending)
+
+    with open(path, 'w') as f:
+        json.dump(array, f, indent=4)

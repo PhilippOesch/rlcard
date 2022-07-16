@@ -1,13 +1,11 @@
 import os
-
 import torch
 
 import rlcard
 from rlcard.agents import NFSPAgent
 from rlcard.agents.random_agent import RandomAgent
 
-from rlcard.games.cego.utility.random_search import get_random_search_args, args_to_str
-from rlcard.games.cego.utility.training import save_args_params
+from rlcard.games.cego.utility.random_search import randomSearch
 
 from rlcard.utils import (
     tournament,
@@ -50,45 +48,6 @@ args = {
     "num_episodes": [50000],
     "evaluate_every": [500]
 }
-
-
-def randomSearch(args: dict, random_search_folder: str, random_search_iterations: int):
-    set_of_searches = init_search_set(random_search_folder)
-
-    for i in range(len(set_of_searches), random_search_iterations):
-        training_args = get_random_search_args(args)
-        args_as_string = args_to_str(training_args)
-
-        # rerole as long as args have already been trained
-        while args_as_string in set_of_searches:
-            training_args = get_random_search_args(args)
-            args_as_string = args_to_str(training_args)
-
-        set_of_searches.add(args_as_string)
-        training_args["log_dir"] = random_search_folder + "/model_" + str(i)
-        save_args_params(training_args)
-        train(**training_args)
-        save_search_set(random_search_folder, args_as_string)
-
-
-def init_search_set(random_search_folder):
-    res = set()
-    if os.path.exists(random_search_folder + "/search_set.txt"):
-        with open(random_search_folder + "/search_set.txt", "r") as f:
-            search_set = set(f.read().splitlines())
-
-            for val in search_set:
-                res.add(val)
-
-    return res
-
-
-def save_search_set(random_search_folder, args_string):
-    if not os.path.exists(random_search_folder + "/search_set.txt"):
-        open(random_search_folder + "/search_set.txt", 'a').close()
-
-    with open(random_search_folder + "/search_set.txt", 'a') as f:
-        f.write(args_string + "\n")
 
 
 def train(log_dir, env_name, game_judge_by_points, game_variant, game_activate_heuristic,
@@ -187,5 +146,5 @@ def train(log_dir, env_name, game_judge_by_points, game_variant, game_activate_h
 
 
 if __name__ == '__main__':
-    randomSearch(args, 'random_search_results/fix_random_search/nfsp_point_var_1',
+    randomSearch(train, args, 'random_search_results/fix_random_search/nfsp_point_var_1',
                  random_search_iterations)

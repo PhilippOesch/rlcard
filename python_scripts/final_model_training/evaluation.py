@@ -1,15 +1,13 @@
 from rlcard.games.cego.utility.eval import compare_models_in_tournament
 
-import rlcard
-
 
 seeds = [12, 17, 20, 30, 33]
 env_name = 'cego'
 game_variant = 'standard'
 game_judge_by_points = 0
-game_activate_heuristic = True
+game_activate_heuristic = False
 game_train_env = [False, False, False, False]
-num_games = 2000
+num_games = 1000000
 
 comparisson_models = [
     "random",
@@ -29,4 +27,4 @@ game_Setting = {
 
 if __name__ == '__main__':
     compare_models_in_tournament(
-        "final_models/test_result.json", game_Setting, num_games, comparisson_models, seeds)
+        "results/analysis_results/compare_cego_no_heuristic.json", game_Setting, num_games, comparisson_models, seeds)
