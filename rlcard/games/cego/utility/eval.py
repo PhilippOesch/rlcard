@@ -6,6 +6,7 @@ import rlcard
 import ntpath
 import numpy as np
 from scipy import stats
+import seaborn as sns;
 
 from rlcard.games.cego.utility.game import ACTION_SPACE, cards2list
 
@@ -14,6 +15,8 @@ from rlcard.utils import (
     set_seed,
     tournament,
 )
+
+ROUND_NUM= 11
 
 
 def load_model(model_path, env=None, position=None, device=None):
@@ -138,10 +141,7 @@ def play_tournament_and_update_rewards(rewards, game_Settings, path_to_models, n
         set_seed(seed)
         env.seed(seed)
 
-    agents = []
-    for position, model_path in enumerate(path_to_models):
-        agent = load_model(model_path, env, position, device)
-        agents.append(agent)
+    agents = convert_to_agents(path_to_models, env, device)
     env.set_agents(agents)
 
     tournament_reward = tournament(env, num_games)
@@ -152,6 +152,14 @@ def play_tournament_and_update_rewards(rewards, game_Settings, path_to_models, n
         rewards[i] += tournament_reward[i]
 
 
+def convert_to_agents(path_to_models, env, device):
+    agents = []
+    for position, model_path in enumerate(path_to_models):
+        agent = load_model(model_path, env, position, device)
+        agents.append(agent)
+    return agents
+
+
 def compare_models_in_tournament(save_path, games_settings, num_games, path_to_models, seeds=None) -> None:
     all_rewards: list = []
 
@@ -159,12 +167,16 @@ def compare_models_in_tournament(save_path, games_settings, num_games, path_to_m
     num_iterations = len(seeds) if seeds != None else 1
 
     if seeds == None:
+        print("Tournament: ", 0)
+        print("--------------------------------")
         play_tournament_and_update_rewards(iterations_rewards, games_settings, path_to_models,
                                            num_games)
     else:
-        for seed in seeds:
+        for i in range(len(seeds)):
+            print("Tournament: ", i)
+            print("--------------------------------")
             play_tournament_and_update_rewards(iterations_rewards, games_settings, path_to_models,
-                                               num_games, seed)
+                                               num_games, seeds[i])
 
     average_rewards = [
         reward / num_iterations for reward in iterations_rewards]
@@ -188,7 +200,7 @@ def analyse_first_mover_advantage(path, env, num_games):
 
     for i in range(num_games):
         print("episode:", i)
-        timesteps.append(((i+1)*11))
+        timesteps.append(((i+1)*ROUND_NUM))
         _, _, state = env.run(is_training=False)
 
         for j in range(len(state['winning_player_history'])):
@@ -199,7 +211,7 @@ def analyse_first_mover_advantage(path, env, num_games):
             total_vals_over_games[relative_winner_id] += 1
 
         for j in range(4):
-            new_avg = total_vals_over_games[j]/((i+1)*11)
+            new_avg = total_vals_over_games[j]/((i+1)*ROUND_NUM)
             relative_vals_over_games[j].append(new_avg)
 
     fig, ax = plt.subplots()
@@ -216,7 +228,7 @@ def analyse_first_mover_advantage(path, env, num_games):
 
     for i in range(4):
         result['player_'+str(i)] = (total_vals_over_games[i] /
-                                    (num_games*11))*100
+                                    (num_games*ROUND_NUM))*100
 
     result = {k: v for k, v in sorted(
         result.items(), key=lambda item: item[1], reverse=True)}
@@ -277,7 +289,7 @@ def analyse_card_trick_win_propabilities(path, env, num_games):
             num_trick_wins += 1
 
     for entry in trick_wins:
-        trick_wins[entry] /= (num_games*11)
+        trick_wins[entry] /= (num_games*ROUND_NUM)
 
     sorted_by_prob = {k: v for k, v in sorted(
         trick_wins.items(), key=lambda item: item[1], reverse=True)}
@@ -499,3 +511,22 @@ def sort_by_key_and_save_array(array, key, path, descending=True):
 
     with open(path, 'w') as f:
         json.dump(array, f, indent=4)
+
+def analyse_card_round_position(env, path, num_games, player_id):
+    heatmap: dict= {}
+    for key in ACTION_SPACE:
+        heatmap[key]= [0]* ROUND_NUM
+    
+
+    for i in range(num_games):
+        print("episode:", i)
+        trajectories, _, _ = env.run(is_training=False)
+        actions= [entry[1] for entry in trajectories[0][-1]['action_record'] if entry[0] == player_id]
+        
+        for i in range(len(actions)):
+            heatmap[actions[i]][i]+= 1
+
+    sns.heatmap(list(heatmap.values()), fmt="d")
+    plt.savefig(path)
+
+    # print(ax)

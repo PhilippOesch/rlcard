@@ -2,18 +2,15 @@
 
 import rlcard
 from rlcard.agents import RandomAgent
-from rlcard.agents.human_agents.cego_human_agent import HumanAgent
-import matplotlib.pyplot as plt
 
-from rlcard.games.cego.utility.eval import analyse_card_trick_win_propabilities, analyse_propability_a_card_wins_a_trick, analyse_first_mover_advantage
+from rlcard.games.cego.utility.eval import analyse_card_round_position, convert_to_agents
 
 from rlcard.utils import (
     get_device,
-    set_seed,
-    tournament,
+
 )
 
-num_games = 1000000
+num_games = 100000
 
 env = rlcard.make(
     'cego',
@@ -26,15 +23,20 @@ env = rlcard.make(
         'game_analysis_mode': True
     })
 
+comparisson_models = [
+    "results/final_models/dmc_cego/dmc/0_5366425600.pth",
+    "random",
+    "random",
+    "random"
+]
+
 device = get_device()
-agents = [RandomAgent(env.num_actions) for _ in range(env.num_players)]
-env.set_agents(
-    [RandomAgent(env.num_actions) for _ in range(env.num_players)]
-)
+agents = convert_to_agents(comparisson_models, env, device)
+env.set_agents(agents)
 
 
 if __name__ == '__main__':
     # analyse_propability_a_card_wins_a_trick(
     #     "analysis_results/percentages_card_win_when_played_probs.json", env, num_games)
 
-    analyse_first_mover_advantage("analysis_results", env, num_games)
+    analyse_card_round_position(env, "results/analysis_results/card_round.png", num_games, 0)
