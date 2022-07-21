@@ -1,0 +1,18 @@
+[
+    {
+        "model": "random",
+        "avg_reward": 40.0213
+    },
+    {
+        "model": "results/final_models/nfsp_all_nfsp_agents/model_final_1.pth",
+        "avg_reward": 38.9787
+    },
+    {
+        "model": "random",
+        "avg_reward": 38.9787
+    },
+    {
+        "model": "random",
+        "avg_reward": 38.9787
+    }
+]
