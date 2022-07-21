@@ -12,7 +12,7 @@ from rlcard.utils import (
 
 args = {
     'env_name': 'cego',
-    'game_variant': 'solo',
+    'game_variant': 'standard',
     'game_judge_by_points': 0,
     'game_activate_heuristic': True,
     "game_train_players": [True, True, True, True],

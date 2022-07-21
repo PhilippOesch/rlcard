@@ -20,7 +20,7 @@ from rlcard.utils import (
 # arguments for the random search
 # nfsp_poinr_var_0_tuned_dqn/model_12
 args = {
-    "log_dir": "final_models/nfsp_cego_player_0",
+    "log_dir": "results/final_models/nfsp_cego_player_1",
     "env_name": "cego",
     "game_variant": "standard",
     "game_activate_heuristic": True,
@@ -101,9 +101,14 @@ def train(log_dir, env_name, game_judge_by_points, game_variant, game_activate_h
         q_mlp_layers=q_mlp_layer,
         device=device,
     )
-    agents = [nfsp_agent]
-    for _ in range(1, env.num_players):
-        agents.append(RandomAgent(num_actions=env.num_actions))
+    agents = [
+        RandomAgent(num_actions=env.num_actions),
+        nfsp_agent,
+        RandomAgent(num_actions=env.num_actions),
+        RandomAgent(num_actions=env.num_actions)
+    ]
+    # for _ in range(1, env.num_players):
+    #     agents.append(RandomAgent(num_actions=env.num_actions))
 
     env.set_agents(agents)  # set agents to the environment
 
@@ -117,7 +122,7 @@ def train(log_dir, env_name, game_judge_by_points, game_variant, game_activate_h
 
         for episode in range(num_episodes):
 
-            agents[0].sample_episode_policy()
+            agents[1].sample_episode_policy()
             # Generate data from the environment
             trajectories, payoffs = env.run(is_training=True)
 
@@ -125,7 +130,7 @@ def train(log_dir, env_name, game_judge_by_points, game_variant, game_activate_h
             trajectories = reorganize(trajectories, payoffs)
 
             # Feed transitions into agent memory, and train the agent
-            for ts in trajectories[0]:
+            for ts in trajectories[1]:
                 nfsp_agent.feed(ts)
 
             # Evaluate the performance.
@@ -133,7 +138,7 @@ def train(log_dir, env_name, game_judge_by_points, game_variant, game_activate_h
                 tournament_reward = tournament(
                     env,
                     num_eval_games,
-                )[0]
+                )[1]
 
                 logger.log_performance(
                     env.timestep,
