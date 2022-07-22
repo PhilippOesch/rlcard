@@ -6,8 +6,10 @@ import rlcard
 import ntpath
 import numpy as np
 from scipy import stats
-import seaborn as sns;
+import seaborn as sns
+import re
 
+from rlcard.agents.random_agent import RandomAgent
 from rlcard.games.cego.utility.game import ACTION_SPACE, cards2list
 
 from rlcard.utils import (
@@ -16,7 +18,7 @@ from rlcard.utils import (
     tournament,
 )
 
-ROUND_NUM= 11
+ROUND_NUM = 11
 
 
 def load_model(model_path, env=None, position=None, device=None):
@@ -373,7 +375,7 @@ def compare_rand_search_models_in_tournament(path_to_models, filename, seeds, en
         )
 
     sort_by_key_and_save_array(
-        all_rewards, 'avg_reward', path_to_models+'/'+ filename, True)
+        all_rewards, 'avg_reward', path_to_models+'/' + filename, True)
 
 
 def sort_by_key_and_save_array(array, key, path, descending=True):
@@ -512,21 +514,83 @@ def sort_by_key_and_save_array(array, key, path, descending=True):
     with open(path, 'w') as f:
         json.dump(array, f, indent=4)
 
+
 def analyse_card_round_position(env, path, num_games, player_id):
-    heatmap: dict= {}
+    heatmap: dict = {}
     for key in ACTION_SPACE:
-        heatmap[key]= [0]* ROUND_NUM
-    
+        heatmap[key] = [0] * ROUND_NUM
 
     for i in range(num_games):
         print("episode:", i)
         trajectories, _, _ = env.run(is_training=False)
-        actions= [entry[1] for entry in trajectories[0][-1]['action_record'] if entry[0] == player_id]
-        
+        actions = [entry[1] for entry in trajectories[0]
+                   [-1]['action_record'] if entry[0] == player_id]
+
         for i in range(len(actions)):
-            heatmap[actions[i]][i]+= 1
+            heatmap[actions[i]][i] += 1
 
     sns.heatmap(list(heatmap.values()), fmt="d")
     plt.savefig(path)
 
     # print(ax)
+
+# sorts the files in a natural way
+
+
+def sorted_alphanumeric(data):
+    def convert(text): return int(text) if text.isdigit() else text.lower()
+    def alphanum_key(key): return [convert(c)
+                                   for c in re.split('([0-9]+)', key)]
+    return sorted(data, key=alphanum_key)
+
+
+def compare_dmc_checkpoints(env_params, path_to_dmc_models, player_index, num_games, seed):
+    files = [f for f in sorted_alphanumeric(os.listdir(
+        path_to_dmc_models)) if os.path.isfile(os.path.join(path_to_dmc_models, f))]
+
+    reward_results = []
+    checkpoint_files = []
+
+    device = get_device()
+
+    env = rlcard.make(
+        env_params['env_name'],
+        config={
+            'seed': seed,
+            'game_variant': env_params['game_variant'],
+            'game_judge_by_points': env_params['game_judge_by_points'],
+            'game_activate_heuristic': env_params['game_activate_heuristic']
+        }
+    )
+
+    idx = 0
+    for file in files:
+        # dir_name = path_leaf(model_dir)
+        if(file.startswith(str(player_index)+"_")):
+            print(file)
+            idx += 1
+            checkpoint_files.append(idx)
+
+            agents = []
+            dl_agent = None
+
+            for i in range(env.num_players):
+                if i == player_index:
+                    dl_agent = load_model(
+                        path_to_dmc_models+file, env, player_index, device)
+                    agents.append(dl_agent)
+                else:
+                    agents.append(RandomAgent(num_actions=env.num_actions))
+
+            env.set_agents(agents)
+
+            reward_results.append(tournament(env, num_games)[player_index])
+
+    fig, ax = plt.subplots()
+    ax.set(xlabel='model', ylabel='avg reward')
+    ax.plot(checkpoint_files, reward_results,
+            label='average rewards over checkpoints', linewidth=2)
+    ax.legend()
+    ax.grid()
+    fig.savefig(path_to_dmc_models + '/checkpoint_graph_player_' +
+                str(player_index) + '.png')
