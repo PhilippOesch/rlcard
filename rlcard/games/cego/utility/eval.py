@@ -671,3 +671,39 @@ def compare_dmc_checkpoints(env_params, path_to_dmc_models, player_index, num_ga
     ax.grid()
     fig.savefig(path_to_dmc_models + '/checkpoint_graph_player_' +
                 str(player_index) + '.png')
+
+
+def plot_curve(csv_path, save_path, algorithm):
+    ''' Read data from csv file and plot the results
+    '''
+    import os
+    import csv
+    import matplotlib.pyplot as plt
+    with open(csv_path) as csvfile:
+        reader = csv.DictReader(csvfile)
+        xs = []
+        p0 = []
+        p1 = []
+        p2 = []
+        p3 = []
+        for row in reader:
+            xs.append(int(row['timestep']))
+            rewards = row['reward'].split(":")
+            p0.append(float(rewards[0]))
+            p1.append(float(rewards[1]))
+            p2.append(float(rewards[2]))
+            p3.append(float(rewards[3]))
+        fig, ax = plt.subplots()
+        ax.plot(xs, p0, label=algorithm+", player_0")
+        ax.plot(xs, p1, label=algorithm+", player_0")
+        ax.plot(xs, p2, label=algorithm+", player_0")
+        ax.plot(xs, p3, label=algorithm+", player_0")
+        ax.set(xlabel='timestep', ylabel='reward')
+        ax.legend()
+        ax.grid()
+
+        save_dir = os.path.dirname(save_path)
+        if not os.path.exists(save_dir):
+            os.makedirs(save_dir)
+
+        fig.savefig(save_path)

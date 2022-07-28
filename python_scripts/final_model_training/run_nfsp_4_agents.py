@@ -158,7 +158,7 @@ def train(log_dir, env_name, game_judge_by_points, game_variant, game_activate_h
 
                 logger.log_performance(
                     env.timestep,
-                    tournament_reward
+                    ":".join(tournament_reward)
                 )
                 cur_avg_reward = (tournament_reward + cur_avg_reward *
                                   (cur_avg_steps-1) / cur_avg_steps)
