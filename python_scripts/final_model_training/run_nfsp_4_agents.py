@@ -89,8 +89,8 @@ def train(log_dir, env_name, game_judge_by_points, game_variant, game_activate_h
             'game_train_players': [False, False, False, False]
         }
     )
-    agents= []
-    for _ in range(env.num_players): 
+    agents = []
+    for _ in range(env.num_players):
         agents.append(
             NFSPAgent(
                 num_actions=env.num_actions,
@@ -120,9 +120,10 @@ def train(log_dir, env_name, game_judge_by_points, game_variant, game_activate_h
     env.set_agents(agents)  # set agents to the environment
 
     # init tournament agents
-    tournament_agents= [agents[0]]
+    tournament_agents = [agents[0]]
     for _ in range(1, env.num_players):
-        tournament_agents.append(RandomAgent(num_actions=tournament_env.num_actions))
+        tournament_agents.append(RandomAgent(
+            num_actions=tournament_env.num_actions))
     tournament_env.set_agents(tournament_agents)
 
     checkpoint_count = 0
@@ -153,7 +154,7 @@ def train(log_dir, env_name, game_judge_by_points, game_variant, game_activate_h
                 tournament_reward = tournament(
                     tournament_env,
                     num_eval_games,
-                )[0]
+                )
 
                 logger.log_performance(
                     env.timestep,
@@ -177,7 +178,7 @@ def train(log_dir, env_name, game_judge_by_points, game_variant, game_activate_h
                     "/checkpoint_" + str(checkpoint_count)+"/fig.png"
                 for i in range(len(agents)):
                     save_path = os.path.join(
-                        log_dir + "/checkpoint_"+str(checkpoint_count), 'model_'+ str(i) +'.pth')
+                        log_dir + "/checkpoint_"+str(checkpoint_count), 'model_' + str(i) + '.pth')
                     torch.save(agents[i], save_path)
                 plot_curve(csv_path, fig_path, "NFSP")
                 checkpoint_count += 1

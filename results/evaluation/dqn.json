@@ -1,0 +1,18 @@
+{
+    "0_results/final_models/dqn_models/dqn_cego_player_0/checkpoint_8/model.pth": {
+        "appg": 43.843204,
+        "wp": 0.627608
+    },
+    "1_random": {
+        "appg": 35.156796,
+        "wp": 0.372392
+    },
+    "2_random": {
+        "appg": 35.156796,
+        "wp": 0.372392
+    },
+    "3_random": {
+        "appg": 35.156796,
+        "wp": 0.372392
+    }
+}

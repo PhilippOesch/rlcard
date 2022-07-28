@@ -1,34 +1,32 @@
-from rlcard.games.cego.utility.eval import compare_models_in_tournament, compare_dmc_checkpoints, compare_dmc_checkpoints
+import rlcard
+from rlcard.games.cego.utility.eval import analyse_card_round_position, convert_to_agents
 
 
-# seeds = [12, 17, 20, 30, 33]
-seeds = [12]
-env_name = 'cego'
-game_variant = 'standard'
-game_judge_by_points = 0
-game_activate_heuristic = True
-game_train_env = [False, False, False, False]
-num_games = 10000
+seeds = [12, 17, 20, 30, 33]
+# seeds = [12]
+num_games = 1000000
 
-comparisson_models = [
-    "results/final_models/dmc_models/dmc_cego_final_player_0/dmc/0_365756800.pth",
+game_Setting = {
+    'env_name': 'cego',
+    'game_variant': 'standard',
+    'game_judge_by_points': 0,
+    'game_activate_heuristic': True,
+    'game_train_env': [False, False, False, False],
+    'game_analysis_mode': True
+}
+
+# "results/final_models/nfsp_models/nfsp_cego_player_0/checkpoint_4/model.pth"
+# "results/final_models/dqn_models/dqn_cego_player_0/checkpoint_8/model.pth",
+# "results/final_models/dmc_models/dmc_cego_final_player_0/dmc/0_2500048000.pth"
+
+dmc_comparisson_models = [
+    "results/final_models/dmc_models/dmc_cego_final_player_0/dmc/0_2500048000.pth",
     "random",
     "random",
     "random"
 ]
 
-game_Setting = {
-    'env_name': env_name,
-    'game_variant': game_variant,
-    'game_judge_by_points': game_judge_by_points,
-    'game_activate_heuristic': game_activate_heuristic,
-    'game_train_env': game_train_env
-}
-
 
 if __name__ == '__main__':
-    # compare_models_in_tournament(
-    #     "results/analysis_results/test.json", game_Setting, num_games, comparisson_models, seeds)
-    # compare_dmc_checkpoints(game_Setting, "results/final_models/dmc_models/dmc_cego_final_player_0/dmc/", 0)
-    compare_dmc_checkpoints(
-        game_Setting, 'results/final_models/dmc_models/dmc_cego_final_player_0/dmc/', 0, 1000, 20)
+    analyse_card_round_position(
+        game_Setting, "DMC Player 0; Seed: 12", dmc_comparisson_models, 'results/analysis_results/dmc_card_tendency.png', num_games, 0, seeds[0])

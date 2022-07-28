@@ -1,0 +1,18 @@
+{
+    "0_results/final_models/nfsp_models/nfsp_cego_player_0/checkpoint_4/model.pth": {
+        "appg": 42.508572,
+        "wp": 0.576576
+    },
+    "1_random": {
+        "appg": 36.491428,
+        "wp": 0.423424
+    },
+    "2_random": {
+        "appg": 36.491428,
+        "wp": 0.423424
+    },
+    "3_random": {
+        "appg": 36.491428,
+        "wp": 0.423424
+    }
+}

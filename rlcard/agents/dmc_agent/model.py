@@ -139,7 +139,7 @@ class DMCModel:
     ):
         self.agents = []
         for player_id in range(len(state_shape)):
-            if focus_player and player_to_focus == player_id:
+            if focus_player and player_to_focus == player_id or not focus_player:
                 agent = DMCAgent(
                     state_shape[player_id],
                     action_shape[player_id],
