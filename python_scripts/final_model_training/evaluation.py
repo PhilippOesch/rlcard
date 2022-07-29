@@ -1,5 +1,5 @@
 import rlcard
-from rlcard.games.cego.utility.eval import analyse_card_round_position, convert_to_agents
+from rlcard.games.cego.utility.eval import analyse_card_round_position, convert_to_agents, compare_dmc_checkpoints
 
 
 seeds = [12, 17, 20, 30, 33]
@@ -28,5 +28,8 @@ dmc_comparisson_models = [
 
 
 if __name__ == '__main__':
-    analyse_card_round_position(
-        game_Setting, "DMC Player 0; Seed: 12", dmc_comparisson_models, 'results/analysis_results/dmc_card_tendency.png', num_games, 0, seeds[0])
+    # analyse_card_round_position(
+    #     game_Setting, "DMC Player 0; Seed: 12", dmc_comparisson_models, 'results/analysis_results/dmc_card_tendency.png', num_games, 0, seeds[0])
+
+    compare_dmc_checkpoints(
+        game_Setting, "results/final_models/dmc_models/dmc_cego_final_player_0/dmc/", 1, 1000, 12)
