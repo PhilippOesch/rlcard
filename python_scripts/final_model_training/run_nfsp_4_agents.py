@@ -120,11 +120,19 @@ def train(log_dir, env_name, game_judge_by_points, game_variant, game_activate_h
     env.set_agents(agents)  # set agents to the environment
 
     # init tournament agents
-    tournament_agents = [agents[0]]
-    for _ in range(1, env.num_players):
-        tournament_agents.append(RandomAgent(
-            num_actions=tournament_env.num_actions))
-    tournament_env.set_agents(tournament_agents)
+    tournament_agents_0 = [
+        agents[0],
+        RandomAgent(num_actions=tournament_env.num_actions),
+        RandomAgent(num_actions=tournament_env.num_actions),
+        RandomAgent(num_actions=tournament_env.num_actions)
+    ]
+
+    tournament_agents_1 = [
+        RandomAgent(num_actions=tournament_env.num_actions),
+        agents[1],
+        RandomAgent(num_actions=tournament_env.num_actions),
+        RandomAgent(num_actions=tournament_env.num_actions)
+    ]
 
     checkpoint_count = 0
 
@@ -151,16 +159,22 @@ def train(log_dir, env_name, game_judge_by_points, game_variant, game_activate_h
 
             # Evaluate the performance.
             if episode % evaluate_every == 0:
-                tournament_reward = tournament(
+                tournament_env.set_agents(tournament_agents_0)
+                tournament_reward_0 = tournament(
                     tournament_env,
                     num_eval_games,
-                )
+                )[0]
+                tournament_env.set_agents(tournament_agents_1)
+                tournament_reward_1 = tournament(
+                    tournament_env,
+                    num_eval_games,
+                )[1]
 
                 logger.log_performance(
                     env.timestep,
-                    ":".join(tournament_reward)
+                    ":".join([tournament_reward_0, tournament_reward_1])
                 )
-                cur_avg_reward = (tournament_reward + cur_avg_reward *
+                cur_avg_reward = (tournament_reward_0 + cur_avg_reward *
                                   (cur_avg_steps-1) / cur_avg_steps)
                 cur_avg_steps += 1
 
