@@ -36,7 +36,7 @@ args = {
     'alpha': 0.99,
     'momentum': 0,
     'epsilon': 0.00001,
-    'focus_player': True,
+    'focus_player': False,
     'player_to_focus': 0
 }
 

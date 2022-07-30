@@ -162,6 +162,54 @@ def convert_to_agents(path_to_models, env, device):
     return agents
 
 
+def tournament_appg_and_wp_cego(save_path, games_settings, num_games, path_to_models, seeds=None):
+    device = get_device()
+
+    won_games = [0, 0, 0, 0]
+    won_points = [0, 0, 0, 0]
+
+    result = {}
+
+    for seed in seeds:
+        set_seed(seed)
+
+        env = rlcard.make(
+            games_settings["env_name"],
+            config={
+                'seed': seed,
+                'game_variant': games_settings["game_variant"],
+                'game_judge_by_points': games_settings["game_judge_by_points"],
+                'game_activate_heuristic': games_settings["game_activate_heuristic"],
+                'game_train_env': games_settings['game_train_env']
+            }
+        )
+
+        agents = convert_to_agents(path_to_models, env, device)
+        env.set_agents(agents)
+
+        for game in range(num_games):
+            print("Game:", game)
+            _, payoffs = env.run(is_training=False)
+
+            for i in range(len(payoffs)):
+                won_points[i] += payoffs[i]
+
+            if payoffs[0] > payoffs[1]:
+                won_games[0] += 1
+            else:
+                for i in range(1, len(payoffs)):
+                    won_games[i] += 1
+
+    for i in range(len(path_to_models)):
+        result[str(i)+"_"+path_to_models[i]] = {
+            'appg': won_points[i] / (num_games * len(seeds)),
+            'wp': won_games[i] / (num_games * len(seeds))
+        }
+
+    with open(save_path, 'w') as f:
+        json.dump(result, f, indent=4)
+
+
 def compare_models_in_tournament(save_path, games_settings, num_games, path_to_models, seeds=None) -> None:
     all_rewards: list = []
 
@@ -515,10 +563,28 @@ def sort_by_key_and_save_array(array, key, path, descending=True):
         json.dump(array, f, indent=4)
 
 
-def analyse_card_round_position(env, path, num_games, player_id):
+def analyse_card_round_position(game_Setting, title, paths_to_models,  path, num_games, player_id, seed):
+    device = get_device()
+
+    env = rlcard.make(
+        game_Setting['env_name'],
+        config={
+            'seed': seed,
+            'game_variant': game_Setting['game_variant'],
+            'game_activate_heuristic': game_Setting['game_activate_heuristic'],
+            'game_judge_by_points': game_Setting['game_judge_by_points'],
+            'game_train_players': game_Setting['game_train_env'],
+            'game_analysis_mode': True
+        }
+    )
+    agents = convert_to_agents(paths_to_models, env, device)
+    env.set_agents(agents)
+
+    card_nums = {}
     heatmap: dict = {}
     for key in ACTION_SPACE:
         heatmap[key] = [0] * ROUND_NUM
+        card_nums[key] = 0
 
     for i in range(num_games):
         print("episode:", i)
@@ -528,9 +594,20 @@ def analyse_card_round_position(env, path, num_games, player_id):
 
         for i in range(len(actions)):
             heatmap[actions[i]][i] += 1
+            card_nums[actions[i]] += 1
 
+    for key in card_nums:
+        if card_nums[key] != 0:
+            for i in range(len(heatmap[key])):
+                if heatmap[key][i] != 0:
+                    heatmap[key][i] = heatmap[key][i] / card_nums[key]
+
+    fig, ax = plt.subplots(figsize=(6, 6))
+    ax.set_title(title, fontsize=16)
     sns.heatmap(list(heatmap.values()), fmt="d")
-    plt.savefig(path)
+    ax.set_xlabel('Round', fontsize=14)
+    ax.set_ylabel('Card', fontsize=14)
+    plt.savefig(path, dpi=200)
 
     # print(ax)
 
@@ -594,3 +671,35 @@ def compare_dmc_checkpoints(env_params, path_to_dmc_models, player_index, num_ga
     ax.grid()
     fig.savefig(path_to_dmc_models + '/checkpoint_graph_player_' +
                 str(player_index) + '.png')
+
+
+def plot_curve(csv_path, save_path, algorithm):
+    ''' Read data from csv file and plot the results
+    '''
+    import os
+    import csv
+    import matplotlib.pyplot as plt
+    with open(csv_path) as csvfile:
+        reader = csv.DictReader(csvfile)
+        xs = []
+        p0 = []
+        p1 = []
+        p2 = []
+        p3 = []
+        for row in reader:
+            xs.append(int(row['timestep']))
+            rewards = row['reward'].split(":")
+            p0.append(float(rewards[0]))
+            p1.append(float(rewards[1]))
+        fig, ax = plt.subplots()
+        ax.plot(xs, p0, label=algorithm+", player_0")
+        ax.plot(xs, p1, label=algorithm+", player_1")
+        ax.set(xlabel='timestep', ylabel='reward')
+        ax.legend()
+        ax.grid()
+
+        save_dir = os.path.dirname(save_path)
+        if not os.path.exists(save_dir):
+            os.makedirs(save_dir)
+
+        fig.savefig(save_path)

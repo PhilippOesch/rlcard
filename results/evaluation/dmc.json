@@ -1,0 +1,18 @@
+{
+    "0_results/final_models/dmc_models/dmc_cego_final_player_0/dmc/0_2500048000.pth": {
+        "appg": 46.557468,
+        "wp": 0.705488
+    },
+    "1_random": {
+        "appg": 32.442532,
+        "wp": 0.294512
+    },
+    "2_random": {
+        "appg": 32.442532,
+        "wp": 0.294512
+    },
+    "3_random": {
+        "appg": 32.442532,
+        "wp": 0.294512
+    }
+}
