@@ -281,9 +281,11 @@ def valid_ultimo(player_cards, strict=False) -> bool:
     '''
     has1_trump = "1-trump" in cards2list(player_cards)
     trumps = [card for card in player_cards if card.suit == 'trump']
+    high_trumps = [card for card in trumps if card.suit == 'trump'
+                   and (card.rank == 'gstiess' or int(card.rank) >= 17)]
 
     if strict:
-        return has1_trump and len(trumps) >= 8
+        return has1_trump and len(trumps) >= 8 and len(high_trumps) >= 2
     else:
         return has1_trump
 

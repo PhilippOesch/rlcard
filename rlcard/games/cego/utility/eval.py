@@ -351,7 +351,7 @@ def analyse_card_trick_win_propabilities(path, env, num_games):
         json.dump(sorted_by_prob, f, indent=4)
 
 
-def compare_rand_search_models_in_tournament(path_to_models, filename, seeds, env_params, num_games) -> None:
+def compare_randsearch_models_in_tournament(path_to_models, filename, seeds, env_params, num_games) -> None:
     '''
     Params:
         path_to_models (list): paths to models
@@ -703,3 +703,70 @@ def plot_curve(csv_path, save_path, algorithm):
             os.makedirs(save_dir)
 
         fig.savefig(save_path)
+
+
+def get_percentages_relative_to_trick(path, threshhold=1):
+    """
+        file:
+        {
+            card: propability
+        }
+    """
+
+    with open(path, 'r') as json_file:
+        data = json.load(json_file)
+
+    sort_orders = sorted(data.items(), key=lambda x: x[1], reverse=False)
+    # print("sorted_data", sort_orders)
+    result = 0
+    low_trick_chance_cards = {}
+    for i in sort_orders:
+        result += i[1]/100*11
+        low_trick_chance_cards[i[0]] = i[1]
+        if result > threshhold:
+            break
+
+    print("result:", low_trick_chance_cards)
+
+
+def get_low_cards(path, save_path, threshhold=1):
+    """
+        file:
+        {
+            card: propability
+        }
+    """
+
+    with open(path, 'r') as json_file:
+        data = json.load(json_file)
+
+    # every card has a chance of (44/54) of beeing played in a game because of the blind cards
+    card_play_chance = 44/54
+
+    sort_orders = sorted(data.items(), key=lambda x: x[1], reverse=False)
+
+    result = 0
+    low_trick_chance_cards = {}
+    for i in sort_orders:
+        result += (i[1]/100)*card_play_chance
+        low_trick_chance_cards[i[0]] = i[1]
+        if result > threshhold:
+            break
+
+    with open(save_path, 'w') as f:
+        json.dump(low_trick_chance_cards, f, indent=4)
+
+
+def get_high_cards(path, save_path):
+    with open(path, 'r') as json_file:
+        data = json.load(json_file)
+
+    high_cards = {}
+
+    for key in data:
+        rank, suit = data[key].split("-")
+        if rank == "k" or rank == "d" or rank == "gstiess" or (suit == "trump" and rank >= 7):
+            high_cards[key] = data[key]
+
+    with open(save_path, 'w') as f:
+        json.dump(high_cards, f, indent=4)

@@ -355,5 +355,29 @@ class TestRaeuberTeamState(unittest.TestCase):
         self.assertEqual([0, 0, 0, 1], team_info_3)
 
 
+class TestUltimoHeuristicStrict(unittest.TestCase):
+    def test_ultimo_heuristic_strict(self):
+        env = rlcard.make(
+            "cego",
+            config={
+                'game_variant': "ultimo",
+                'game_activate_heuristic': True,
+                'game_judge_by_points': 0
+            }
+        )
+
+        env.game.init_game()
+        player_0_cards = cards2list(env.game.players[0].hand)
+        contains_geiss = "1-trump" in player_0_cards
+        trumps = [card for card in player_0_cards if card.split('-')[
+            1] == 'trump']
+        high_trumps = [card for card in trumps if card.split('-')[1] == 'trump'
+                       and (card.split('-')[0] == 'gstiess' or int(card.split('-')[0]) >= 17)]
+
+        self.assertTrue(contains_geiss)
+        self.assertGreaterEqual(len(trumps), 8)
+        self.assertGreaterEqual(len(high_trumps), 2)
+
+
 if __name__ == '__main__':
     unittest.main()
