@@ -7,12 +7,12 @@ from rlcard.agents import NFSPAgent
 from rlcard.agents.random_agent import RandomAgent
 
 from rlcard.games.cego.utility.training import save_args_params
+from rlcard.games.cego.utility.eval import plot_curve
 
 from rlcard.utils import (
     tournament,
     reorganize,
     MyLogger,
-    plot_curve,
     get_device,
     set_seed,
 )  # import some useful functions
@@ -172,7 +172,8 @@ def train(log_dir, env_name, game_judge_by_points, game_variant, game_activate_h
 
                 logger.log_performance(
                     env.timestep,
-                    ":".join([tournament_reward_0, tournament_reward_1])
+                    ":".join([str(tournament_reward_0),
+                             str(tournament_reward_1)])
                 )
                 cur_avg_reward = (tournament_reward_0 + cur_avg_reward *
                                   (cur_avg_steps-1) / cur_avg_steps)
@@ -211,5 +212,5 @@ def train(log_dir, env_name, game_judge_by_points, game_variant, game_activate_h
 
 if __name__ == '__main__':
     save_args_params(args)
-    os.environ["CUDA_VISIBLE_DEVICES"] = "cpu"
+    # os.environ["CUDA_VISIBLE_DEVICES"] = "cpu"
     train(**args)
