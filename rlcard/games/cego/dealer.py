@@ -1,4 +1,4 @@
-from rlcard.games.cego.utility.game import init_deck, valid_cego, valid_ultimo, valid_solo, valid_solo_light
+from rlcard.games.cego.utility.game import init_deck, valid_cego, valid_ultimo, valid_solo, valid_solo_light, valid_bettel, valid_piccolo
 
 
 class CegoDealer:
@@ -20,6 +20,8 @@ class CegoDealer:
         "solo_light"
         "solo",
         "ultimo_strict"
+        "bettel",
+        "piccolo"
     }
 
     num_blind_cards = 10
@@ -44,6 +46,12 @@ class CegoDealer:
                 self.shuffle()
         if heuristic == "solo":
             while not valid_solo(self.deck[43:54]):
+                self.shuffle()
+        if heuristic == "bettel":
+            while not valid_bettel(self.deck[43:54]):
+                self.shuffle()
+        if heuristic == "piccolo":
+            while not valid_piccolo(self.deck[43:54]):
                 self.shuffle()
 
     def shuffle(self) -> None:

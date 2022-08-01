@@ -2,7 +2,7 @@ from rlcard.games.cego import Game
 
 from rlcard.games.cego import Dealer
 from rlcard.games.cego import Player
-from rlcard.games.cego import JudgerBettel
+from rlcard.games.cego import JudgerPiccolo
 from rlcard.games.cego import Round
 from rlcard.games.cego import Game
 
@@ -22,7 +22,10 @@ class CegoGamePiccolo(Game):
         self.winning_player_history = []
 
         # Initialize a dealer that can deal cards
-        self.dealer = Dealer(self.np_random)
+        if self.activate_heuristic:
+            self.dealer = Dealer(self.np_random, heuristic="piccolo")
+        else:
+            self.dealer = Dealer(self.np_random)
 
         # Initialize players to play the game
         self.players = [Player(i, self.np_random)
@@ -31,7 +34,7 @@ class CegoGamePiccolo(Game):
         # player 0 is the solo player
         self.players[0].is_single_player = True
 
-        self.judger = JudgerBettel(self.np_random)
+        self.judger = JudgerPiccolo(self.np_random)
 
         # deal cards to player
         for i in range(self.num_players):
@@ -61,3 +64,10 @@ class CegoGamePiccolo(Game):
         if self.points[0] > 1:
             return True
         return self.round_counter >= Game.num_rounds
+
+    def get_payoffs(self) -> list:
+        if self.judge_by_points == 0:
+            return self.judger.judge_game_zero_to_one(self.points)
+        if self.judge_by_points == 1:
+            return self.judger.judge_game_minusone_to_one(self.points)
+        return self.judger.judge_game_minusone_to_one(self.points)

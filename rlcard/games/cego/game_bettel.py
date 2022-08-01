@@ -18,9 +18,14 @@ class CegoGameBettel(Game):
     def init_game(self) -> tuple[dict, Any]:
         self.points = [0 for _ in range(self.num_players)]
         self.winning_card_history = []
+        self.start_player_history = [0]
+        self.winning_player_history = []
 
         # Initialize a dealer that can deal cards
-        self.dealer = Dealer(self.np_random)
+        if self.activate_heuristic:
+            self.dealer = Dealer(self.np_random, heuristic="bettel")
+        else:
+            self.dealer = Dealer(self.np_random)
 
         # Initialize players to play the game
         self.players = [Player(i, self.np_random)
@@ -58,3 +63,10 @@ class CegoGameBettel(Game):
         if self.points[0] > 0:
             return True
         return self.round_counter >= Game.num_rounds
+
+    def get_payoffs(self) -> list:
+        if self.judge_by_points == 0:
+            return self.judger.judge_game_zero_to_one(self.points)
+        if self.judge_by_points == 1:
+            return self.judger.judge_game_minusone_to_one(self.points)
+        return self.judger.judge_game_minusone_to_one(self.points)

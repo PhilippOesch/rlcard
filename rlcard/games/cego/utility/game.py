@@ -14,6 +14,12 @@ with open(os.path.join(ROOT_PATH, 'games/cego/jsondata/action_space.json'), 'r')
     ACTION_SPACE = json.load(file, object_pairs_hook=OrderedDict)
     ACTION_LIST = list(ACTION_SPACE.keys())
 
+with open(os.path.join(ROOT_PATH, 'games/cego/jsondata/high_cards.json'), 'r') as file:
+    HIGH_CARDS = json.load(file, object_pairs_hook=OrderedDict)
+
+with open(os.path.join(ROOT_PATH, 'games/cego/jsondata/low_cards.json'), 'r') as file:
+    LOW_CARDS = json.load(file, object_pairs_hook=OrderedDict)
+
 
 def init_deck() -> list:
     ''' initialize the cego deck'''
@@ -331,3 +337,30 @@ def valid_solo_light(solo_player_cards):
     '''
     trumps = [card for card in solo_player_cards if card.suit == 'trump']
     return len(trumps) >= 7
+
+
+def valid_bettel(solo_player_cards) -> bool:
+    valid_cards = []
+    # print(LOW_CARDS)
+    for card in solo_player_cards:
+        if str(card) in LOW_CARDS:
+            valid_cards.append(card)
+
+    # check if all cards are low cards
+    if len(valid_cards) != len(solo_player_cards):
+        return False
+
+    return True
+
+
+def valid_piccolo(solo_player_cards):
+    valid_cards = []
+    for card in solo_player_cards:
+        if str(card) in LOW_CARDS:
+            valid_cards.append(card)
+
+    # check if all cards but one are low cards
+    if len(valid_cards)+1 != len(solo_player_cards):
+        return False
+
+    return True

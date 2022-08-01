@@ -3,7 +3,7 @@ import unittest
 import rlcard
 from rlcard.agents import RandomAgent
 from rlcard.games.cego.game_cego import CegoGameStandard as Game
-from rlcard.games.cego.utility.game import cards2value, cards2list
+from rlcard.games.cego.utility.game import cards2value, cards2list, LOW_CARDS, HIGH_CARDS
 
 
 def check_if_all_cards_are_unique(players: list) -> bool:
@@ -377,6 +377,107 @@ class TestUltimoHeuristicStrict(unittest.TestCase):
         self.assertTrue(contains_geiss)
         self.assertGreaterEqual(len(trumps), 8)
         self.assertGreaterEqual(len(high_trumps), 2)
+
+
+class TestPiccoloPoints(unittest.TestCase):
+    def test_piccolo_points(self):
+        env = rlcard.make(
+            "cego",
+            config={
+                'game_variant': "piccolo",
+                'game_activate_heuristic': True,
+                'game_judge_by_points': 0,
+                'game_analysis_mode': True
+            }
+        )
+        env.set_agents([
+            RandomAgent(num_actions=env.num_actions) for _ in range(env.num_players)
+        ])
+
+        _, payoffs, state = env.run(is_training=False)
+        winning_players = state['winning_player_history']
+        player_0_wins = [id for id in winning_players if id == 0]
+        count_player_wins = len(player_0_wins)
+
+        if count_player_wins == 1:
+            self.assertEqual(1, payoffs[0])
+        else:
+            self.assertNotEqual(1, payoffs[0])
+
+
+class TestBettelPoints(unittest.TestCase):
+    def test_piccolo_points(self):
+        env = rlcard.make(
+            "cego",
+            config={
+                'game_variant': "bettel",
+                'game_activate_heuristic': True,
+                'game_judge_by_points': 0,
+                'game_analysis_mode': True
+            }
+        )
+        env.set_agents([
+            RandomAgent(num_actions=env.num_actions) for _ in range(env.num_players)
+        ])
+
+        _, payoffs, state = env.run(is_training=False)
+        winning_players = state['winning_player_history']
+        player_0_wins = [id for id in winning_players if id == 0]
+        count_player_wins = len(player_0_wins)
+
+        if count_player_wins == 0:
+            self.assertEqual(1, payoffs[0])
+        else:
+            self.assertNotEqual(1, payoffs[0])
+
+
+class TestBettelHeursitic(unittest.TestCase):
+    def test_bettel_heuristic(self):
+        env = rlcard.make(
+            "cego",
+            config={
+                'game_variant': "bettel",
+                'game_activate_heuristic': True,
+                'game_judge_by_points': 0,
+                'game_analysis_mode': True
+            }
+        )
+        env.game.init_game()
+        player_0_cards = env.game.players[0].hand
+
+        valid_cards = []
+        for card in player_0_cards:
+            if str(card) in LOW_CARDS:
+                valid_cards.append(card)
+
+        self.assertEqual(len(valid_cards), 11)
+
+
+class TestPiccoloHeursitic(unittest.TestCase):
+    def test_piccolo_heuristic(self):
+        env = rlcard.make(
+            "cego",
+            config={
+                'game_variant': "piccolo",
+                'game_activate_heuristic': True,
+                'game_judge_by_points': 0,
+                'game_analysis_mode': True
+            }
+        )
+        env.game.init_game()
+        player_0_cards = env.game.players[0].hand
+
+        valid_cards = []
+        high_cards = []
+        for card in player_0_cards:
+            if str(card) in LOW_CARDS:
+                valid_cards.append(card)
+            else:
+                high_cards.append(card)
+
+        self.assertEqual(len(high_cards), 1)
+        self.assertTrue(str(high_cards[0]) in HIGH_CARDS)
+        self.assertEqual(len(valid_cards), 10)
 
 
 if __name__ == '__main__':

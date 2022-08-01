@@ -25,13 +25,13 @@ class CegoJudgerBettel(Judger):
         return points
 
     def judge_game_zero_to_one(self, points) -> list:
-        if points[0] > 0:
-            return [0, 1, 1, 1]
-        else:
+        if points[0] == 0:
             return [1, 0, 0, 0]
+        else:
+            return [0, 1, 1, 1]
 
     def judge_game_minusone_to_one(self, points) -> list:
-        if points[0] > 0:
-            return [-1, 1, 1, 1]
-        else:
+        if points[0] == 0:
             return [1, -1, -1, -1]
+        else:
+            return [-1, 1, 1, 1]

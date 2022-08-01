@@ -1,6 +1,7 @@
 from rlcard.games.cego.utility.eval import analyse_card_round_position, convert_to_agents, \
-    compare_dmc_checkpoints, get_percentages_relative_to_trick, get_low_card, \
-    compare_models_in_tournament, get_low_cards, get_high_cards
+    compare_dmc_checkpoints, get_percentages_relative_to_trick, \
+    compare_models_in_tournament, get_low_cards, get_high_cards, split_80_20_cards, create_bar_graph, \
+    create_bar_graph_colored
 
 
 # seeds = [12, 17, 20, 30, 33]
@@ -9,7 +10,7 @@ num_games = 1000000
 
 game_Setting = {
     'env_name': 'cego',
-    'game_variant': 'ultimo',
+    'game_variant': 'bettel',
     'game_judge_by_points': 0,
     'game_activate_heuristic': True,
     'game_train_env': [False, False, False, False],
@@ -29,19 +30,18 @@ comparisson_models = [
 
 
 if __name__ == '__main__':
-
+    pass
     # compare_dmc_checkpoints(
     #     game_Setting, "results/final_models/dmc_models/dmc_cego_final_other_players/dmc/", 1, 1000, 12)
 
-    # compare_models_in_tournament("results/analysis_results/compare_ultimo_with_heuristic_1_mill_seed_12.json",
-    #                              game_Setting, num_games, comparisson_models, seeds)
+    # split_80_20_cards(
+    #     "results/analysis_results/percentages_card_win_when_played_probs.json", "rlcard/games/cego/jsondata", 80, True)
 
-    get_low_cards(
-        "results/analysis_results/percentages_card_win_when_played_probs.json",
-        "rlcard/games/cego/jsondata/low_cards.json"
-    )
+    compare_models_in_tournament("results/analysis_results/compare_bettel_with_ten_thousand_light_seed_12.json",
+                                 game_Setting, num_games, comparisson_models, seeds)
 
-    get_high_cards(
-        "results/analysis_results/percentages_card_win_when_played_probs.json",
-        "rlcard/games/cego/jsondata/high_cards.json"
-    )
+    # results/analysis_results/percentages_trick_win_probs.json
+    # create_bar_graph_colored("results/analysis_results/percentages_trick_win_probs.json",
+    #                          "results/analysis_results/trick_percentages_visual_colored.png", 80)
+    # create_bar_graph_colored("results/analysis_results/percentages_card_win_when_played_probs.json",
+    #                          "results/analysis_results/card_percentages_visual_colored.png", 80, True)

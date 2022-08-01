@@ -1,0 +1,18 @@
+[
+    {
+        "model": "random",
+        "avg_reward": 0.7324
+    },
+    {
+        "model": "random",
+        "avg_reward": 0.2676
+    },
+    {
+        "model": "random",
+        "avg_reward": 0.2676
+    },
+    {
+        "model": "random",
+        "avg_reward": 0.2676
+    }
+]

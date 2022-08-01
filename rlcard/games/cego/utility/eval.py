@@ -15,7 +15,6 @@ from rlcard.games.cego.utility.game import ACTION_SPACE, cards2list
 from rlcard.utils import (
     get_device,
     set_seed,
-    tournament,
 )
 
 ROUND_NUM = 11
@@ -152,6 +151,35 @@ def play_tournament_and_update_rewards(rewards, game_Settings, path_to_models, n
 
     for i in range(len(rewards)):
         rewards[i] += tournament_reward[i]
+
+
+def tournament(env, num):
+    ''' Evaluate he performance of the agents in the environment
+
+    Args:
+        env (Env class): The environment to be evaluated.
+        num (int): The number of games to play.
+
+    Returns:
+        A list of avrage payoffs for each player
+    '''
+    payoffs = [0 for _ in range(env.num_players)]
+    counter = 0
+    while counter < num:
+        print("game num:", counter)
+        _, _payoffs = env.run(is_training=False)
+        if isinstance(_payoffs, list):
+            for _p in _payoffs:
+                for i, _ in enumerate(payoffs):
+                    payoffs[i] += _p[i]
+                counter += 1
+        else:
+            for i, _ in enumerate(payoffs):
+                payoffs[i] += _payoffs[i]
+            counter += 1
+    for i, _ in enumerate(payoffs):
+        payoffs[i] /= counter
+    return payoffs
 
 
 def convert_to_agents(path_to_models, env, device):
@@ -764,9 +792,104 @@ def get_high_cards(path, save_path):
     high_cards = {}
 
     for key in data:
-        rank, suit = data[key].split("-")
-        if rank == "k" or rank == "d" or rank == "gstiess" or (suit == "trump" and rank >= 7):
+        rank, suit = key.split("-")
+        if rank == "k" or rank == "d" or rank == "gstiess" or (suit == "trump" and int(rank) >= 7):
             high_cards[key] = data[key]
 
     with open(save_path, 'w') as f:
+        json.dump(high_cards, f, indent=4)
+
+
+def create_bar_graph(path, save_path):
+    x = []
+    y = []
+
+    with open(path, 'r') as json_file:
+        data = json.load(json_file)
+
+    result = 0
+    i = 0
+    for key in data:
+        x.append(i)
+        y.append(data[key])
+        i += 1
+
+    fig, ax = plt.subplots()
+    ax.bar(x, y)
+    ax.set(xlabel='card', ylabel='WP')
+    fig.savefig(save_path)
+
+
+def create_bar_graph_colored(path, save_path, highcards_percentage=80, is_card_relative=False):
+    x = []
+    y = []
+
+    with open(path, 'r') as json_file:
+        data = json.load(json_file)
+
+    result = 0
+    i = 0
+
+    low_cards = []
+    high_cards = []
+    colors = []
+    for key in data:
+        if result >= highcards_percentage:
+            low_cards.append(i)
+            colors.append('tab:blue')
+        else:
+            high_cards.append(i)
+            colors.append('mediumvioletred')
+        if is_card_relative:
+            result += (data[key]*(44/54))/11
+        else:
+            result += data[key]
+        x.append(i)
+        y.append(data[key])
+        i += 1
+
+    fig, ax = plt.subplots()
+    ax.bar(x, y, color=colors)
+    ax.set(xlabel='card', ylabel='WP')
+    fig.savefig(save_path)
+
+
+def split_80_20_cards(path, save_path, highcards_percentage=80, is_card_relative=False):
+    with open(path, 'r') as json_file:
+        data = json.load(json_file)
+
+    high_cards = {}
+    low_cards = {}
+    result = 0
+    high_result = 0
+
+    sort_orders = sorted(data.items(), key=lambda x: x[1], reverse=False)
+
+    for i in sort_orders:
+        if is_card_relative:
+            result += (i[1]*(44/54))/11
+        else:
+            result += i[1]
+
+        if result > (100-highcards_percentage):
+            high_cards[i[0]] = i[1]
+            if is_card_relative:
+                high_result += (i[1]*(44/54))/11
+            else:
+                high_result += i[1]
+        else:
+            low_cards[i[0]] = i[1]
+
+    print(len(low_cards))
+    print("low cards", low_cards)
+    print("low_cards_sum:", high_result)
+    print("-------------------------")
+    print(len(high_cards))
+    print("high cards", high_cards)
+    print("hight_cards_sum:", (result - high_result))
+
+    with open(save_path + "/low_cards.json", 'w') as f:
+        json.dump(low_cards, f, indent=4)
+
+    with open(save_path + "/high_cards.json", 'w') as f:
         json.dump(high_cards, f, indent=4)
