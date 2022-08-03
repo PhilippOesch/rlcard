@@ -153,7 +153,7 @@ def play_tournament_and_update_rewards(rewards, game_Settings, path_to_models, n
         rewards[i] += tournament_reward[i]
 
 
-def tournament(env, num):
+def tournament(env, num, debug=True):
     ''' Evaluate he performance of the agents in the environment
 
     Args:
@@ -166,7 +166,8 @@ def tournament(env, num):
     payoffs = [0 for _ in range(env.num_players)]
     counter = 0
     while counter < num:
-        print("game num:", counter)
+        if debug:
+            print("game num:", counter)
         _, _payoffs = env.run(is_training=False)
         if isinstance(_payoffs, list):
             for _p in _payoffs:
@@ -689,7 +690,8 @@ def compare_dmc_checkpoints(env_params, path_to_dmc_models, player_index, num_ga
 
             env.set_agents(agents)
 
-            reward_results.append(tournament(env, num_games)[player_index])
+            reward_results.append(tournament(
+                env, num_games, debug=False)[player_index])
 
     fig, ax = plt.subplots()
     ax.set(xlabel='model', ylabel='avg reward')
@@ -697,8 +699,15 @@ def compare_dmc_checkpoints(env_params, path_to_dmc_models, player_index, num_ga
             label='average rewards over checkpoints', linewidth=2)
     ax.legend()
     ax.grid()
+
+    with open(path_to_dmc_models + '/checkpoint_tournament_results_player_' +
+              str(player_index) + '_seed_' + str(seed) + '.csv', 'w', encoding='UTF8') as file:
+        writer = csv.writer(file)
+        writer.writerow(['checkpoint', 'reward'])
+        writer.writerows(zip(checkpoint_files, reward_results))
+
     fig.savefig(path_to_dmc_models + '/checkpoint_graph_player_' +
-                str(player_index) + '.png')
+                str(player_index) + '_seed_' + str(seed) + '.png')
 
 
 def plot_curve(csv_path, save_path, algorithm):

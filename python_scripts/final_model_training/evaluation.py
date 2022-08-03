@@ -10,7 +10,7 @@ num_games = 1000000
 
 game_Setting = {
     'env_name': 'cego',
-    'game_variant': 'bettel',
+    'game_variant': 'standard',
     'game_judge_by_points': 0,
     'game_activate_heuristic': True,
     'game_train_env': [False, False, False, False],
@@ -30,15 +30,16 @@ comparisson_models = [
 
 
 if __name__ == '__main__':
-    pass
-    # compare_dmc_checkpoints(
-    #     game_Setting, "results/final_models/dmc_models/dmc_cego_final_other_players/dmc/", 1, 1000, 12)
+
+    # over 10,000 games:
+    compare_dmc_checkpoints(
+        game_Setting, "results/final_models/dmc_models/dmc_cego_final_other_players/dmc/", 1, 10000, 15)
 
     # split_80_20_cards(
     #     "results/analysis_results/percentages_card_win_when_played_probs.json", "rlcard/games/cego/jsondata", 80, True)
 
-    compare_models_in_tournament("results/analysis_results/compare_bettel_with_ten_thousand_light_seed_12.json",
-                                 game_Setting, num_games, comparisson_models, seeds)
+    # compare_models_in_tournament("results/analysis_results/compare_piccolo_with_ten_thousand_light_seed_12.json",
+    #                              game_Setting, num_games, comparisson_models, seeds)
 
     # results/analysis_results/percentages_trick_win_probs.json
     # create_bar_graph_colored("results/analysis_results/percentages_trick_win_probs.json",
