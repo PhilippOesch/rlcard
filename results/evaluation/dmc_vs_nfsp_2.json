@@ -1,0 +1,18 @@
+[
+    {
+        "model": "results/final_models/dmc_models/dmc_cego_final_other_players/dmc/0_2500048000.pth",
+        "avg_reward": 46.786512
+    },
+    {
+        "model": "results/final_models/nfsp_models/nfsp_cego_player_0/checkpoint_4/model.pth",
+        "avg_reward": 32.213488
+    },
+    {
+        "model": "random",
+        "avg_reward": 32.213488
+    },
+    {
+        "model": "random",
+        "avg_reward": 32.213488
+    }
+]
