@@ -69,6 +69,30 @@ if __name__ == '__main__':
     # compare_dmc_checkpoints(
     #     game_Setting, "results/final_models/dmc_models/dmc_cego_final_player_0/dmc/", 1, 1000, 15)
 
+    # compare_dmc_checkpoints(
+    #     game_Setting,
+    #     "results/final_models/dmc_models/dmc_solo_final_other_players/dmc/",
+    #     "cego_player_0_seed_15_1000_games.csv",
+    #     [True, False, False, False],
+    #     1000,
+    #     15)
+
+    # compare_dmc_checkpoints(
+    #     game_Setting,
+    #     "results/final_models/dmc_models/dmc_solo_final_other_players/dmc/",
+    #     "cego_player_1_seed_15_1000_games.csv",
+    #     [False, True, False, False],
+    #     1000,
+    #     15)
+
+    # compare_dmc_checkpoints(
+    #     game_Setting,
+    #     "results/final_models/dmc_models/dmc_solo_final_other_players/dmc/",
+    #     "cego_other_players_seed_15_1000_games.csv",
+    #     [False, True, True, True],
+    #     1000,
+    #     15)
+
     # split_80_20_cards(
     #     "results/analysis_results/percentages_card_win_when_played_probs.json", "rlcard/games/cego/jsondata", 80, True)
 
@@ -84,10 +108,10 @@ if __name__ == '__main__':
     # compare_models_in_tournament("results/evaluation/nfsp_vs_dmc_2.json",
     #                              game_Setting, num_games, nfsp_dmc_comparisson_models, seeds)
 
-    compare_models_in_tournament("results/evaluation/dmc_2.json",
-                                 game_Setting, num_games, dmc_comparisson_models, seeds)
+    # compare_models_in_tournament("results/evaluation/dmc_2.json",
+    #                              game_Setting, num_games, dmc_comparisson_models, seeds)
 
-    dmc_comparisson_models
+    # dmc_comparisson_models
 
     # results/analysis_results/percentages_trick_win_probs.json
     # create_bar_graph_colored("results/analysis_results/percentages_trick_win_probs.json",

@@ -650,7 +650,7 @@ def sorted_alphanumeric(data):
     return sorted(data, key=alphanum_key)
 
 
-def compare_dmc_checkpoints(env_params, path_to_dmc_models, player_index, num_games, seed):
+def compare_dmc_checkpoints(env_params, path_to_dmc_models, file_name, is_ai_array, num_games, seed):
     files = [f for f in sorted_alphanumeric(os.listdir(
         path_to_dmc_models)) if os.path.isfile(os.path.join(path_to_dmc_models, f))]
 
@@ -669,48 +669,41 @@ def compare_dmc_checkpoints(env_params, path_to_dmc_models, player_index, num_ga
         }
     )
 
-    idx = 0
+    file_list = [[], [], [], []]
+
     for file in files:
-        # dir_name = path_leaf(model_dir)
-        if(file.startswith(str(player_index)+"_")):
-            print(file)
-            idx += 1
-            checkpoint_files.append(idx)
+        if(file.startswith("0_")):
+            file_list[0].append(file)
+        if(file.startswith("1_")):
+            file_list[1].append(file)
+        if(file.startswith("2_")):
+            file_list[2].append(file)
+        if(file.startswith("3_")):
+            file_list[3].append(file)
 
-            agents = []
-            dl_agent = None
+    for i in range(len(file_list[0])):
+        agents = []
 
-            for i in range(env.num_players):
-                if i == player_index:
-                    dl_agent = load_model(
-                        path_to_dmc_models+file, env, player_index, device)
-                    agents.append(dl_agent)
-                else:
-                    agents.append(RandomAgent(num_actions=env.num_actions))
+        checkpoint_files.append(i)
 
-            env.set_agents(agents)
+        for y in range(4):
+            if is_ai_array[y]:
+                agents.append(load_model(path_to_dmc_models +
+                              file_list[y][i], env, y, device))
+            else:
+                agents.append(load_model("random", env, y, device))
+        env.set_agents(agents)
+        reward = tournament(env, num_games, debug=False)
+        reward_results.append(":".join([str(reward[0]), str(reward[1])]))
 
-            reward_results.append(tournament(
-                env, num_games, debug=False)[player_index])
-
-    fig, ax = plt.subplots()
-    ax.set(xlabel='model', ylabel='avg reward')
-    ax.plot(checkpoint_files, reward_results,
-            label='average rewards over checkpoints', linewidth=2)
-    ax.legend()
-    ax.grid()
-
-    with open(path_to_dmc_models + '/checkpoint_tournament_results_player_' +
-              str(player_index) + '_seed_' + str(seed) + '.csv', 'w', encoding='UTF8') as file:
+    with open(path_to_dmc_models + '/' +
+              file_name, 'w', encoding='UTF8') as file:
         writer = csv.writer(file)
-        writer.writerow(['checkpoint', 'reward'])
+        writer.writerow(['timestep', 'reward'])
         writer.writerows(zip(checkpoint_files, reward_results))
 
-    fig.savefig(path_to_dmc_models + '/checkpoint_graph_player_' +
-                str(player_index) + '_seed_' + str(seed) + '.png')
 
-
-def plot_curve(csv_path, save_path, algorithm):
+def plot_curve(csv_path, save_path, name=""):
     ''' Read data from csv file and plot the results
     '''
     import os
@@ -721,16 +714,15 @@ def plot_curve(csv_path, save_path, algorithm):
         xs = []
         p0 = []
         p1 = []
-        p2 = []
-        p3 = []
         for row in reader:
             xs.append(int(row['timestep']))
             rewards = row['reward'].split(":")
             p0.append(float(rewards[0]))
             p1.append(float(rewards[1]))
         fig, ax = plt.subplots()
-        ax.plot(xs, p0, label=algorithm+", player_0")
-        ax.plot(xs, p1, label=algorithm+", player_1")
+        ax.set_title(name)
+        ax.plot(xs, p0, label="single_player")
+        ax.plot(xs, p1, label="other_players")
         ax.set(xlabel='timestep', ylabel='reward')
         ax.legend()
         ax.grid()
