@@ -32,7 +32,8 @@ class BridgeGame:
         '''
         board_id = self.np_random.choice([1, 2, 3, 4])
         self.actions: List[ActionEvent] = []
-        self.round = BridgeRound(num_players=self.num_players, board_id=board_id, np_random=self.np_random)
+        self.round = BridgeRound(
+            num_players=self.num_players, board_id=board_id, np_random=self.np_random)
         for player_id in range(4):
             player = self.round.players[player_id]
             self.round.dealer.deal_cards(player=player, num=13)

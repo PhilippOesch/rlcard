@@ -706,9 +706,6 @@ def compare_dmc_checkpoints(env_params, path_to_dmc_models, file_name, is_ai_arr
 def plot_curve(csv_path, save_path, name=""):
     ''' Read data from csv file and plot the results
     '''
-    import os
-    import csv
-    import matplotlib.pyplot as plt
     with open(csv_path) as csvfile:
         reader = csv.DictReader(csvfile)
         xs = []
@@ -894,3 +891,73 @@ def split_80_20_cards(path, save_path, highcards_percentage=80, is_card_relative
 
     with open(save_path + "/high_cards.json", 'w') as f:
         json.dump(high_cards, f, indent=4)
+
+
+def plot_combined(csv_dict, save_path, x_name, y_name, name=""):
+    """
+        csv_dict= [
+            {
+                'path': '...',
+                'team': 0 or 1,
+                'name': '...'
+            },
+            ...
+        ]
+    """
+    ys = [[] for _ in range(len(csv_dict))]
+    x = []
+
+    for i in range(len(csv_dict)):
+        with open(csv_dict[i]['path']) as csvfile:
+            reader = csv.DictReader(csvfile)
+            for row in reader:
+                print(row)
+                if i == 0:
+                    x.append(int(row[x_name]))
+
+                rewards = row[y_name].split(":")
+                ys[i].append(float(rewards[csv_dict[i]['team']]))
+
+    fig, ax = plt.subplots()
+    ax.set_title(name)
+
+    for i in range(len(csv_dict)):
+        ax.plot(x, ys[i], label=csv_dict[i]['name'])
+    ax.set(xlabel=x_name, ylabel=y_name)
+    ax.legend()
+    ax.grid()
+
+    save_dir = os.path.dirname(save_path)
+    if not os.path.exists(save_dir):
+        os.makedirs(save_dir)
+
+    fig.savefig(save_path)
+
+
+def refactor_training_graph(csv_path, name, y_name, x_name, title, save_path, num_checkpoints):
+    xs = []
+    ys = []
+
+    with open(csv_path) as csvfile:
+        reader = csv.DictReader(csvfile)
+        i = 0
+        for row in reader:
+            if i == num_checkpoints:
+                break
+
+            xs.append(int(row['timestep']))
+            ys.append(float(row['reward']))
+            i += 1
+
+    fig, ax = plt.subplots()
+    ax.set_title(name)
+    ax.plot(xs, ys, label=name)
+    ax.set(xlabel=x_name, ylabel=y_name)
+    ax.legend()
+    ax.grid()
+
+    save_dir = os.path.dirname(save_path)
+    if not os.path.exists(save_dir):
+        os.makedirs(save_dir)
+
+    fig.savefig(save_path)

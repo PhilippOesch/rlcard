@@ -1,18 +1,18 @@
-[
-    {
-        "model": "results/final_models/dqn_models/dqn_cego_player_0/checkpoint_8/model.pth",
-        "avg_reward": 42.13348800000001
+{
+    "0_results/final_models/dqn_models/dqn_cego_player_0/checkpoint_8/model.pth": {
+        "appg": 42.133488,
+        "wp": 0.571152
     },
-    {
-        "model": "results/final_models/dmc_models/dmc_cego_final_other_players/dmc/0_2500048000.pth",
-        "avg_reward": 36.86651199999999
+    "1_results/final_models/dmc_models/dmc_cego_final_other_players/dmc/0_2500048000.pth": {
+        "appg": 36.866512,
+        "wp": 0.428848
     },
-    {
-        "model": "random",
-        "avg_reward": 36.86651199999999
+    "2_random": {
+        "appg": 36.866512,
+        "wp": 0.428848
     },
-    {
-        "model": "random",
-        "avg_reward": 36.86651199999999
+    "3_random": {
+        "appg": 36.866512,
+        "wp": 0.428848
     }
-]
+}

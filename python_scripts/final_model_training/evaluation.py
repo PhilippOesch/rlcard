@@ -1,7 +1,7 @@
 from rlcard.games.cego.utility.eval import analyse_card_round_position, convert_to_agents, \
     compare_dmc_checkpoints, get_percentages_relative_to_trick, \
     compare_models_in_tournament, get_low_cards, get_high_cards, split_80_20_cards, create_bar_graph, \
-    create_bar_graph_colored
+    create_bar_graph_colored, plot_curve, plot_combined, tournament_appg_and_wp_cego, refactor_training_graph
 
 
 seeds = [12, 17, 20, 30, 33]
@@ -58,63 +58,96 @@ dmc_comparisson_models = [
 
 
 if __name__ == '__main__':
-
+    # pass
     # over 1,000 games:
-    # compare_dmc_checkpoints(
-    #     game_Setting, "results/final_models/dmc_models/dmc_cego_final_other_players/dmc/", 0, 1000, 15)
-    # compare_dmc_checkpoints(
-    #     game_Setting, "results/final_models/dmc_models/dmc_cego_final_other_players/dmc/", 1, 1000, 15)
-    # compare_dmc_checkpoints(
-    #     game_Setting, "results/final_models/dmc_models/dmc_cego_final_player_0/dmc/", 0, 1000, 15)
-    # compare_dmc_checkpoints(
-    #     game_Setting, "results/final_models/dmc_models/dmc_cego_final_player_0/dmc/", 1, 1000, 15)
 
-    # compare_dmc_checkpoints(
-    #     game_Setting,
-    #     "results/final_models/dmc_models/dmc_solo_final_other_players/dmc/",
-    #     "cego_player_0_seed_15_1000_games.csv",
-    #     [True, False, False, False],
-    #     1000,
-    #     15)
+    compare_dmc_checkpoints(
+        game_Setting,
+        "results/final_models/dmc_models/dmc_bettel_final_other_players/dmc/",
+        "bettel_player_0_seed_15_1000_games.csv",
+        [True, False, False, False],
+        1000,
+        15)
 
-    # compare_dmc_checkpoints(
-    #     game_Setting,
-    #     "results/final_models/dmc_models/dmc_solo_final_other_players/dmc/",
-    #     "cego_player_1_seed_15_1000_games.csv",
-    #     [False, True, False, False],
-    #     1000,
-    #     15)
+    compare_dmc_checkpoints(
+        game_Setting,
+        "results/final_models/dmc_models/dmc_bettel_final_other_players/dmc/",
+        "bettel_player_1_seed_15_1000_games.csv",
+        [False, True, False, False],
+        1000,
+        15)
 
-    # compare_dmc_checkpoints(
-    #     game_Setting,
-    #     "results/final_models/dmc_models/dmc_solo_final_other_players/dmc/",
-    #     "cego_other_players_seed_15_1000_games.csv",
-    #     [False, True, True, True],
-    #     1000,
-    #     15)
+    compare_dmc_checkpoints(
+        game_Setting,
+        "results/final_models/dmc_models/dmc_bettel_final_other_players/dmc/",
+        "bettel_other_players_seed_15_1000_games.csv",
+        [False, True, True, True],
+        1000,
+        15)
 
-    # split_80_20_cards(
-    #     "results/analysis_results/percentages_card_win_when_played_probs.json", "rlcard/games/cego/jsondata", 80, True)
+    compare_dmc_checkpoints(
+        game_Setting,
+        "results/final_models/dmc_models/dmc_bettel_final_other_players/dmc/",
+        "bettel_other_players_seed_15_1000_games.csv",
+        [True, True, True, True],
+        1000,
+        15)
 
-    # compare_models_in_tournament("results/evaluation/dmc_vs_dqn_2.json",
-    #                              game_Setting, num_games, dmc_dqn_comparisson_models, seeds)
+    # tournament_appg_and_wp_cego("results/evaluation/dmc_vs_dqn_2.json",
+    #                             game_Setting, num_games, dmc_dqn_comparisson_models, seeds)
 
-    # compare_models_in_tournament("results/evaluation/dqn_vs_dmc_2.json",
-    #                              game_Setting, num_games, dqn_dmc_comparisson_models, seeds)
+    # tournament_appg_and_wp_cego("results/evaluation/dqn_vs_dmc_2.json",
+    #                             game_Setting, num_games, dqn_dmc_comparisson_models, seeds)
 
-    # compare_models_in_tournament("results/evaluation/dmc_vs_nfsp_2.json",
-    #                              game_Setting, num_games, dmc_nfsp_comparisson_models, seeds)
+    # tournament_appg_and_wp_cego("results/evaluation/dmc_vs_nfsp_2.json",
+    #                             game_Setting, num_games, dmc_nfsp_comparisson_models, seeds)
 
-    # compare_models_in_tournament("results/evaluation/nfsp_vs_dmc_2.json",
-    #                              game_Setting, num_games, nfsp_dmc_comparisson_models, seeds)
+    # tournament_appg_and_wp_cego("results/evaluation/nfsp_vs_dmc_2.json",
+    #                             game_Setting, num_games, nfsp_dmc_comparisson_models, seeds)
 
-    # compare_models_in_tournament("results/evaluation/dmc_2.json",
-    #                              game_Setting, num_games, dmc_comparisson_models, seeds)
+    # tournament_appg_and_wp_cego("results/evaluation/dmc_2.json",
+    #                             game_Setting, num_games, dmc_comparisson_models, seeds)
 
-    # dmc_comparisson_models
+    csv_paths = [
+        {
+            'path': "results/final_models/dmc_models/dmc_ultimo_final_other_players/dmc/ultimo_player_0_seed_15_1000_games.csv",
+            'team': 0,
+            'name': "1 AI single player vs 3 random other players"
+        },
+        {
+            'path': "results/final_models/dmc_models/dmc_ultimo_final_other_players/dmc/ultimo_player_1_seed_15_1000_games.csv",
+            'team': 1,
+            'name': "1 AI other player vs 3 random players"
+        },
+        {
+            'path': "results/final_models/dmc_models/dmc_ultimo_final_other_players/dmc/ultimo_other_players_seed_15_1000_games.csv",
+            'team': 1,
+            'name': "3 AI other players vs 1 random single player"
+        }
+    ]
 
-    # results/analysis_results/percentages_trick_win_probs.json
-    # create_bar_graph_colored("results/analysis_results/percentages_trick_win_probs.json",
-    #                          "results/analysis_results/trick_percentages_visual_colored.png", 80)
-    # create_bar_graph_colored("results/analysis_results/percentages_card_win_when_played_probs.json",
-    #                          "results/analysis_results/card_percentages_visual_colored.png", 80, True)
+    # csv_paths = [
+    #     {
+    #         'path': 'results/final_models/dmc_models/dmc_cego_final_other_players/dmc/cego_player_0_seed_15_1000_games.csv',
+    #         'team': 0,
+    #         'name': 'DMC'
+    #     },
+    # ]
+
+    plot_combined(
+        csv_paths,
+        'results/final_models/dmc_models/dmc_ultimo_final_other_players/ultimo_traing_progress_graph.png',
+        'checkpoint',
+        'APPG',
+        'Training Progress - Ultimo'
+    )
+
+    # refactor_training_graph(
+    #     'results/final_models/nfsp_models/nfsp_cego_player_0/performance.csv',
+    #     'NFSP',
+    #     'APPG',
+    #     'timestep',
+    #     'Training Progress - Bettel',
+    #     'results/final_models/nfsp_models/nfsp_cego_player_0/training_progress_nfsp.png',
+    #     200
+    # )

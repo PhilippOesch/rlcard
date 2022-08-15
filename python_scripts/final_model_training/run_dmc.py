@@ -12,7 +12,7 @@ from rlcard.utils import (
 
 args = {
     'env_name': 'cego',
-    'game_variant': 'ultimo',
+    'game_variant': 'raeuber',
     'game_judge_by_points': 0,
     'game_activate_heuristic': True,
     "game_train_players": [True, True, True, True],
@@ -24,7 +24,7 @@ args = {
     'num_actor_devices': 1,
     'num_actors': 5,
     'training_device': '0',
-    'log_dir': 'results/final_models/dmc_models/dmc_ultimo_final_other_players',
+    'log_dir': 'results/final_models/dmc_models/dmc_raeuber_final_other_players',
     'total_frames': 1500000000,
     'exp_epsilon': 0.01,
     'batch_size': 32,
