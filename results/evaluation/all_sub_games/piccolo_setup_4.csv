@@ -1,0 +1,18 @@
+[
+    {
+        "model": "random",
+        "avg_reward": 0.174584
+    },
+    {
+        "model": "results/final_models/dmc_models/dmc_piccolo_final_other_players/dmc/1_1500048000.pth",
+        "avg_reward": 0.825416
+    },
+    {
+        "model": "results/final_models/dmc_models/dmc_piccolo_final_other_players/dmc/2_1500048000.pth",
+        "avg_reward": 0.825416
+    },
+    {
+        "model": "results/final_models/dmc_models/dmc_piccolo_final_other_players/dmc/3_1500048000.pth",
+        "avg_reward": 0.825416
+    }
+]

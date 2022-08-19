@@ -1,0 +1,18 @@
+[
+    {
+        "model": "random",
+        "avg_reward": 0.6730240000000001
+    },
+    {
+        "model": "results/final_models/dmc_models/dmc_bettel_final_other_players/dmc/1_1500048000.pth",
+        "avg_reward": 0.32697600000000004
+    },
+    {
+        "model": "random",
+        "avg_reward": 0.32697600000000004
+    },
+    {
+        "model": "random",
+        "avg_reward": 0.32697600000000004
+    }
+]

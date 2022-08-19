@@ -116,7 +116,7 @@ def create_combined_graph(path_to_models, data_per_graph=10):
             xs = []
 
 
-def play_tournament_and_update_rewards(rewards, game_Settings, path_to_models, num_games, seed=None) -> None:
+def play_tournament_and_update_rewards(rewards, game_Settings, path_to_models, num_games, seed=None, i=None) -> None:
     '''
     Params:
         rewards (list): Current rewards,
@@ -145,7 +145,7 @@ def play_tournament_and_update_rewards(rewards, game_Settings, path_to_models, n
     agents = convert_to_agents(path_to_models, env, device)
     env.set_agents(agents)
 
-    tournament_reward = tournament(env, num_games)
+    tournament_reward = tournament(env, num_games, episode=i)
     for position, rew in enumerate(tournament_reward):
         print(position, path_to_models[position], rew)
 
@@ -153,7 +153,7 @@ def play_tournament_and_update_rewards(rewards, game_Settings, path_to_models, n
         rewards[i] += tournament_reward[i]
 
 
-def tournament(env, num, debug=True):
+def tournament(env, num, debug=True, episode=None):
     ''' Evaluate he performance of the agents in the environment
 
     Args:
@@ -167,7 +167,7 @@ def tournament(env, num, debug=True):
     counter = 0
     while counter < num:
         if debug:
-            print("game num:", counter)
+            print('episode:', episode, 'game num:', counter)
         _, _payoffs = env.run(is_training=False)
         if isinstance(_payoffs, list):
             for _p in _payoffs:
@@ -249,13 +249,13 @@ def compare_models_in_tournament(save_path, games_settings, num_games, path_to_m
         print("Tournament: ", 0)
         print("--------------------------------")
         play_tournament_and_update_rewards(iterations_rewards, games_settings, path_to_models,
-                                           num_games)
+                                           num_games, i=0)
     else:
         for i in range(len(seeds)):
             print("Tournament: ", i)
             print("--------------------------------")
             play_tournament_and_update_rewards(iterations_rewards, games_settings, path_to_models,
-                                               num_games, seeds[i])
+                                               num_games, seeds[i], i=0)
 
     average_rewards = [
         reward / num_iterations for reward in iterations_rewards]

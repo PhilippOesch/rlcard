@@ -1,0 +1,18 @@
+[
+    {
+        "model": "results/final_models/dmc_models/dmc_raeuber_final_other_players/dmc/0_1500048000.pth",
+        "avg_reward": 0.829392
+    },
+    {
+        "model": "results/final_models/dmc_models/dmc_raeuber_final_other_players/dmc/1_1500048000.pth",
+        "avg_reward": 0.8384639999999999
+    },
+    {
+        "model": "random",
+        "avg_reward": 0.669692
+    },
+    {
+        "model": "random",
+        "avg_reward": 0.662452
+    }
+]

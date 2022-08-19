@@ -1,0 +1,18 @@
+[
+    {
+        "model": "random",
+        "avg_reward": 38.016376
+    },
+    {
+        "model": "results/final_models/dmc_models/dmc_cego_final_other_players/dmc/1_2500048000.pth",
+        "avg_reward": 40.983624
+    },
+    {
+        "model": "random",
+        "avg_reward": 40.983624
+    },
+    {
+        "model": "random",
+        "avg_reward": 40.983624
+    }
+]
