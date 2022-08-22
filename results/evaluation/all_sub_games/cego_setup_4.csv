@@ -1,18 +1,18 @@
 [
     {
-        "model": "random",
-        "avg_reward": 33.602304000000004
+        "model": "results/final_models/dmc_models/dmc_cego_final_other_players/dmc/0_2500048000.pth",
+        "avg_reward": 37.974544
     },
     {
         "model": "results/final_models/dmc_models/dmc_cego_final_other_players/dmc/1_2500048000.pth",
-        "avg_reward": 45.397695999999996
+        "avg_reward": 41.025456
     },
     {
         "model": "results/final_models/dmc_models/dmc_cego_final_other_players/dmc/2_2500048000.pth",
-        "avg_reward": 45.397695999999996
+        "avg_reward": 41.025456
     },
     {
         "model": "results/final_models/dmc_models/dmc_cego_final_other_players/dmc/3_2500048000.pth",
-        "avg_reward": 45.397695999999996
+        "avg_reward": 41.025456
     }
 ]

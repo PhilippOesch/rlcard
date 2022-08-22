@@ -352,7 +352,7 @@ def analyse_propability_a_card_wins_a_trick(path, env, num_games):
 
 def analyse_card_trick_win_propabilities(path, env, num_games):
     '''
-        if a trick was won who big is the chance that this card was the winner
+        if a trick was won how big is the chance that this card was the winner
     '''
     trick_wins: dict = {}
 

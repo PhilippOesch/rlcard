@@ -38,8 +38,8 @@ setup_2 = [
 ]
 
 setup_3 = [
-    "results/final_models/dmc_models/dmc_raeuber_final_other_players/dmc/0_1500048000.pth",
-    "results/final_models/dmc_models/dmc_raeuber_final_other_players/dmc/1_1500048000.pth",
+    "results/final_models/dmc_models/dmc_cego_final_other_players/dmc/0_2500048000.pth",
+    "results/final_models/dmc_models/dmc_cego_final_other_players/dmc/1_2500048000.pth",
     "random",
     "random",
 ]
@@ -69,13 +69,13 @@ if __name__ == '__main__':
     # pass
     # over 1,000 games:
 
-    compare_models_in_tournament(
-        "results/evaluation/all_sub_games/raeuber_setup_1.csv",
-        game_Setting,
-        num_games,
-        setup_1,
-        seeds
-    )
+    # compare_models_in_tournament(
+    #     "results/evaluation/all_sub_games/raeuber_setup_1.csv",
+    #     game_Setting,
+    #     num_games,
+    #     setup_1,
+    #     seeds
+    # )
 
     # compare_models_in_tournament(
     #     "results/evaluation/all_sub_games/piccolo_setup_2.csv",
@@ -85,13 +85,13 @@ if __name__ == '__main__':
     #     seeds
     # )
 
-    compare_models_in_tournament(
-        "results/evaluation/all_sub_games/raeuber_setup_3.csv",
-        game_Setting,
-        num_games,
-        setup_3,
-        seeds
-    )
+    # compare_models_in_tournament(
+    #     "results/evaluation/all_sub_games/cego_setup_3.csv",
+    #     game_Setting,
+    #     num_games,
+    #     setup_3,
+    #     seeds
+    # )
 
     # compare_models_in_tournament(
     #     "results/evaluation/all_sub_games/piccolo_setup_4.csv",
@@ -101,58 +101,50 @@ if __name__ == '__main__':
     #     seeds
     # )
 
-    compare_models_in_tournament(
-        "results/evaluation/all_sub_games/raeuber_setup_5.csv",
-        game_Setting,
-        num_games,
-        setup_5,
-        seeds
-    )
+    # compare_models_in_tournament(
+    #     "results/evaluation/all_sub_games/raeuber_setup_5.csv",
+    #     game_Setting,
+    #     num_games,
+    #     setup_5,
+    #     seeds
+    # )
 
     # compare_dmc_checkpoints(
     #     game_Setting,
-    #     "results/final_models/dmc_models/dmc_bettel_final_other_players/dmc/",
-    #     "bettel_player_0_seed_15_1000_games.csv",
+    #     "results/final_models/dmc_models/dmc_raeuber_final_other_players/dmc/",
+    #     "raeuber_player_0_seed_15_1000_games.csv",
     #     [True, False, False, False],
     #     1000,
     #     15)
 
     # compare_dmc_checkpoints(
     #     game_Setting,
-    #     "results/final_models/dmc_models/dmc_bettel_final_other_players/dmc/",
-    #     "bettel_player_1_seed_15_1000_games.csv",
+    #     "results/final_models/dmc_models/dmc_piccolo_final_other_players/dmc/",
+    #     "piccolo_player_1_seed_15_1000_games.csv",
     #     [False, True, False, False],
     #     1000,
     #     15)
 
     # compare_dmc_checkpoints(
     #     game_Setting,
-    #     "results/final_models/dmc_models/dmc_bettel_final_other_players/dmc/",
-    #     "bettel_other_players_seed_15_1000_games.csv",
+    #     "results/final_models/dmc_models/dmc_raeuber_final_other_players/dmc/",
+    #     "raeuber_2_ai_players_seed_15_1000_games.csv",
+    #     [True, True, False, False],
+    #     1000,
+    #     15)
+
+    # compare_dmc_checkpoints(
+    #     game_Setting,
+    #     "results/final_models/dmc_models/dmc_piccolo_final_other_players/dmc/",
+    #     "piccolo_3_ai_players_seed_15_1000_games.csv",
     #     [False, True, True, True],
     #     1000,
     #     15)
 
     # compare_dmc_checkpoints(
     #     game_Setting,
-    #     "results/final_models/dmc_models/dmc_ultimo_final_other_players/dmc/",
-    #     "cego_all_players_seed_15_1000_games.csv",
-    #     [True, True, True, True],
-    #     1000,
-    #     15)
-
-    # compare_dmc_checkpoints(
-    #     game_Setting,
-    #     "results/final_models/dmc_models/dmc_ultimo_final_all_players/dmc/",
-    #     "bettel_other_players_seed_15_1000_games.csv",
-    #     [True, True, True, True],
-    #     1000,
-    #     15)
-
-    # compare_dmc_checkpoints(
-    #     game_Setting,
-    #     "results/final_models/dmc_models/dmc_cego_final_all_players/dmc/",
-    #     "bettel_other_players_seed_15_1000_games.csv",
+    #     "results/final_models/dmc_models/dmc_raeuber_final_other_players/dmc/",
+    #     "raeuber_all_players_seed_15_1000_games.csv",
     #     [True, True, True, True],
     #     1000,
     #     15)
@@ -174,19 +166,19 @@ if __name__ == '__main__':
 
     csv_paths = [
         {
-            'path': "results/final_models/dmc_models/dmc_ultimo_final_other_players/dmc/ultimo_player_0_seed_15_1000_games.csv",
+            'path': "results/final_models/dmc_models/dmc_raeuber_final_other_players/dmc/raeuber_player_0_seed_15_1000_games.csv",
             'team': 0,
-            'name': "1 AI single player vs 3 random other players"
+            'name': "setup-1"
         },
         {
-            'path': "results/final_models/dmc_models/dmc_ultimo_final_other_players/dmc/ultimo_player_1_seed_15_1000_games.csv",
+            'path': "results/final_models/dmc_models/dmc_raeuber_final_other_players/dmc/raeuber_2_ai_players_seed_15_1000_games.csv",
             'team': 1,
-            'name': "1 AI other player vs 3 random players"
+            'name': "setup-2"
         },
         {
-            'path': "results/final_models/dmc_models/dmc_ultimo_final_other_players/dmc/ultimo_other_players_seed_15_1000_games.csv",
-            'team': 1,
-            'name': "3 AI other players vs 1 random single player"
+            'path': "results/final_models/dmc_models/dmc_raeuber_final_other_players/dmc/raeuber_all_players_seed_15_1000_games.csv",
+            'team': 0,
+            'name': "setup-3"
         }
     ]
 
@@ -198,13 +190,13 @@ if __name__ == '__main__':
     #     },
     # ]
 
-    # plot_combined(
-    #     csv_paths,
-    #     'results/final_models/dmc_models/dmc_ultimo_final_other_players/ultimo_traing_progress_graph.png',
-    #     'checkpoint',
-    #     'APPG',
-    #     'Training Progress - Ultimo'
-    # )
+    plot_combined(
+        csv_paths,
+        'results/final_models/dmc_models/dmc_raeuber_final_other_players/raeuber_traing_progress_graph.png',
+        'checkpoint',
+        'WP',
+        'Training Progress - Räuber'
+    )
 
     # refactor_training_graph(
     #     'results/final_models/nfsp_models/nfsp_cego_player_0/performance.csv',

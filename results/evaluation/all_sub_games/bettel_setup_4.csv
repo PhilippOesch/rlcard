@@ -1,18 +1,18 @@
 [
     {
-        "model": "random",
-        "avg_reward": 0.49016400000000004
+        "model": "results/final_models/dmc_models/dmc_bettel_final_other_players/dmc/0_1500048000.pth",
+        "avg_reward": 0.607752
     },
     {
         "model": "results/final_models/dmc_models/dmc_bettel_final_other_players/dmc/1_1500048000.pth",
-        "avg_reward": 0.509836
+        "avg_reward": 0.39224800000000004
     },
     {
         "model": "results/final_models/dmc_models/dmc_bettel_final_other_players/dmc/2_1500048000.pth",
-        "avg_reward": 0.509836
+        "avg_reward": 0.39224800000000004
     },
     {
         "model": "results/final_models/dmc_models/dmc_bettel_final_other_players/dmc/3_1500048000.pth",
-        "avg_reward": 0.509836
+        "avg_reward": 0.39224800000000004
     }
 ]

@@ -1,18 +1,18 @@
 [
     {
         "model": "results/final_models/dmc_models/dmc_raeuber_final_other_players/dmc/0_1500048000.pth",
-        "avg_reward": 0.829392
+        "avg_reward": 0.7445959999999999
     },
     {
         "model": "results/final_models/dmc_models/dmc_raeuber_final_other_players/dmc/1_1500048000.pth",
-        "avg_reward": 0.8384639999999999
+        "avg_reward": 0.742568
     },
     {
-        "model": "random",
-        "avg_reward": 0.669692
+        "model": "results/final_models/dmc_models/dmc_raeuber_final_other_players/dmc/2_1500048000.pth",
+        "avg_reward": 0.7501800000000001
     },
     {
-        "model": "random",
-        "avg_reward": 0.662452
+        "model": "results/final_models/dmc_models/dmc_raeuber_final_other_players/dmc/3_1500048000.pth",
+        "avg_reward": 0.762656
     }
 ]
