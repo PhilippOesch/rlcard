@@ -54,7 +54,7 @@ class CegoGameStandard(Game):
             self.points,
             self.players,
             0,
-            self.players[0].valued_cards
+            self.players[0].legage
         )
 
         # Count the round. There are 4 rounds in each game.

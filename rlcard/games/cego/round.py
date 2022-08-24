@@ -130,8 +130,8 @@ class CegoRound:
         state['winner_card'] = str(self.winner_card) if str(
             self.winner_card) is not None else None
         state['winner'] = self.winner_idx
-        state['valued_cards'] = cards2list(
-            player.valued_cards) if player.is_single_player else []
+        state['legage'] = cards2list(
+            player.legage) if player.is_single_player else []
         state['legal_actions'] = self.get_legal_actions(player)
         state['start_player'] = self.starting_player_idx
         return state

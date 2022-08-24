@@ -66,14 +66,14 @@ def get_tricks_played(tricks) -> list:
     return card_idxs
 
 
-def get_known_cards(hand, valued_cards, tricks_played, current_trick, start_idx=0) -> list:
+def get_known_cards(hand, legage, tricks_played, current_trick, start_idx=0) -> list:
     ''' get all cards that are already out of the game '''
 
     known_cards = []
     if hand is not None:
         known_cards.extend(hand)
-    if valued_cards is not None:
-        known_cards.extend(valued_cards)
+    if legage is not None:
+        known_cards.extend(legage)
     if tricks_played is not None:
         known_cards.extend([card for trick in tricks_played for card in trick])
     if current_trick is not None:
@@ -129,7 +129,7 @@ def set_cego_player_deck(player, blind_cards) -> None:
 
     # set player cards
     player.hand = new_hand
-    player.valued_cards = throw_away
+    player.legage = throw_away
 
 
 def set_observation(obs, plane, indexes):
@@ -174,7 +174,7 @@ def encode_observation_var1(state, is_raeuber=False):
     obs[hand_cards_idx] = 1
 
     known_cards_idxs = get_known_cards(
-        state['hand'], state['valued_cards'], state['played_tricks'], state['trick'], 54)
+        state['hand'], state['legage'], state['played_tricks'], state['trick'], 54)
 
     obs[range(54, 108)] = 1
     # unset all cards that are out of the game
@@ -223,7 +223,7 @@ def encode_observation_perfect_information(state, is_raeuber=False):
         obs[hand_cards_idx] = 1
 
     known_cards_idxs = get_known_cards(
-        None, state['valued_cards'], state['played_tricks'], state['trick'], 216)
+        None, state['legage'], state['played_tricks'], state['trick'], 216)
 
     obs[known_cards_idxs] = 1
 
@@ -283,7 +283,9 @@ def valid_ultimo(player_cards, strict=False) -> bool:
         - cego_player_cards (list): the cards of the cego player
 
     Returns:
-        - valid (bool): Player has 1-trump on his hand
+        - valid (bool): Player has 1-trump on his hand 
+            + more than 8 trump cards 
+            + more than 2 high trumps
     '''
     has1_trump = "1-trump" in cards2list(player_cards)
     trumps = [card for card in player_cards if card.suit == 'trump']

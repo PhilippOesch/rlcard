@@ -16,8 +16,8 @@ def check_if_all_cards_are_unique(players: list) -> bool:
     all_cards_set = set()
     count = 0
 
-    count += len(players[0].valued_cards)
-    for card in players[0].valued_cards:
+    count += len(players[0].legage)
+    for card in players[0].legage:
         all_cards_set.add(str(card))
 
     for player in players:
@@ -45,7 +45,7 @@ class TestStartPayoffs(unittest.TestCase):
         game.init_game()
 
         expected_payoffs = [
-            cards2value(game.players[0].valued_cards), 0, 0, 0
+            cards2value(game.players[0].legage), 0, 0, 0
         ]
 
         self.assertEqual(game.points, expected_payoffs)
