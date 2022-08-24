@@ -1,7 +1,14 @@
 import os
 
 
-def save_args_params(args):
+def save_args_params(args) -> None:
+    '''
+        saves hyperparameters to a file
+
+    Input:
+        args: model parameters
+    '''
+
     if not os.path.exists(args["log_dir"]):
         os.makedirs(args["log_dir"])
 

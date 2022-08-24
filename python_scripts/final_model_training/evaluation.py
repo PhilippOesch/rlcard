@@ -56,37 +56,37 @@ if __name__ == '__main__':
     # pass
     # over 1,000 games:
 
-    compare_models_in_tournament(
-        "results/evaluation/all_sub_games/solo_setup_1.csv",
-        game_Setting,
-        num_games,
-        setup_1,
-        seeds
-    )
+    # compare_models_in_tournament(
+    #     "results/evaluation/all_sub_games/solo_setup_1.csv",
+    #     game_Setting,
+    #     num_games,
+    #     setup_1,
+    #     seeds
+    # )
 
-    compare_models_in_tournament(
-        "results/evaluation/all_sub_games/solo_setup_2.csv",
-        game_Setting,
-        num_games,
-        setup_2,
-        seeds
-    )
+    # compare_models_in_tournament(
+    #     "results/evaluation/all_sub_games/solo_setup_2.csv",
+    #     game_Setting,
+    #     num_games,
+    #     setup_2,
+    #     seeds
+    # )
 
-    compare_models_in_tournament(
-        "results/evaluation/all_sub_games/solo_setup_3.csv",
-        game_Setting,
-        num_games,
-        setup_3,
-        seeds
-    )
+    # compare_models_in_tournament(
+    #     "results/evaluation/all_sub_games/solo_setup_3.csv",
+    #     game_Setting,
+    #     num_games,
+    #     setup_3,
+    #     seeds
+    # )
 
-    compare_models_in_tournament(
-        "results/evaluation/all_sub_games/solo_setup_4.csv",
-        game_Setting,
-        num_games,
-        setup_4,
-        seeds
-    )
+    # compare_models_in_tournament(
+    #     "results/evaluation/all_sub_games/solo_setup_4.csv",
+    #     game_Setting,
+    #     num_games,
+    #     setup_4,
+    #     seeds
+    # )
 
     # compare_models_in_tournament(
     #     "results/evaluation/all_sub_games/raeuber_setup_5.csv",
@@ -96,29 +96,29 @@ if __name__ == '__main__':
     #     seeds
     # )
 
-    # compare_dmc_checkpoints(
-    #     game_Setting,
-    #     "results/final_models/dmc_models/dmc_raeuber_final_other_players/dmc/",
-    #     "raeuber_player_0_seed_15_1000_games.csv",
-    #     [True, False, False, False],
-    #     1000,
-    #     15)
+    compare_dmc_checkpoints(
+        game_Setting,
+        "results/final_models/dmc_models/dmc_solo_final_other_players/dmc/",
+        "solo_player_0_seed_15_1000_games.csv",
+        [True, False, False, False],
+        1000,
+        15)
 
-    # compare_dmc_checkpoints(
-    #     game_Setting,
-    #     "results/final_models/dmc_models/dmc_piccolo_final_other_players/dmc/",
-    #     "piccolo_player_1_seed_15_1000_games.csv",
-    #     [False, True, False, False],
-    #     1000,
-    #     15)
+    compare_dmc_checkpoints(
+        game_Setting,
+        "results/final_models/dmc_models/dmc_solo_final_other_players/dmc/",
+        "solo_player_1_seed_15_1000_games.csv",
+        [False, True, False, False],
+        1000,
+        15)
 
-    # compare_dmc_checkpoints(
-    #     game_Setting,
-    #     "results/final_models/dmc_models/dmc_raeuber_final_other_players/dmc/",
-    #     "raeuber_2_ai_players_seed_15_1000_games.csv",
-    #     [True, True, False, False],
-    #     1000,
-    #     15)
+    compare_dmc_checkpoints(
+        game_Setting,
+        "results/final_models/dmc_models/dmc_solo_final_other_players/dmc/",
+        "solo_2_ai_players_seed_15_1000_games.csv",
+        [True, True, False, False],
+        1000,
+        15)
 
     # compare_dmc_checkpoints(
     #     game_Setting,
@@ -128,13 +128,13 @@ if __name__ == '__main__':
     #     1000,
     #     15)
 
-    # compare_dmc_checkpoints(
-    #     game_Setting,
-    #     "results/final_models/dmc_models/dmc_raeuber_final_other_players/dmc/",
-    #     "raeuber_all_players_seed_15_1000_games.csv",
-    #     [True, True, True, True],
-    #     1000,
-    #     15)
+    compare_dmc_checkpoints(
+        game_Setting,
+        "results/final_models/dmc_models/dmc_solo_final_other_players/dmc/",
+        "solo_all_players_seed_15_1000_games.csv",
+        [True, True, True, True],
+        1000,
+        15)
 
     # tournament_appg_and_wp_cego("results/evaluation/dmc_vs_dqn_2.json",
     #                             game_Setting, num_games, dmc_dqn_comparisson_models, seeds)
@@ -177,13 +177,13 @@ if __name__ == '__main__':
     #     },
     # ]
 
-    plot_combined(
-        csv_paths,
-        'results/final_models/dmc_models/dmc_raeuber_final_other_players/raeuber_traing_progress_graph.png',
-        'checkpoint',
-        'WP',
-        'Training Progress - Räuber'
-    )
+    # plot_combined(
+    #     csv_paths,
+    #     'results/final_models/dmc_models/dmc_raeuber_final_other_players/raeuber_traing_progress_graph.png',
+    #     'checkpoint',
+    #     'WP',
+    #     'Training Progress - Räuber'
+    # )
 
     # refactor_training_graph(
     #     'results/final_models/nfsp_models/nfsp_cego_player_0/performance.csv',

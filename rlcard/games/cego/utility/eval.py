@@ -20,7 +20,19 @@ from rlcard.utils import (
 ROUND_NUM = 11
 
 
-def load_model(model_path, env=None, position=None, device=None):
+def load_model(model_path, env=None, position=None, device=None) -> object:
+    '''
+        load model as agent
+
+    Input:
+        model_path (str): path to model
+        env (Env): the environment object
+        position (int): the position of the agent
+        device (object): the device to run the agent
+
+    Output:
+        model (object)
+    '''
     agent = None
     if os.path.isfile(model_path):  # Torch model
         import torch
@@ -35,6 +47,12 @@ def load_model(model_path, env=None, position=None, device=None):
 
 
 def isfloat(num) -> bool:
+    '''
+        helper function that finds out wheather the object is a float
+
+    Input: 
+        num (Any): potential number
+    '''
     try:
         float(num)
         return True
@@ -44,7 +62,7 @@ def isfloat(num) -> bool:
 
 def create_cego_dmc_graph(model_path) -> None:
     '''
-    Creates a training graph for a dmc_model
+        Creates a training graph from the dmc-model logs
     '''
     file = open(model_path + '/dmc/logs.csv')
 
@@ -73,9 +91,14 @@ def create_cego_dmc_graph(model_path) -> None:
     fig.savefig(model_path + '/fig.png')
 
 
-def create_combined_graph(path_to_models, data_per_graph=10):
+def create_combined_graph(path_to_models, data_per_graph=10) -> None:
     '''
-    Combines model graphs of specified path into one graph
+        Combines model graphs of specified path into one graph
+
+    Input:
+        path_to_models: array of model paths
+        data_per_graph: how many models to display in one. Otherwise
+            the graphs are split
     '''
     model_dirs = [x[0] for x in os.walk(path_to_models)]
 
@@ -118,6 +141,8 @@ def create_combined_graph(path_to_models, data_per_graph=10):
 
 def play_tournament_and_update_rewards(rewards, game_Settings, path_to_models, num_games, seed=None, i=None) -> None:
     '''
+    gets a reward array, play a tournament and updated the reward array
+
     Params:
         rewards (list): Current rewards,
         game_Settings (dict): Dictionary of the game settings
@@ -153,15 +178,17 @@ def play_tournament_and_update_rewards(rewards, game_Settings, path_to_models, n
         rewards[i] += tournament_reward[i]
 
 
-def tournament(env, num, debug=True, episode=None):
-    ''' Evaluate he performance of the agents in the environment
+def tournament(env, num, debug=True, episode=None) -> list[int]:
+    ''' 
+        Evaluate the performance of the agents in the environment.
+        This function is copied form rlcard.utils.utils and changed to allow debugging outputs.
 
     Args:
         env (Env class): The environment to be evaluated.
         num (int): The number of games to play.
 
     Returns:
-        A list of avrage payoffs for each player
+        A list of average payoffs for each player
     '''
     payoffs = [0 for _ in range(env.num_players)]
     counter = 0
@@ -183,7 +210,10 @@ def tournament(env, num, debug=True, episode=None):
     return payoffs
 
 
-def convert_to_agents(path_to_models, env, device):
+def convert_to_agents(path_to_models, env, device) -> list[object]:
+    '''
+        convert a list of model paths into a list of agents
+    '''
     agents = []
     for position, model_path in enumerate(path_to_models):
         agent = load_model(model_path, env, position, device)
@@ -191,7 +221,11 @@ def convert_to_agents(path_to_models, env, device):
     return agents
 
 
-def tournament_appg_and_wp_cego(save_path, games_settings, num_games, path_to_models, seeds=None):
+def tournament_appg_and_wp_cego(save_path, games_settings, num_games, path_to_models, seeds=None) -> None:
+    '''
+        a tournament, but both APPG and WP are calculated
+    '''
+
     device = get_device()
 
     won_games = [0, 0, 0, 0]
@@ -202,6 +236,7 @@ def tournament_appg_and_wp_cego(save_path, games_settings, num_games, path_to_mo
     for seed in seeds:
         set_seed(seed)
 
+        # for each seed, a new environment is created
         env = rlcard.make(
             games_settings["env_name"],
             config={
@@ -229,6 +264,7 @@ def tournament_appg_and_wp_cego(save_path, games_settings, num_games, path_to_mo
                 for i in range(1, len(payoffs)):
                     won_games[i] += 1
 
+    # save in file
     for i in range(len(path_to_models)):
         result[str(i)+"_"+path_to_models[i]] = {
             'appg': won_points[i] / (num_games * len(seeds)),
@@ -240,6 +276,16 @@ def tournament_appg_and_wp_cego(save_path, games_settings, num_games, path_to_mo
 
 
 def compare_models_in_tournament(save_path, games_settings, num_games, path_to_models, seeds=None) -> None:
+    '''
+        function to compare models in a tournament
+
+    Input:
+        save_path (str): Path of where to save the results in json format
+        game_settings (dict): a dictionary of the env settings
+        num_games (int): the number of games to play for each random seed
+        path_to_models (list[str]): a list of the model paths to compare
+        seeds: (list[int]) a list of random seeds
+    '''
     all_rewards: list = []
 
     iterations_rewards = [0 for _ in range(len(path_to_models))]
@@ -272,7 +318,12 @@ def compare_models_in_tournament(save_path, games_settings, num_games, path_to_m
         json.dump(all_rewards, f, indent=4)
 
 
-def analyse_first_mover_advantage(path, env, num_games):
+def analyze_first_mover_advantage(path, env, num_games):
+    '''
+        This function analyzes whether the player who plays 
+            the first card in the trick has an advantage over other players.
+    '''
+
     relative_vals_over_games = [[], [], [], []]
     total_vals_over_games = [0, 0, 0, 0]
     timesteps = []
@@ -316,7 +367,11 @@ def analyse_first_mover_advantage(path, env, num_games):
         json.dump(result, f, indent=4)
 
 
-def analyse_propability_a_card_wins_a_trick(path, env, num_games):
+def analyze_probability_a_card_wins_a_trick(path, env, num_games):
+    '''
+        Approximate the probability that a card won a trick when played.
+            P(W_i| CP_i)
+    '''
     trick_wins: dict = {}
 
     for key in ACTION_SPACE:
@@ -350,9 +405,10 @@ def analyse_propability_a_card_wins_a_trick(path, env, num_games):
         json.dump(sorted_by_prob, f, indent=4)
 
 
-def analyse_card_trick_win_propabilities(path, env, num_games):
+def analyze_card_trick_win_probabilities(path, env, num_games):
     '''
-        if a trick was won how big is the chance that this card was the winner
+        Approximate the probability that a card won a trick
+            P(W_i)
     '''
     trick_wins: dict = {}
 
@@ -382,7 +438,9 @@ def analyse_card_trick_win_propabilities(path, env, num_games):
 
 def compare_randsearch_models_in_tournament(path_to_models, filename, seeds, env_params, num_games) -> None:
     '''
-    Params:
+        Comparison and ranking of random search models.
+
+    Input:
         path_to_models (list): paths to models
         filename (str): Name of the result-file
         seeds (list): random Seeds to test for each run
@@ -463,6 +521,8 @@ def sort_by_key_and_save_array(array, key, path, descending=True):
 
 
 def get_total_ranking(save_folder, paths_to_models, filename="total_ranking.json") -> None:
+    '''create'''
+
     array_rewards: list[dict] = []
     array_slopes: list[dict] = []
 

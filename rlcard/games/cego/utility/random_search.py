@@ -2,7 +2,12 @@ import random
 import os
 from rlcard.games.cego.utility.training import save_args_params
 
-def args_to_str(args):
+
+def args_to_str(args) -> str:
+    '''
+        combines hyperparemeters into a single string
+    '''
+
     res = ''
 
     for val in args:
@@ -19,7 +24,18 @@ def get_random_search_args(args) -> dict:
 
     return res
 
-def randomSearch(train_func, args: dict, random_search_folder: str, random_search_iterations: int):
+
+def randomSearch(train_func, args: dict, random_search_folder: str, random_search_iterations: int) -> None:
+    '''
+        random Search implementation
+
+    Input:
+        train_func: the training function
+        args: full hyperparameter set
+        random_search_folder: folder to save random search results
+        random_search_iterations: number of random unique hyperparameter sets to sample
+    '''
+    # initialize list of unique search params
     set_of_searches = init_search_set(random_search_folder)
 
     for i in range(len(set_of_searches), random_search_iterations):
@@ -38,8 +54,11 @@ def randomSearch(train_func, args: dict, random_search_folder: str, random_searc
         save_search_set(random_search_folder, args_as_string)
 
 
-def init_search_set(random_search_folder):
-    res = set()
+def init_search_set(random_search_folder) -> set:
+    '''
+    initiate the search set based on already finished searches
+    '''
+    res: set = set()
     if os.path.exists(random_search_folder + "/search_set.txt"):
         with open(random_search_folder + "/search_set.txt", "r") as f:
             search_set = set(f.read().splitlines())
@@ -50,7 +69,10 @@ def init_search_set(random_search_folder):
     return res
 
 
-def save_search_set(random_search_folder, args_string):
+def save_search_set(random_search_folder, args_string) -> None:
+    '''
+        save parameter search set for stopping and later continuing random search process 
+    '''
     if not os.path.exists(random_search_folder + "/search_set.txt"):
         open(random_search_folder + "/search_set.txt", 'a').close()
 

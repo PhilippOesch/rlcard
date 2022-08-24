@@ -1,0 +1,38 @@
+{
+  "cego": [
+    "app/models/cego/player_0.pth",
+    "app/models/cego/player_1.pth",
+    "app/models/cego/player_2.pth",
+    "app/models/cego/player_3.pth"
+  ],
+  "solo": [
+    "app/models/solo/player_0.pth",
+    "app/models/solo/player_1.pth",
+    "app/models/solo/player_2.pth",
+    "app/models/solo/player_3.pth"
+  ],
+  "ultimo": [
+    "app/models/ultimo/player_0.pth",
+    "app/models/ultimo/player_1.pth",
+    "app/models/ultimo/player_2.pth",
+    "app/models/ultimo/player_3.pth"
+  ],
+  "bettel": [
+    "app/models/bettel/player_0.pth",
+    "app/models/bettel/player_1.pth",
+    "app/models/bettel/player_2.pth",
+    "app/models/bettel/player_3.pth"
+  ],
+  "piccolo": [
+    "app/models/piccolo/player_0.pth",
+    "app/models/piccolo/player_1.pth",
+    "app/models/piccolo/player_2.pth",
+    "app/models/piccolo/player_3.pth"
+  ],
+  "raeuber": [
+    "app/models/raeuber/player_0.pth",
+    "app/models/raeuber/player_1.pth",
+    "app/models/raeuber/player_2.pth",
+    "app/models/raeuber/player_3.pth"
+  ]
+}

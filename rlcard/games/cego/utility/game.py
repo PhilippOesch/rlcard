@@ -10,13 +10,16 @@ from rlcard.games.cego.card import CegoCard as Card
 # Read required docs
 ROOT_PATH = rlcard.__path__[0]
 
+# load action space and list of actions
 with open(os.path.join(ROOT_PATH, 'games/cego/jsondata/action_space.json'), 'r') as file:
     ACTION_SPACE = json.load(file, object_pairs_hook=OrderedDict)
     ACTION_LIST = list(ACTION_SPACE.keys())
 
+# get high card list
 with open(os.path.join(ROOT_PATH, 'games/cego/jsondata/high_cards.json'), 'r') as file:
     HIGH_CARDS = json.load(file, object_pairs_hook=OrderedDict)
 
+# get low card list
 with open(os.path.join(ROOT_PATH, 'games/cego/jsondata/low_cards.json'), 'r') as file:
     LOW_CARDS = json.load(file, object_pairs_hook=OrderedDict)
 
@@ -132,19 +135,7 @@ def set_cego_player_deck(player, blind_cards) -> None:
     player.legage = throw_away
 
 
-def set_observation(obs, plane, indexes):
-    ''' set observation of a specific plane 
-
-    Parameters:
-        - obs (dict): the observation
-        - plane (int): the plane to be set
-        - indexes (list): the indexes to be set
-    '''
-    for index in indexes:
-        obs[plane][index] = 1
-
-
-def encode_observation(state, is_raeuber=False):
+def encode_observation(state, is_raeuber=False) -> object:
     ''' the shape of this encoding is (336)
 
     Parameters:
@@ -191,7 +182,7 @@ def encode_observation(state, is_raeuber=False):
     return obs
 
 
-def encode_observation_perfect_information(state, is_raeuber=False):
+def encode_observation_perfect_information(state, is_raeuber=False) -> object:
     ''' the shape of this encoding is (498)
 
     Parameters:
@@ -238,7 +229,11 @@ def encode_observation_perfect_information(state, is_raeuber=False):
     return obs
 
 
-def encode_obs_game_info(state, obs, start_idx, is_raeuber=False):
+def encode_obs_game_info(state, obs, start_idx, is_raeuber=False) -> None:
+    ''' 
+        encoding of player specific information
+    '''
+
     winner_idx = state['winner']
     start_player_idx = state['start_player']
     current_player_idx = state['current_player']
@@ -326,7 +321,7 @@ def valid_solo(solo_player_cards) -> bool:
     return False
 
 
-def valid_solo_light(solo_player_cards):
+def valid_solo_light(solo_player_cards) -> bool:
     ''' This function checks if it would be valid for the 
     for the solo player to play solo.
 
@@ -342,6 +337,10 @@ def valid_solo_light(solo_player_cards):
 
 
 def valid_bettel(solo_player_cards) -> bool:
+    '''
+        t
+    '''
+
     valid_cards = []
     # print(LOW_CARDS)
     for card in solo_player_cards:
@@ -355,7 +354,7 @@ def valid_bettel(solo_player_cards) -> bool:
     return True
 
 
-def valid_piccolo(solo_player_cards):
+def valid_piccolo(solo_player_cards) -> bool:
     valid_cards = []
     for card in solo_player_cards:
         if str(card) in LOW_CARDS:
