@@ -5,7 +5,7 @@ import rlcard
 from rlcard.envs import Env
 from rlcard.games.cego import GameStandard, GameSolo, GameBettel, GamePiccolo, GameUltimo, GameRaeuber
 from rlcard.games.cego.utility.game import ACTION_LIST, ACTION_SPACE
-from rlcard.games.cego.utility.game import cards2list, encode_observation_var1, encode_observation_perfect_information
+from rlcard.games.cego.utility.game import cards2list, encode_observation, encode_observation_perfect_information
 
 DEFAULT_GAME_CONFIG = {
     'game_num_players': 4,
@@ -75,18 +75,11 @@ class CegoEnv(Env):
             # Agent plays
             if is_training:
                 if not self.game_train_players[player_id]:
-                    # print("state:", state)
                     action, _ = self.agents[player_id].eval_step(state)
                 else:
-                    # print("state:", state)
                     action = self.agents[player_id].step(state)
             else:
-                # print("state:", state)
                 action, _ = self.agents[player_id].eval_step(state)
-            # if not is_training:
-            #     action, _ = self.agents[player_id].eval_step(state)
-            # else:
-            #     action = self.agents[player_id].step(state)
 
             # Environment steps
             next_state, next_player_id = self.step(
@@ -125,25 +118,20 @@ class CegoEnv(Env):
 
         perfect_info_state = self.get_perfect_information()
         if self.game.with_perfect_information:
-            extracted_state['obs'] = encode_observation_var1(
+            extracted_state['obs'] = encode_observation(
                 encode_observation_perfect_information(perfect_info_state),
                 is_raeuber_game
             )
         else:
-            extracted_state['obs'] = encode_observation_var1(
+            extracted_state['obs'] = encode_observation(
                 state,
                 is_raeuber_game
             )
-        # setup extracted state
-        # extracted_state['obs'] = encode_observation_var1(state)
-        # print(extracted_state['obs'] )
         extracted_state['legal_actions'] = legal_actions
         extracted_state['raw_obs'] = state
         extracted_state['raw_legal_actions'] = [
             a for a in state['legal_actions']]
         extracted_state['action_record'] = self.action_recorder
-        # print()
-        # print("raw_legal_actions", extracted_state['raw_legal_actions'])
 
         return extracted_state
 

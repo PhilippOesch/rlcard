@@ -146,5 +146,5 @@ def train(log_dir, env_name, game_judge_by_points, game_variant, game_activate_h
 
 
 if __name__ == '__main__':
-    randomSearch(train, args, 'random_search_results/fix_random_search/nfsp_point_var_1',
+    randomSearch(train, args, 'random_search_results/random_search/nfsp_point_var_test',
                  random_search_iterations)

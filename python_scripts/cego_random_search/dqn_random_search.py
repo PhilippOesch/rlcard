@@ -127,5 +127,5 @@ def train(log_dir, env_name, game_variant, game_activate_heuristic,
 
 if __name__ == '__main__':
     os.environ["CUDA_VISIBLE_DEVICES"] = "cpu"
-    randomSearch(train, args, 'random_search_results/fix_random_search_test_test/dqn_point_var_1',
+    randomSearch(train, args, 'random_search_results/random_search/dqn_point_var_test',
                  random_search_iterations)

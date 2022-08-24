@@ -1,0 +1,18 @@
+[
+    {
+        "model": "random",
+        "avg_reward": 46.014716
+    },
+    {
+        "model": "results/final_models/dmc_models/dmc_solo_final_other_players/dmc/1_1500048000.pth",
+        "avg_reward": 32.985284
+    },
+    {
+        "model": "random",
+        "avg_reward": 32.985284
+    },
+    {
+        "model": "random",
+        "avg_reward": 32.985284
+    }
+]

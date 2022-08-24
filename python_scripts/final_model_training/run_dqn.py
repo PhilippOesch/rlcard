@@ -7,11 +7,11 @@ from rlcard.agents import DQNAgent
 from rlcard.agents.random_agent import RandomAgent
 
 from rlcard.games.cego.utility.training import save_args_params
+from rlcard.games.cego.utility.MyLogger import MyLogger
 
 from rlcard.utils import (
     tournament,
     reorganize,
-    MyLogger,
     plot_curve,
     get_device,
     set_seed,
@@ -20,7 +20,7 @@ from rlcard.utils import (
 # arguments for the random search
 # dqn_point_var_0/model_4
 args = {
-    "log_dir": "results/final_models/dqn/test_dqn_cego_player_1",
+    "log_dir": "results/final_models/dqn/dqn_cego_player_test",
     "env_name": "cego",
     "game_variant": "standard",
     "game_activate_heuristic": True,

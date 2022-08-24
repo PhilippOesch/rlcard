@@ -144,7 +144,7 @@ def set_observation(obs, plane, indexes):
         obs[plane][index] = 1
 
 
-def encode_observation_var1(state, is_raeuber=False):
+def encode_observation(state, is_raeuber=False):
     ''' the shape of this encoding is (336)
 
     Parameters:

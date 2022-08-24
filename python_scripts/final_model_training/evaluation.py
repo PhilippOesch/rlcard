@@ -11,7 +11,7 @@ num_games = 50000
 
 game_Setting = {
     'env_name': 'cego',
-    'game_variant': 'raeuber',
+    'game_variant': 'solo',
     'game_judge_by_points': 0,
     'game_activate_heuristic': True,
     'game_train_env': [False, False, False, False],
@@ -24,7 +24,7 @@ game_Setting = {
 
 
 setup_1 = [
-    "results/final_models/dmc_models/dmc_raeuber_final_other_players/dmc/0_1500048000.pth",
+    "results/final_models/dmc_models/dmc_solo_final_other_players/dmc/0_1500048000.pth",
     "random",
     "random",
     "random",
@@ -32,74 +32,61 @@ setup_1 = [
 
 setup_2 = [
     "random",
-    "results/final_models/dmc_models/dmc_piccolo_final_other_players/dmc/1_1500048000.pth",
+    "results/final_models/dmc_models/dmc_solo_final_other_players/dmc/1_1500048000.pth",
     "random",
     "random",
 ]
 
 setup_3 = [
-    "results/final_models/dmc_models/dmc_cego_final_other_players/dmc/0_2500048000.pth",
-    "results/final_models/dmc_models/dmc_cego_final_other_players/dmc/1_2500048000.pth",
+    "results/final_models/dmc_models/dmc_solo_final_other_players/dmc/0_1500048000.pth",
+    "results/final_models/dmc_models/dmc_solo_final_other_players/dmc/1_1500048000.pth",
     "random",
     "random",
 ]
 
 setup_4 = [
-    "random",
-    "results/final_models/dmc_models/dmc_piccolo_final_other_players/dmc/1_1500048000.pth",
-    "results/final_models/dmc_models/dmc_piccolo_final_other_players/dmc/2_1500048000.pth",
-    "results/final_models/dmc_models/dmc_piccolo_final_other_players/dmc/3_1500048000.pth",
+    "results/final_models/dmc_models/dmc_solo_final_other_players/dmc/0_1500048000.pth",
+    "results/final_models/dmc_models/dmc_solo_final_other_players/dmc/1_1500048000.pth",
+    "results/final_models/dmc_models/dmc_solo_final_other_players/dmc/2_1500048000.pth",
+    "results/final_models/dmc_models/dmc_solo_final_other_players/dmc/3_1500048000.pth",
 ]
 
-setup_5 = [
-    "results/final_models/dmc_models/dmc_raeuber_final_other_players/dmc/0_1500048000.pth",
-    "results/final_models/dmc_models/dmc_raeuber_final_other_players/dmc/1_1500048000.pth",
-    "results/final_models/dmc_models/dmc_raeuber_final_other_players/dmc/2_1500048000.pth",
-    "results/final_models/dmc_models/dmc_raeuber_final_other_players/dmc/3_1500048000.pth",
-]
-
-ultimo_behavior = [
-    "results/final_models/dmc_models/dmc_ultimo_final_other_players/dmc/0_1500048000.pth",
-    "random",
-    "random",
-    "random",
-]
 
 if __name__ == '__main__':
     # pass
     # over 1,000 games:
 
-    # compare_models_in_tournament(
-    #     "results/evaluation/all_sub_games/raeuber_setup_1.csv",
-    #     game_Setting,
-    #     num_games,
-    #     setup_1,
-    #     seeds
-    # )
+    compare_models_in_tournament(
+        "results/evaluation/all_sub_games/solo_setup_1.csv",
+        game_Setting,
+        num_games,
+        setup_1,
+        seeds
+    )
 
-    # compare_models_in_tournament(
-    #     "results/evaluation/all_sub_games/piccolo_setup_2.csv",
-    #     game_Setting,
-    #     num_games,
-    #     setup_2,
-    #     seeds
-    # )
+    compare_models_in_tournament(
+        "results/evaluation/all_sub_games/solo_setup_2.csv",
+        game_Setting,
+        num_games,
+        setup_2,
+        seeds
+    )
 
-    # compare_models_in_tournament(
-    #     "results/evaluation/all_sub_games/cego_setup_3.csv",
-    #     game_Setting,
-    #     num_games,
-    #     setup_3,
-    #     seeds
-    # )
+    compare_models_in_tournament(
+        "results/evaluation/all_sub_games/solo_setup_3.csv",
+        game_Setting,
+        num_games,
+        setup_3,
+        seeds
+    )
 
-    # compare_models_in_tournament(
-    #     "results/evaluation/all_sub_games/piccolo_setup_4.csv",
-    #     game_Setting,
-    #     num_games,
-    #     setup_4,
-    #     seeds
-    # )
+    compare_models_in_tournament(
+        "results/evaluation/all_sub_games/solo_setup_4.csv",
+        game_Setting,
+        num_games,
+        setup_4,
+        seeds
+    )
 
     # compare_models_in_tournament(
     #     "results/evaluation/all_sub_games/raeuber_setup_5.csv",

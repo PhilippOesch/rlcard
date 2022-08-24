@@ -1,8 +1,6 @@
 # random against human
 
 import rlcard
-from rlcard.agents import RandomAgent
-
 from rlcard.games.cego.utility.eval import analyse_card_round_position, convert_to_agents
 
 from rlcard.utils import (
@@ -36,7 +34,5 @@ env.set_agents(agents)
 
 
 if __name__ == '__main__':
-    # analyse_propability_a_card_wins_a_trick(
-    #     "analysis_results/percentages_card_win_when_played_probs.json", env, num_games)
-
-    analyse_card_round_position(env, "results/analysis_results/card_round.png", num_games, 0)
+    analyse_card_round_position(
+        env, "results/analysis_results/card_round.png", num_games, 0)

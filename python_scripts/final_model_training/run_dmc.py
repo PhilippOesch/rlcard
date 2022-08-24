@@ -24,7 +24,7 @@ args = {
     'num_actor_devices': 1,
     'num_actors': 5,
     'training_device': '0',
-    'log_dir': 'results/final_models/dmc_models/dmc_raeuber_final_other_players',
+    'log_dir': 'results/final_models/dmc_models/dmc_raeuber_test',
     'total_frames': 1500000000,
     'exp_epsilon': 0.01,
     'batch_size': 32,

@@ -41,13 +41,6 @@ class CegoRound:
             - action (str): the action of the current player
         '''
 
-        """ Logs for Testing """
-        # print("current player: ", self.current_player_idx)
-        # print("Player Cards: ", cards2list(
-        #     players[self.current_player_idx].hand))
-        # print("Target Card: ", str(self.target))
-        # print("Played Card: ", action)
-
         # get current player
         player = players[self.current_player_idx]
 
