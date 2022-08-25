@@ -13,12 +13,13 @@
     * philipp.oeschger@hs-furtwangen.de
 
 * [Link to Master Thesis](thesis/Philipp_Oeschger_268388_Master_Thesis.pdf)
+* The folder [src](src) contains the source code of this thesis
 
 ## About this Repository
 
 This repository contains the full source code of the thesis.
 
-The framework is a fork of [RLCard](https://github.com/datamllab/rlcard) and, therefore, the **src/rl_env** folder contains external source code. The following files / folders in **src/rl_env** do **not** contain external code:
+The repository is a fork of [RLCard](https://github.com/datamllab/rlcard) and, therefore, the **src/rl_env** folder contains external source code. The following files / folders in **src/rl_env** do contain **self created** code:
 
 * [src/rl_env/rlcard/games/cego](src/rl_env/rlcard/games/cego)
 * [src/rl_env/rlcard/envs/cego.py](src/rl_env/rlcard/envs/cego.py)
@@ -26,34 +27,47 @@ The framework is a fork of [RLCard](https://github.com/datamllab/rlcard) and, th
 * [src/rl_env/results](src/rl_env/results)
 * [src/rl_env/python_scripts](src/rl_env/python_scripts)
 
-## Description of the structure:
+## Description of source code stucture the structure:
 
 ### Class Diagramm of Game Implementation:
 ![Class Diagram](readme_imgs/class_diagram_rlcard_cego_simple.drawio.png)
 
 ### File Stucture of **src** folder:
-* [rlcard/games/cego](rlcard/games/cego): The implementation of the game logic.
-    * jsondata: contains card encoding, high cards and low cards list.
-    * testing: contains script for testing the environment
-    * utility: contains utility function modules for:
-        * evaluations
-        * game implementation
-        * custom logging
-        * random search Hyper parameter optimization
+
+#### Deep-AI-Service
+The API that makes the AI-models available.
+
+* this is a seperate service that requires a seperate setup
+* [more details here](src/deepl-ai-service/README.md)
+
+#### RL-Env
+
+* [rlcard/games/cego](src/rl_env/rlcard/games/cego): The implementation of the game logic.
+    * [jsondata](src/rl_env/rlcard/games/cego/jsondata): contains card encoding, high cards and low cards list.
+    * [testing](src/rl_env/rlcard/games/cego/testing): contains script for testing the environment
+    * [utility](src/rl_env/rlcard/games/cego/utility): contains utility function modules for:
+        * [evaluations](src/rl_env/rlcard/games/cego/utility/eval.py)
+        * [game implementation](src/rl_env/rlcard/games/cego/utility/game.py)
+        * [custom logging](src/rl_env/rlcard/games/cego/utility/MyLogger.py)
+        * [random search Hyperparameter optimization](src/rl_env/rlcard/games/cego/utility/random_search.py)
+        * [training](src/rl_env/rlcard/games/cego/utility/training.py)
     * ... game classes described in class diagram
-* [rlcard/envs/cego.py](rlcard/envs/cego.py): The environment class for the game.
-* [rlcard/agents/human_agents/cego_human_agent.py](rlcard/agents/human_agents/cego_human_agent.py): An agent that serves as testing interface to play against AI models.
-* [results](results): contains various results, including evaluations, model training, random search results: ...
-* [python_scripts](python_scripts): script for training, hyperparameter search and evaluation.
-    * cego_random_search: random search scripts for dqn and nfsp.
-    * final_model_training: contains,
+* [rlcard/envs/cego.py](src/rl_env/rlcard/envs/cego.py): The environment class for the game.
+* [rlcard/agents/human_agents/cego_human_agent.py](src/rl_env/rlcard/agents/human_agents/cego_human_agent.py): An agent that serves as testing interface to play against AI models.
+* [results](src/rl_env/results): contains various results, including 
+    * [analysis results](src/rl_env/results/analysis_results),
+    * [evaluations](src/rl_env/results/evaluation), 
+    * [model training](src/rl_env/results/final_models), 
+    * [random search results](src/rl_env/results/random_search_results).
+* [python_scripts](src/rl_env/python_scripts): script for training, hyperparameter search and evaluation.
+    * [cego_random_search](src/rl_env/python_scripts/cego_random_search): random search scripts for dqn and nfsp.
+    * [final_model_training](src/rl_env/python_scripts/final_model_training): contains,
         * evaluation of models
         * analysis of the game environment
         * scripts for final dmc, dqn, and nfsp training
-* [deepl-ai-service](deepl-ai-service): The API that makes the model available.
-    * this is a seperate service that requires a seperate setup
-    * [more details here](src/deepl-ai-service/README.md)
-* [thesis](thesis): contains the Thesis PDF.
+    * [interactive_cego_testing](src/rl_env/python_scripts/interactive_cego_testing): contains a test script for playing against a model in the command line
+
+
 
 ## Setting up the Environment
 
@@ -70,22 +84,9 @@ cd src/rl_env
 
 ### Create an environment
 
-Mac OS:
 
 ```bash
-source venv/bin/activate
-```
-
-Linux:
-
-```bash
-source venv/Scripts/activate
-```
-
-Windows:
-
-```bash
-.\venv\Scripts\activate
+python3 -m venv venv
 ```
 
 ### Activate Environment

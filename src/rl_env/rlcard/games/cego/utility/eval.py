@@ -86,6 +86,7 @@ def create_cego_dmc_graph(model_path) -> None:
     ax.legend()
     ax.grid()
 
+    os.makedirs(os.path.dirname(model_path), exist_ok=True)
     fig.savefig(model_path + '/fig.png')
 
 
@@ -130,6 +131,7 @@ def create_combined_graph(path_to_models, data_per_graph=10) -> None:
         ax.legend()
         ax.grid()
 
+        os.makedirs(os.path.dirname(path_to_models), exist_ok=True)
         if i % data_per_graph == 0:
             fig.savefig(path_to_models + '/fig' +
                         str(i//data_per_graph) + '.png', dpi=200)
@@ -299,7 +301,7 @@ def compare_models_in_tournament(save_path, games_settings, num_games, path_to_m
             print("Tournament: ", i)
             print("--------------------------------")
             play_tournament_and_update_rewards(iterations_rewards, games_settings, path_to_models,
-                                               num_games, seeds[i], i=0)
+                                               num_games, seeds[i], i=i)
 
     average_rewards = [
         reward / num_iterations for reward in iterations_rewards]
@@ -312,6 +314,7 @@ def compare_models_in_tournament(save_path, games_settings, num_games, path_to_m
             }
         )
 
+    os.makedirs(os.path.dirname(save_path), exist_ok=True)
     with open(save_path, 'w') as f:
         json.dump(all_rewards, f, indent=4)
 
@@ -350,6 +353,8 @@ def analyze_first_mover_advantage(path, env, num_games) -> None:
             timesteps, relative_vals_over_games[i], label="player_"+str(i))
     ax.legend()
     ax.grid()
+    
+    os.makedirs(os.path.dirname(path), exist_ok=True)
     fig.savefig(path + "/first_players_advantage_test.png")
 
     result = {}
@@ -361,6 +366,7 @@ def analyze_first_mover_advantage(path, env, num_games) -> None:
     result = {k: v for k, v in sorted(
         result.items(), key=lambda item: item[1], reverse=True)}
 
+    os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path + "/first_players_advantage_result_test.json", 'w') as f:
         json.dump(result, f, indent=4)
 
@@ -380,7 +386,7 @@ def analyze_probability_a_card_wins_a_trick(path, env, num_games) -> None:
 
     for i in range(num_games):
         print("episode:", i)
-        trajectories, payoffs, state = env.run(is_training=False)
+        _, _, state = env.run(is_training=False)
         for trick in state['played_tricks']:
             for card in trick:
                 trick_wins[str(card)]['played'] += 1
@@ -399,6 +405,7 @@ def analyze_probability_a_card_wins_a_trick(path, env, num_games) -> None:
     for key in sorted_by_prob:
         sorted_by_prob[key] = round((sorted_by_prob[key]*100), 2)
 
+    os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, 'w') as f:
         json.dump(sorted_by_prob, f, indent=4)
 
@@ -430,6 +437,7 @@ def analyze_card_trick_win_probabilities(path, env, num_games) -> None:
     for key in sorted_by_prob:
         sorted_by_prob[key] = round((sorted_by_prob[key]*100), 2)
 
+    os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, 'w') as f:
         json.dump(sorted_by_prob, f, indent=4)
 
@@ -517,6 +525,7 @@ def sort_by_key_and_save_array(array, key, path, descending=True) -> None:
     '''
     array.sort(key=lambda x: x[key], reverse=descending)
 
+    os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, 'w') as f:
         json.dump(array, f, indent=4)
 
@@ -668,6 +677,8 @@ def compare_training_slope(path_to_models, max_value=79, min_value=0) -> None:
                 label="linear regression: "+dir_name, linewidth=2)
         ax.legend()
         ax.grid()
+
+        os.makedirs(os.path.dirname(path_to_models), exist_ok=True)
         fig.savefig(path_to_models + '/lin_reg_graphs/lin_reg_' +
                     dir_name + '.png', dpi=200)
 
@@ -736,6 +747,8 @@ def analyze_card_round_position(game_Setting, title, paths_to_models,  save_path
     sns.heatmap(list(heatmap.values()), fmt="d")
     ax.set_xlabel('Round', fontsize=14)
     ax.set_ylabel('Card', fontsize=14)
+
+    os.makedirs(os.path.dirname(save_path), exist_ok=True)
     plt.savefig(save_path, dpi=200)
 
 
@@ -839,6 +852,7 @@ def plot_curve(csv_path, save_path, name="") -> None:
         if not os.path.exists(save_dir):
             os.makedirs(save_dir)
 
+        os.makedirs(os.path.dirname(save_path), exist_ok=True)
         fig.savefig(save_path)
 
 
@@ -862,6 +876,8 @@ def create_bar_graph(path, save_path) -> None:
     fig, ax = plt.subplots()
     ax.bar(x, y)
     ax.set(xlabel='card', ylabel='WP')
+
+    os.makedirs(os.path.dirname(save_path), exist_ok=True)
     fig.savefig(save_path)
 
 
@@ -905,6 +921,8 @@ def create_bar_graph_colored(path, save_path, highcards_percentage=80, is_card_r
     fig, ax = plt.subplots()
     ax.bar(x, y, color=colors)
     ax.set(xlabel='card', ylabel='WP')
+
+    os.makedirs(os.path.dirname(save_path), exist_ok=True)
     fig.savefig(save_path)
 
 
@@ -952,6 +970,7 @@ def split_80_20_cards(path, save_path, highcards_percentage=80, is_card_relative
     print("high cards", high_cards)
     print("hight_cards_sum:", (result - high_result))
 
+    os.makedirs(os.path.dirname(save_path), exist_ok=True)
     with open(save_path + "/low_cards.json", 'w') as f:
         json.dump(low_cards, f, indent=4)
 
@@ -999,6 +1018,7 @@ def plot_combined(csv_dict, save_path, x_name, y_name, name="") -> None:
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
 
+    os.makedirs(os.path.dirname(save_path), exist_ok=True)
     fig.savefig(save_path)
 
 
@@ -1028,8 +1048,5 @@ def refactor_training_graph(csv_path, name, y_name, x_name, title, save_path, nu
     ax.legend()
     ax.grid()
 
-    save_dir = os.path.dirname(save_path)
-    if not os.path.exists(save_dir):
-        os.makedirs(save_dir)
-
+    os.makedirs(os.path.dirname(save_path), exist_ok=True)
     fig.savefig(save_path)

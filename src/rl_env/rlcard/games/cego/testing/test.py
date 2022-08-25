@@ -323,7 +323,7 @@ class TestRaeuberPoints(unittest.TestCase):
             RandomAgent(num_actions=env.num_actions) for _ in range(env.num_players)
         ])
 
-        trajectory, _ = env.run(is_training=False)
+        _, _ = env.run(is_training=False)
         full_points = sum(env.game.points) + cards2value(env.game.blind_cards)
 
         self.assertEqual(79, full_points)

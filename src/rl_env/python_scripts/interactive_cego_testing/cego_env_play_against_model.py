@@ -22,7 +22,7 @@ env = rlcard.make(
 device = get_device()
 
 dmc_agent = load_model(
-    "results/final_models/dmc_models/dmc_cego_final_other_players/dmc/0_2500048000.pth",
+    "results/final_models/dmc_models/dmc_cego_final/dmc/0_2500048000.pth",
     env,
     0,
     device

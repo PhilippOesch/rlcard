@@ -40,11 +40,11 @@ Games where considered where the Ultimo player has at least 8 trumps of which on
 
 ### Bettel
 
-All Games where considered where the Bettel player only has low cards. For the definition of what is considered a low card please read the Theses where this project is based on. 
+All Games where considered where the Bettel player only has low cards. For the definition of what is considered a low card please read the [thesis](thesis/Philipp_Oeschger_268388_Master_Thesis.pdf) where this project is based on. 
 
 ### Piccolo
 
-All Games where considered where the Piccolo player all low cards but exactly one high card. Again please consider reading the Thesis of this project to find a definition of high and low cards in Cego.
+All Games where considered where the Piccolo player all low cards but exactly one high card. Again please consider reading the [thesis](thesis/Philipp_Oeschger_268388_Master_Thesis.pdf) of this project to find a definition of high and low cards in Cego.
 
 ### Räuber
 
@@ -70,19 +70,19 @@ Response:
 
 These Values can be used for card inputs:
 
-[/src/deepl-ai-service/app/jsondata/action_space.json](/src/deepl-ai-service/app/jsondata/action_space.json)
+[Action Space](/src/deepl-ai-service/app/jsondata/action_space.json)
 
 ## Folder-Structure
 
-* *app* – api sub folder
+* [app](src/deepl-ai-service/app) – api sub folder
   * *api_v[x]* - folder for a specific api version
-    * *plugin* – helper_classes
-    * *testing* - contains tests
-    * *main.py* - main file that is called when the api is initialized
-* *jsondata* – contains data such as card encoding and model mapping
-  * action_space.json – encoding of cards
-  * model_paths.json – mapping of game modes to model weights
-* *models* - contains the api models
+    * [plugin](src/deepl-ai-service/app/api_v1/plugins) – helper_classes
+    * [testing](src/deepl-ai-service/app/api_v1/testing) - contains tests
+    * [main.py](src/deepl-ai-service/app/api_v1/main.py) - main file that is called when the api is initialized
+* [jsondata](src/deepl-ai-service/app/jsondata) – contains data such as card encoding and model mapping
+  * [action_space.json](src/deepl-ai-service/app/jsondata/action_space.json) – encoding of cards
+  * [model_paths.json](src/deepl-ai-service/app/jsondata/model_paths.json) – mapping of game modes to model weights
+* [models](src/deepl-ai-service/app/models) - contains the AI models
 
 ## Setup
 
@@ -106,25 +106,35 @@ pip install virtualenv
 
 ### Setup Developer Environment with Virtualenv
 
-Jump to folder:
+**Jump to folder:**
 
 ```bash
 cd src/deepl-ai-service
 ```
 
-Setup Virtualenv:
+**Setup Virtualenv:**
 
 ```bash
-bash virtualenv venv
+python3 -m venv venv
 ```
 
-Activate Environment:
+**Activate Environment**:
 
+
+MacOs:
 ```bash
 source venv/bin/activate
 ```
+Linux:
+```bash
+source venv/Scripts/activate
+```
+Windows:
+```bash
+.\venv\Scripts\activate
+```
 
-Install Dev Dependencies:
+**Install Dev Dependencies:**
 
 ```bash
 pip install -r requirements.txt

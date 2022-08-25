@@ -83,7 +83,6 @@ def get_known_cards(hand, legage, tricks_played, current_trick, start_idx=0) -> 
         known_cards.extend(current_trick)
     card_idxs = [start_idx + ACTION_SPACE[card] for card in known_cards]
 
-    # print("cards:", card_idxs)
     return card_idxs
 
 
@@ -92,8 +91,6 @@ def get_cards_played(tricks_played, current_trick) -> list:
 
     tricks = tricks_played[:]
     tricks.append(current_trick)
-
-    # print("get_cards_played:",tricks)
 
     card_idxs = []
     for trick in tricks:
@@ -336,32 +333,46 @@ def valid_solo_light(solo_player_cards) -> bool:
     return len(trumps) >= 7
 
 
-def valid_bettel(solo_player_cards) -> bool:
-    '''
-        t
+def valid_bettel(bettel_player_cards) -> bool:
+    ''' This function checks if it would be valid for the 
+    for the bettel player to play bettel.
+
+    Parameters:
+        - bettel_player_cards (list): the cards of the cego player
+
+    Returns:
+        - valid (bool): if a player has only low cards
     '''
 
     valid_cards = []
-    # print(LOW_CARDS)
-    for card in solo_player_cards:
+    for card in bettel_player_cards:
         if str(card) in LOW_CARDS:
             valid_cards.append(card)
 
     # check if all cards are low cards
-    if len(valid_cards) != len(solo_player_cards):
+    if len(valid_cards) != len(bettel_player_cards):
         return False
 
     return True
 
 
-def valid_piccolo(solo_player_cards) -> bool:
+def valid_piccolo(piccolo_player_cards) -> bool:
+    ''' This function checks if it would be valid for the 
+    for the piccolo player to play piccolo.
+
+    Parameters:
+        - piccolo_player_cards (list): the cards of the cego player
+
+    Returns:
+        - valid (bool): if a player has only low cards and exactly one high card
+    '''
     valid_cards = []
-    for card in solo_player_cards:
+    for card in piccolo_player_cards:
         if str(card) in LOW_CARDS:
             valid_cards.append(card)
 
     # check if all cards but one are low cards
-    if len(valid_cards)+1 != len(solo_player_cards):
+    if len(valid_cards)+1 != len(piccolo_player_cards):
         return False
 
     return True

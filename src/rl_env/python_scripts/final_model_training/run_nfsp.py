@@ -20,7 +20,7 @@ from rlcard.utils import (
 # arguments for the random search
 # nfsp_poinr_var_0_tuned_dqn/model_12
 args = {
-    "log_dir": "results/final_models/nfsp_cego_player_test",
+    "log_dir": "results/final_models/nfsp_cego_player_0_test",
     "env_name": "cego",
     "game_variant": "standard",
     "game_activate_heuristic": True,
@@ -102,8 +102,8 @@ def train(log_dir, env_name, game_judge_by_points, game_variant, game_activate_h
         device=device,
     )
     agents = [
-        RandomAgent(num_actions=env.num_actions),
         nfsp_agent,
+        RandomAgent(num_actions=env.num_actions),
         RandomAgent(num_actions=env.num_actions),
         RandomAgent(num_actions=env.num_actions)
     ]
@@ -122,7 +122,7 @@ def train(log_dir, env_name, game_judge_by_points, game_variant, game_activate_h
 
         for episode in range(num_episodes):
 
-            agents[1].sample_episode_policy()
+            agents[0].sample_episode_policy()
             # Generate data from the environment
             trajectories, payoffs = env.run(is_training=True)
 
@@ -138,7 +138,7 @@ def train(log_dir, env_name, game_judge_by_points, game_variant, game_activate_h
                 tournament_reward = tournament(
                     env,
                     num_eval_games,
-                )[1]
+                )[0]
 
                 logger.log_performance(
                     env.timestep,

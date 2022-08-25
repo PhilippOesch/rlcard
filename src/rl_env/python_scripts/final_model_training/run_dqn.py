@@ -20,7 +20,7 @@ from rlcard.utils import (
 # arguments for the random search
 # dqn_point_var_0/model_4
 args = {
-    "log_dir": "results/final_models/dqn/dqn_cego_player_test",
+    "log_dir": "results/final_models/dqn/dqn_cego_player_0_test",
     "env_name": "cego",
     "game_variant": "standard",
     "game_activate_heuristic": True,
@@ -84,8 +84,8 @@ def train(log_dir, env_name, game_variant, game_activate_heuristic,
 
     )
     agents = [
-        RandomAgent(num_actions=env.num_actions),
         dqn_agent,
+        RandomAgent(num_actions=env.num_actions),
         RandomAgent(num_actions=env.num_actions),
         RandomAgent(num_actions=env.num_actions)
     ]
@@ -117,7 +117,7 @@ def train(log_dir, env_name, game_variant, game_activate_heuristic,
                 tournament_reward = tournament(
                     env,
                     num_eval_games,
-                )[1]
+                )[0]
 
                 logger.log_performance(
                     env.timestep,

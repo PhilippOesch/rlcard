@@ -47,11 +47,6 @@ def _print_state(state, action_record):
     print('\n==== Last Round Winner: Player',
           state['last_round_winner'], '====')
 
-    # for pair in _action_list:
-    #     print('>> Player', pair[0], 'chooses ', end='')
-    #     _print_action(pair[1])
-    #     print('')
-
     print('\n==== Round', state['current_trick_round'], ' ====')
     print('\n=============== Your Hand ===============')
     CegoCard.print_cards(state['hand'])
