@@ -13,7 +13,7 @@
     * philipp.oeschger@hs-furtwangen.de
 
 * [Link to Master Thesis](thesis/Philipp_Oeschger_268388_Master_Thesis.pdf)
-* The folder [src](src) contains the source code of this thesis
+* The folder [src](src) contains the source code to this thesis
 
 ## About this Repository
 
