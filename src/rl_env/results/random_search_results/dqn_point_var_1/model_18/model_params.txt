@@ -1,0 +1,19 @@
+env_name: cego
+game_judge_by_points: 1
+game_variant: standard
+game_activate_heuristic: True
+game_train_players: [True, True, True, True]
+seed: 12
+replay_memory_size: 100000
+update_target_estimator_every: 2000
+discount_factor: 0.99
+epsilon_start: 1.0
+epsilon_end: 0.05
+epsilon_decay_steps: 50000
+batch_size: 64
+mlp_layers: [512, 512, 512]
+num_eval_games: 1000
+num_episodes: 50000
+evaluate_every: 500
+learning_rate: 5e-06
+log_dir: random_search_results/fix_random_search/dqn_point_var_1/model_18

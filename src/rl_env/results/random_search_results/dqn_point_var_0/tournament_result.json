@@ -1,0 +1,82 @@
+[
+  {
+    "model": "random_search_results/fix_random_search/dqn_point_var_0/model_3",
+    "avg_reward": 43.102399999999996
+  },
+  {
+    "model": "random_search_results/fix_random_search/dqn_point_var_0/model_19",
+    "avg_reward": 43.01539999999999
+  },
+  {
+    "model": "random_search_results/fix_random_search/dqn_point_var_0/model_0",
+    "avg_reward": 42.844
+  },
+  {
+    "model": "random_search_results/fix_random_search/dqn_point_var_0/model_9",
+    "avg_reward": 42.7504
+  },
+  {
+    "model": "random_search_results/fix_random_search/dqn_point_var_0/model_16",
+    "avg_reward": 42.5782
+  },
+  {
+    "model": "random_search_results/fix_random_search/dqn_point_var_0/model_17",
+    "avg_reward": 42.475
+  },
+  {
+    "model": "random_search_results/fix_random_search/dqn_point_var_0/model_7",
+    "avg_reward": 42.4564
+  },
+  {
+    "model": "random_search_results/fix_random_search/dqn_point_var_0/model_6",
+    "avg_reward": 42.3942
+  },
+  {
+    "model": "random_search_results/fix_random_search/dqn_point_var_0/model_18",
+    "avg_reward": 42.271800000000006
+  },
+  {
+    "model": "random_search_results/fix_random_search/dqn_point_var_0/model_10",
+    "avg_reward": 42.1052
+  },
+  {
+    "model": "random_search_results/fix_random_search/dqn_point_var_0/model_12",
+    "avg_reward": 41.9832
+  },
+  {
+    "model": "random_search_results/fix_random_search/dqn_point_var_0/model_8",
+    "avg_reward": 41.973600000000005
+  },
+  {
+    "model": "random_search_results/fix_random_search/dqn_point_var_0/model_14",
+    "avg_reward": 41.8142
+  },
+  {
+    "model": "random_search_results/fix_random_search/dqn_point_var_0/model_1",
+    "avg_reward": 41.748799999999996
+  },
+  {
+    "model": "random_search_results/fix_random_search/dqn_point_var_0/model_15",
+    "avg_reward": 41.6002
+  },
+  {
+    "model": "random_search_results/fix_random_search/dqn_point_var_0/model_2",
+    "avg_reward": 41.568799999999996
+  },
+  {
+    "model": "random_search_results/fix_random_search/dqn_point_var_0/model_11",
+    "avg_reward": 41.42819999999999
+  },
+  {
+    "model": "random_search_results/fix_random_search/dqn_point_var_0/model_13",
+    "avg_reward": 41.355
+  },
+  {
+    "model": "random_search_results/fix_random_search/dqn_point_var_0/model_4",
+    "avg_reward": 41.279999999999994
+  },
+  {
+    "model": "random_search_results/fix_random_search/dqn_point_var_0/model_5",
+    "avg_reward": 40.7976
+  }
+]

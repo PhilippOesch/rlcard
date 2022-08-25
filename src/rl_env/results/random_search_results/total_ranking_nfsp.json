@@ -1,0 +1,242 @@
+[
+    {
+        "model": "random_search_results/fix_random_search/nfsp_point_var_0/model_5",
+        "rank": 6.5,
+        "avg_reward": 42.248599999999996,
+        "slope": 0.00025497774173274676
+    },
+    {
+        "model": "random_search_results/fix_random_search/nfsp_point_var_0/model_2",
+        "rank": 9.5,
+        "avg_reward": 42.0642,
+        "slope": 0.0002484934339233694
+    },
+    {
+        "model": "random_search_results/fix_random_search/nfsp_point_var_0/model_10",
+        "rank": 11.0,
+        "avg_reward": 42.129000000000005,
+        "slope": 0.00022783371547741694
+    },
+    {
+        "model": "random_search_results/fix_random_search/nfsp_point_var_0/model_19",
+        "rank": 11.5,
+        "avg_reward": 42.0086,
+        "slope": 0.0002292771279429442
+    },
+    {
+        "model": "random_search_results/fix_random_search/nfsp_point_var_0/model_9",
+        "rank": 13.0,
+        "avg_reward": 42.0814,
+        "slope": 0.00021048997880225332
+    },
+    {
+        "model": "random_search_results/fix_random_search/nfsp_point_var_1/model_1",
+        "rank": 13.0,
+        "avg_reward": 41.2536,
+        "slope": 0.00039666693942121497
+    },
+    {
+        "model": "random_search_results/fix_random_search/nfsp_point_var_0/model_16",
+        "rank": 13.5,
+        "avg_reward": 42.0034,
+        "slope": 0.0002171312643347188
+    },
+    {
+        "model": "random_search_results/fix_random_search/nfsp_point_var_1/model_19",
+        "rank": 13.5,
+        "avg_reward": 41.300200000000004,
+        "slope": 0.0002797916155251893
+    },
+    {
+        "model": "random_search_results/fix_random_search/nfsp_point_var_0/model_8",
+        "rank": 14.5,
+        "avg_reward": 41.9226,
+        "slope": 0.000216119655693993
+    },
+    {
+        "model": "random_search_results/fix_random_search/nfsp_point_var_1/model_8",
+        "rank": 14.5,
+        "avg_reward": 41.25320000000001,
+        "slope": 0.0002811372046295539
+    },
+    {
+        "model": "random_search_results/fix_random_search/nfsp_point_var_1/model_16",
+        "rank": 16.5,
+        "avg_reward": 41.267,
+        "slope": 0.00025706206984334813
+    },
+    {
+        "model": "random_search_results/fix_random_search/nfsp_point_var_1/model_2",
+        "rank": 17.0,
+        "avg_reward": 41.2374,
+        "slope": 0.00027654583640182194
+    },
+    {
+        "model": "random_search_results/fix_random_search/nfsp_point_var_1/model_15",
+        "rank": 17.0,
+        "avg_reward": 41.2262,
+        "slope": 0.000277827782778278
+    },
+    {
+        "model": "random_search_results/fix_random_search/nfsp_point_var_0/model_12",
+        "rank": 17.5,
+        "avg_reward": 41.9206,
+        "slope": 0.0002013613329111968
+    },
+    {
+        "model": "random_search_results/fix_random_search/nfsp_point_var_1/model_12",
+        "rank": 18.5,
+        "avg_reward": 41.266,
+        "slope": 0.00025389811708443575
+    },
+    {
+        "model": "random_search_results/fix_random_search/nfsp_point_var_1/model_11",
+        "rank": 19.0,
+        "avg_reward": 41.08200000000001,
+        "slope": 0.0003593359335933593
+    },
+    {
+        "model": "random_search_results/fix_random_search/nfsp_point_var_0/model_11",
+        "rank": 20.0,
+        "avg_reward": 41.922,
+        "slope": 0.0001893523069222917
+    },
+    {
+        "model": "random_search_results/fix_random_search/nfsp_point_var_1/model_0",
+        "rank": 20.0,
+        "avg_reward": 41.32719999999999,
+        "slope": 0.00022817736319086468
+    },
+    {
+        "model": "random_search_results/fix_random_search/nfsp_point_var_1/model_17",
+        "rank": 20.0,
+        "avg_reward": 41.15480000000001,
+        "slope": 0.0002561165207429837
+    },
+    {
+        "model": "random_search_results/fix_random_search/nfsp_point_var_1/model_10",
+        "rank": 20.0,
+        "avg_reward": 41.1068,
+        "slope": 0.00027141805089599895
+    },
+    {
+        "model": "random_search_results/fix_random_search/nfsp_point_var_0/model_3",
+        "rank": 21.0,
+        "avg_reward": 41.8512,
+        "slope": 0.00019187684015812417
+    },
+    {
+        "model": "random_search_results/fix_random_search/nfsp_point_var_0/model_17",
+        "rank": 21.0,
+        "avg_reward": 41.8292,
+        "slope": 0.00019241878157896328
+    },
+    {
+        "model": "random_search_results/fix_random_search/nfsp_point_var_0/model_6",
+        "rank": 21.5,
+        "avg_reward": 41.870400000000004,
+        "slope": 0.00018825104604821855
+    },
+    {
+        "model": "random_search_results/fix_random_search/nfsp_point_var_0/model_7",
+        "rank": 21.5,
+        "avg_reward": 41.768600000000006,
+        "slope": 0.00019776764788101347
+    },
+    {
+        "model": "random_search_results/fix_random_search/nfsp_point_var_0/model_13",
+        "rank": 21.5,
+        "avg_reward": 41.726000000000006,
+        "slope": 0.00020527208071785316
+    },
+    {
+        "model": "random_search_results/fix_random_search/nfsp_point_var_1/model_3",
+        "rank": 21.5,
+        "avg_reward": 40.9996,
+        "slope": 0.00028008255370991653
+    },
+    {
+        "model": "random_search_results/fix_random_search/nfsp_point_var_1/model_13",
+        "rank": 22.0,
+        "avg_reward": 41.0886,
+        "slope": 0.00026678122357690325
+    },
+    {
+        "model": "random_search_results/fix_random_search/nfsp_point_var_0/model_14",
+        "rank": 22.5,
+        "avg_reward": 41.806200000000004,
+        "slope": 0.00019134214917464136
+    },
+    {
+        "model": "random_search_results/fix_random_search/nfsp_point_var_0/model_1",
+        "rank": 22.5,
+        "avg_reward": 41.755399999999995,
+        "slope": 0.00019908803308409123
+    },
+    {
+        "model": "random_search_results/fix_random_search/nfsp_point_var_0/model_15",
+        "rank": 23.5,
+        "avg_reward": 41.861200000000004,
+        "slope": 0.00017259493498256645
+    },
+    {
+        "model": "random_search_results/fix_random_search/nfsp_point_var_1/model_7",
+        "rank": 23.5,
+        "avg_reward": 41.1352,
+        "slope": 0.0002329687514205966
+    },
+    {
+        "model": "random_search_results/fix_random_search/nfsp_point_var_1/model_5",
+        "rank": 25.0,
+        "avg_reward": 41.089,
+        "slope": 0.0002348052987116894
+    },
+    {
+        "model": "random_search_results/fix_random_search/nfsp_point_var_0/model_18",
+        "rank": 25.5,
+        "avg_reward": 41.7598,
+        "slope": 0.0001841128876984361
+    },
+    {
+        "model": "random_search_results/fix_random_search/nfsp_point_var_1/model_6",
+        "rank": 25.5,
+        "avg_reward": 41.054,
+        "slope": 0.00025221613070397963
+    },
+    {
+        "model": "random_search_results/fix_random_search/nfsp_point_var_0/model_0",
+        "rank": 26.5,
+        "avg_reward": 41.764599999999994,
+        "slope": 0.0001620099869595705
+    },
+    {
+        "model": "random_search_results/fix_random_search/nfsp_point_var_1/model_14",
+        "rank": 29.0,
+        "avg_reward": 41.0952,
+        "slope": 0.00020505686932329603
+    },
+    {
+        "model": "random_search_results/fix_random_search/nfsp_point_var_0/model_4",
+        "rank": 29.5,
+        "avg_reward": 41.622800000000005,
+        "slope": 0.0001418315594505365
+    },
+    {
+        "model": "random_search_results/fix_random_search/nfsp_point_var_1/model_9",
+        "rank": 33.0,
+        "avg_reward": 41.1112,
+        "slope": 0.00018275463910027358
+    },
+    {
+        "model": "random_search_results/fix_random_search/nfsp_point_var_1/model_18",
+        "rank": 38.0,
+        "avg_reward": 41.020599999999995,
+        "slope": 0.00015764303703097576
+    },
+    {
+        "model": "random_search_results/fix_random_search/nfsp_point_var_1/model_4",
+        "rank": 40.0,
+        "avg_reward": 40.9688,
+        "slope": 0.00012376692214676027
+    }
+]

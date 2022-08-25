@@ -1,0 +1,82 @@
+[
+    {
+        "model": "random_search_results/fix_random_search/dqn_point_var_0/model_19",
+        "slope": 4.2759615432199106e-09
+    },
+    {
+        "model": "random_search_results/fix_random_search/dqn_point_var_0/model_9",
+        "slope": 3.4279216183988936e-09
+    },
+    {
+        "model": "random_search_results/fix_random_search/dqn_point_var_0/model_7",
+        "slope": 3.2663346887047665e-09
+    },
+    {
+        "model": "random_search_results/fix_random_search/dqn_point_var_0/model_6",
+        "slope": 2.7464449551974783e-09
+    },
+    {
+        "model": "random_search_results/fix_random_search/dqn_point_var_0/model_3",
+        "slope": 2.7217773561015498e-09
+    },
+    {
+        "model": "random_search_results/fix_random_search/dqn_point_var_0/model_17",
+        "slope": 2.7118269939767222e-09
+    },
+    {
+        "model": "random_search_results/fix_random_search/dqn_point_var_0/model_16",
+        "slope": 2.6238158913704925e-09
+    },
+    {
+        "model": "random_search_results/fix_random_search/dqn_point_var_0/model_0",
+        "slope": 2.3511890889894524e-09
+    },
+    {
+        "model": "random_search_results/fix_random_search/dqn_point_var_0/model_1",
+        "slope": 2.302444283553785e-09
+    },
+    {
+        "model": "random_search_results/fix_random_search/dqn_point_var_0/model_10",
+        "slope": 2.2746555438052422e-09
+    },
+    {
+        "model": "random_search_results/fix_random_search/dqn_point_var_0/model_8",
+        "slope": 1.8996019279718516e-09
+    },
+    {
+        "model": "random_search_results/fix_random_search/dqn_point_var_0/model_18",
+        "slope": 1.8618156407125163e-09
+    },
+    {
+        "model": "random_search_results/fix_random_search/dqn_point_var_0/model_12",
+        "slope": 1.7972510714822923e-09
+    },
+    {
+        "model": "random_search_results/fix_random_search/dqn_point_var_0/model_14",
+        "slope": 1.6549997922692131e-09
+    },
+    {
+        "model": "random_search_results/fix_random_search/dqn_point_var_0/model_13",
+        "slope": 5.868204772145792e-10
+    },
+    {
+        "model": "random_search_results/fix_random_search/dqn_point_var_0/model_11",
+        "slope": 5.685528276648126e-10
+    },
+    {
+        "model": "random_search_results/fix_random_search/dqn_point_var_0/model_15",
+        "slope": 5.19987556868456e-10
+    },
+    {
+        "model": "random_search_results/fix_random_search/dqn_point_var_0/model_2",
+        "slope": 3.8682809592811804e-10
+    },
+    {
+        "model": "random_search_results/fix_random_search/dqn_point_var_0/model_4",
+        "slope": 1.6706733964535563e-10
+    },
+    {
+        "model": "random_search_results/fix_random_search/dqn_point_var_0/model_5",
+        "slope": -2.908023828850109e-10
+    }
+]

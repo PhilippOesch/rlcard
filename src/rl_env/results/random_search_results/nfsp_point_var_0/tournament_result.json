@@ -1,0 +1,82 @@
+[
+  {
+    "model": "random_search_results/fix_random_search/nfsp_point_var_0/model_5",
+    "avg_reward": 42.248599999999996
+  },
+  {
+    "model": "random_search_results/fix_random_search/nfsp_point_var_0/model_10",
+    "avg_reward": 42.129000000000005
+  },
+  {
+    "model": "random_search_results/fix_random_search/nfsp_point_var_0/model_9",
+    "avg_reward": 42.0814
+  },
+  {
+    "model": "random_search_results/fix_random_search/nfsp_point_var_0/model_2",
+    "avg_reward": 42.0642
+  },
+  {
+    "model": "random_search_results/fix_random_search/nfsp_point_var_0/model_19",
+    "avg_reward": 42.0086
+  },
+  {
+    "model": "random_search_results/fix_random_search/nfsp_point_var_0/model_16",
+    "avg_reward": 42.0034
+  },
+  {
+    "model": "random_search_results/fix_random_search/nfsp_point_var_0/model_8",
+    "avg_reward": 41.9226
+  },
+  {
+    "model": "random_search_results/fix_random_search/nfsp_point_var_0/model_11",
+    "avg_reward": 41.922
+  },
+  {
+    "model": "random_search_results/fix_random_search/nfsp_point_var_0/model_12",
+    "avg_reward": 41.9206
+  },
+  {
+    "model": "random_search_results/fix_random_search/nfsp_point_var_0/model_6",
+    "avg_reward": 41.870400000000004
+  },
+  {
+    "model": "random_search_results/fix_random_search/nfsp_point_var_0/model_15",
+    "avg_reward": 41.861200000000004
+  },
+  {
+    "model": "random_search_results/fix_random_search/nfsp_point_var_0/model_3",
+    "avg_reward": 41.8512
+  },
+  {
+    "model": "random_search_results/fix_random_search/nfsp_point_var_0/model_17",
+    "avg_reward": 41.8292
+  },
+  {
+    "model": "random_search_results/fix_random_search/nfsp_point_var_0/model_14",
+    "avg_reward": 41.806200000000004
+  },
+  {
+    "model": "random_search_results/fix_random_search/nfsp_point_var_0/model_7",
+    "avg_reward": 41.768600000000006
+  },
+  {
+    "model": "random_search_results/fix_random_search/nfsp_point_var_0/model_0",
+    "avg_reward": 41.764599999999994
+  },
+  {
+    "model": "random_search_results/fix_random_search/nfsp_point_var_0/model_18",
+    "avg_reward": 41.7598
+  },
+  {
+    "model": "random_search_results/fix_random_search/nfsp_point_var_0/model_1",
+    "avg_reward": 41.755399999999995
+  },
+  {
+    "model": "random_search_results/fix_random_search/nfsp_point_var_0/model_13",
+    "avg_reward": 41.726000000000006
+  },
+  {
+    "model": "random_search_results/fix_random_search/nfsp_point_var_0/model_4",
+    "avg_reward": 41.622800000000005
+  }
+]

@@ -15,7 +15,6 @@ docs/rst
 docs/sphinx
 final_models/
 experiments/
-random_search_results/
 bayesian_opt_result/
 dist/
 rlcard/games/doudizhu/jsondata/

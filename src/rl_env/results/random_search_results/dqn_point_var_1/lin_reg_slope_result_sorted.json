@@ -1,0 +1,82 @@
+[
+    {
+        "model": "random_search_results/fix_random_search/dqn_point_var_1/model_11",
+        "slope": 5.002682086390456e-09
+    },
+    {
+        "model": "random_search_results/fix_random_search/dqn_point_var_1/model_18",
+        "slope": 4.63691823727827e-09
+    },
+    {
+        "model": "random_search_results/fix_random_search/dqn_point_var_1/model_8",
+        "slope": 4.410350125921682e-09
+    },
+    {
+        "model": "random_search_results/fix_random_search/dqn_point_var_1/model_12",
+        "slope": 4.053950849630423e-09
+    },
+    {
+        "model": "random_search_results/fix_random_search/dqn_point_var_1/model_10",
+        "slope": 3.850294120321122e-09
+    },
+    {
+        "model": "random_search_results/fix_random_search/dqn_point_var_1/model_13",
+        "slope": 3.404613188591586e-09
+    },
+    {
+        "model": "random_search_results/fix_random_search/dqn_point_var_1/model_19",
+        "slope": 2.8522852285228547e-09
+    },
+    {
+        "model": "random_search_results/fix_random_search/dqn_point_var_1/model_16",
+        "slope": 2.7162716271627173e-09
+    },
+    {
+        "model": "random_search_results/fix_random_search/dqn_point_var_1/model_4",
+        "slope": 2.516797134258879e-09
+    },
+    {
+        "model": "random_search_results/fix_random_search/dqn_point_var_1/model_1",
+        "slope": 2.2466792133758832e-09
+    },
+    {
+        "model": "random_search_results/fix_random_search/dqn_point_var_1/model_3",
+        "slope": 2.1072107210721056e-09
+    },
+    {
+        "model": "random_search_results/fix_random_search/dqn_point_var_1/model_17",
+        "slope": 1.921010282846467e-09
+    },
+    {
+        "model": "random_search_results/fix_random_search/dqn_point_var_1/model_0",
+        "slope": 1.8577312276682228e-09
+    },
+    {
+        "model": "random_search_results/fix_random_search/dqn_point_var_1/model_9",
+        "slope": 1.6818045440907707e-09
+    },
+    {
+        "model": "random_search_results/fix_random_search/dqn_point_var_1/model_14",
+        "slope": 1.461964378256007e-09
+    },
+    {
+        "model": "random_search_results/fix_random_search/dqn_point_var_1/model_5",
+        "slope": 1.4294156688396116e-09
+    },
+    {
+        "model": "random_search_results/fix_random_search/dqn_point_var_1/model_2",
+        "slope": 1.4039585776759493e-09
+    },
+    {
+        "model": "random_search_results/fix_random_search/dqn_point_var_1/model_7",
+        "slope": 1.1449326750856913e-09
+    },
+    {
+        "model": "random_search_results/fix_random_search/dqn_point_var_1/model_6",
+        "slope": 8.009891898280734e-10
+    },
+    {
+        "model": "random_search_results/fix_random_search/dqn_point_var_1/model_15",
+        "slope": 5.305985143968935e-10
+    }
+]

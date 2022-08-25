@@ -1,0 +1,28 @@
+env_name: cego
+game_judge_by_points: 0
+seed: 12
+game_variant: standard
+game_activate_heuristic: True
+game_train_players: [True, True, True, True]
+hidden_layers_sizes: [512, 512]
+reservoir_buffer_capacity: 20000
+anticipatory_param: 0.1
+batch_size: 32
+train_every: 1
+rl_learning_rate: 1e-05
+sl_learning_rate: 0.0001
+min_buffer_size_to_learn: 100
+q_replay_memory_size: 100000
+q_replay_memory_init_size: 100
+q_update_target_estimator_every: 10000
+q_discount_factor: 0.95
+q_epsilon_start: 1
+q_epsilon_end: 0.1
+q_epsilon_decay_steps: 50000
+q_batch_size: 32
+q_train_every: 1
+q_mlp_layer: [512, 512]
+num_eval_games: 1000
+num_episodes: 50000
+evaluate_every: 500
+log_dir: random_search_results/fix_random_search/nfsp_point_var_0/model_15
