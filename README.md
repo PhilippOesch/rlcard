@@ -18,7 +18,7 @@
 
 This repository contains the full source code of the thesis.
 
-The framework is a fork of [RLCard](https://github.com/datamllab/rlcard) and, therefore, parts of this repository are external source code. The following folders/ files contain thesis specific content and are, therefore, not external source code:
+The framework is a fork of [RLCard](https://github.com/datamllab/rlcard) and, therefore, parts of this repository are external source code. The following folders/ files contain thesis specific content and are, therefore, **not external source code**:
 
 * [rlcard/games/cego](rlcard/games/cego)
 * [rlcard/envs/cego.py](rlcard/envs/cego.py)
@@ -28,12 +28,47 @@ The framework is a fork of [RLCard](https://github.com/datamllab/rlcard) and, th
 * [deepl-ai-service](deepl-ai-service)
 * [thesis](thesis)
 
+## Description of the structure:
+
+### Class Diagramm of Game Implementation:
+![Class Diagram](readme_imgs/class_diagram_rlcard_cego_simple.drawio.png)
+
+### File Stucture:
+* [rlcard/games/cego](rlcard/games/cego): The implementation of the game logic.
+    * jsondata: contains card encoding, high cards and low cards list.
+    * testing: contains script for testing the environment
+    * utility: contains utility function modules for:
+        * evaluations
+        * game implementation
+        * custom logging
+        * random search Hyper parameter optimization
+    * ... game classes described in class diagram
+* [rlcard/envs/cego.py](rlcard/envs/cego.py): The environment class for the game.
+* [rlcard/agents/human_agents/cego_human_agent.py](rlcard/agents/human_agents/cego_human_agent.py): An agent that serves as testing interface to play against AI models.
+* [results](results): contains various results, including evaluations, model training, random search results: ...
+* [python_scripts](python_scripts): script for training, hyperparameter search and evaluation.
+    * cego_random_search: random search scripts for dqn and nfsp.
+    * final_model_training: contains,
+        * evaluation of models
+        * analysis of the game environment
+        * scripts for final dmc, dqn, and nfsp training
+* [deepl-ai-service](deepl-ai-service): The API that makes the model available.
+    * this is a seperate service that requires a seperate setup
+    * [more details here]()
+* [thesis](thesis): contains the Thesis PDF.
+
 ## Setting up the Environment
 
 The following tools are needed to setup the environment:
 
 * [Python 3](https://www.python.org/downloads/) (Python 3.9 was used)
 * [Virtualenv](https://pypi.org/project/virtualenv/)
+
+### Open rl_env_folder
+
+```bash
+cd src/rl_env
+```
 
 ### Create an environment
 
@@ -89,12 +124,8 @@ pip install -r requirements.txt
 pip3 install -e .
 ```
 
-## Short Description of the structure:
+### Run Tests for RL-Env:
 
-* [rlcard/games/cego](rlcard/games/cego): The implementation of the game logic.
-* [rlcard/envs/cego.py](rlcard/envs/cego.py): The environment class for the game.
-* [rlcard/agents/human_agents/cego_human_agent.py](rlcard/agents/human_agents/cego_human_agent.py): An agent that serves as testing interface to play against AI models.
-* [results](results): contains various results, including evaluations, model training, random search results: ...
-* [python_scripts](python_scripts): script for training, hyperparameter search and evaluation.
-* [deepl-ai-service](deepl-ai-service): The API that makes the model available.
-* [thesis](thesis): contains the Thesis PDF.
+```bash
+python -m unittest discover 
+```
