@@ -12,6 +12,8 @@
     * 78120 Furtwangen im Schwarzwald
     * philipp.oeschger@hs-furtwangen.de
 
+* [Link to Master Thesis](thesis/Philipp_Oeschger_268388_Master_Thesis.pdf)
+
 ## About this Repository
 
 This repository contains the full source code of the thesis.
@@ -23,6 +25,7 @@ The framework is a fork of [RLCard](https://github.com/datamllab/rlcard) and, th
 * [rlcard/agents/human_agents/cego_human_agent.py](rlcard/agents/human_agents/cego_human_agent.py)
 * [results](results)
 * [python_scripts](python_scripts)
+* [deepl-ai-service](deepl-ai-service)
 * [thesis](thesis)
 
 ## Setting up the Environment
@@ -85,3 +88,13 @@ pip install -r requirements.txt
 ```bash
 pip3 install -e .
 ```
+
+## Short Description of the structure:
+
+* [rlcard/games/cego](rlcard/games/cego): The implementation of the game logic.
+* [rlcard/envs/cego.py](rlcard/envs/cego.py): The environment class for the game.
+* [rlcard/agents/human_agents/cego_human_agent.py](rlcard/agents/human_agents/cego_human_agent.py): An agent that serves as testing interface to play against AI models.
+* [results](results): contains various results, including evaluations, model training, random search results: ...
+* [python_scripts](python_scripts): script for training, hyperparameter search and evaluation.
+* [deepl-ai-service](deepl-ai-service): The API that makes the model available.
+* [thesis](thesis): contains the Thesis PDF.

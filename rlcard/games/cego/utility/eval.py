@@ -8,8 +8,6 @@ import numpy as np
 from scipy import stats
 import seaborn as sns
 import re
-
-from rlcard.agents.random_agent import RandomAgent
 from rlcard.games.cego.utility.game import ACTION_SPACE, cards2list
 
 from rlcard.utils import (
@@ -318,7 +316,7 @@ def compare_models_in_tournament(save_path, games_settings, num_games, path_to_m
         json.dump(all_rewards, f, indent=4)
 
 
-def analyze_first_mover_advantage(path, env, num_games):
+def analyze_first_mover_advantage(path, env, num_games) -> None:
     '''
         This function analyzes whether the player who plays 
             the first card in the trick has an advantage over other players.
@@ -367,7 +365,7 @@ def analyze_first_mover_advantage(path, env, num_games):
         json.dump(result, f, indent=4)
 
 
-def analyze_probability_a_card_wins_a_trick(path, env, num_games):
+def analyze_probability_a_card_wins_a_trick(path, env, num_games) -> None:
     '''
         Approximate the probability that a card won a trick when played.
             P(W_i| CP_i)
@@ -405,7 +403,7 @@ def analyze_probability_a_card_wins_a_trick(path, env, num_games):
         json.dump(sorted_by_prob, f, indent=4)
 
 
-def analyze_card_trick_win_probabilities(path, env, num_games):
+def analyze_card_trick_win_probabilities(path, env, num_games) -> None:
     '''
         Approximate the probability that a card won a trick
             P(W_i)
@@ -513,7 +511,10 @@ def compare_randsearch_models_in_tournament(path_to_models, filename, seeds, env
         all_rewards, 'avg_reward', path_to_models+'/' + filename, True)
 
 
-def sort_by_key_and_save_array(array, key, path, descending=True):
+def sort_by_key_and_save_array(array, key, path, descending=True) -> None:
+    '''
+        helper function for sorting and saving arrays
+    '''
     array.sort(key=lambda x: x[key], reverse=descending)
 
     with open(path, 'w') as f:
@@ -521,7 +522,14 @@ def sort_by_key_and_save_array(array, key, path, descending=True):
 
 
 def get_total_ranking(save_folder, paths_to_models, filename="total_ranking.json") -> None:
-    '''create'''
+    '''
+        compare rank of slopes and rewards and create a total ranking
+
+    Input: 
+        save_folder (str): folder to save the file
+        paths_to_models (list[str]): list of model paths to rank
+        filename (str): the filename to save
+    '''
 
     array_rewards: list[dict] = []
     array_slopes: list[dict] = []
@@ -569,6 +577,16 @@ def get_total_ranking(save_folder, paths_to_models, filename="total_ranking.json
 
 
 def read_performance(model_dir, max=79, min=0) -> tuple[object, object, object, object, object]:
+    '''
+        read the csv_performance file and perform a linear regression
+
+    Input:
+        model_dir (str): directory of the model
+        max (int): max value for normalization of rewards
+        min (int): min value for normalization of rewards
+    '''
+
+    # early return when not defined
     if not os.path.exists(model_dir + '/performance.csv'):
         return None, None, None, None, None
 
@@ -589,7 +607,10 @@ def read_performance(model_dir, max=79, min=0) -> tuple[object, object, object, 
     return result.slope, result.intercept, std, y, x
 
 
-def get_ys(x, slope, intercept):
+def get_ys(x, slope, intercept) -> list:
+    '''
+        get y values for linear regression straight line to visualize
+    '''
     ys = []
     for x_i in x:
         ys.append(slope*x_i+intercept)
@@ -597,11 +618,23 @@ def get_ys(x, slope, intercept):
     return ys
 
 
-def path_leaf(path):
+def path_leaf(path) -> object:
+    '''
+        helper function to get folder structure
+    '''
     return ntpath.split(path)
 
 
-def compare_training_slope(path_to_models, max_value=79, min_value=0):
+def compare_training_slope(path_to_models, max_value=79, min_value=0) -> None:
+    '''
+        create slope ranking
+
+    Input:
+        model_dir (str): directory of the model
+        max (int): max value for normalization of rewards
+        min (int): min value for normalization of rewards
+    '''
+
     model_dirs = [x[0] for x in os.walk(path_to_models)]
 
     slopes = []
@@ -645,14 +678,21 @@ def compare_training_slope(path_to_models, max_value=79, min_value=0):
         slopes, 'slope', path_to_models+'/lin_reg_slope_result_sorted.json', True)
 
 
-def sort_by_key_and_save_array(array, key, path, descending=True):
-    array.sort(key=lambda x: x[key], reverse=descending)
+def analyze_card_round_position(game_Setting, title, paths_to_models,  save_path, num_games, player_id, seed) -> None:
+    '''
+        analyze the position of in what round specific cards are played for a player.
+        This function visualizes this in a heat map
 
-    with open(path, 'w') as f:
-        json.dump(array, f, indent=4)
+    Input:
+        game_Setting (dict): Environment settings
+        title (str): The title of the heatmap that is created
+        paths_to_models (list): environment models
+        path (str): path to save the heatmap to
+        num_games (int): number of games to play
+        player_id (int): id of the player to observe
+        seed (int): random seed
+    '''
 
-
-def analyse_card_round_position(game_Setting, title, paths_to_models,  path, num_games, player_id, seed):
     device = get_device()
 
     env = rlcard.make(
@@ -696,21 +736,31 @@ def analyse_card_round_position(game_Setting, title, paths_to_models,  path, num
     sns.heatmap(list(heatmap.values()), fmt="d")
     ax.set_xlabel('Round', fontsize=14)
     ax.set_ylabel('Card', fontsize=14)
-    plt.savefig(path, dpi=200)
-
-    # print(ax)
-
-# sorts the files in a natural way
+    plt.savefig(save_path, dpi=200)
 
 
-def sorted_alphanumeric(data):
+def sorted_alphanumeric(data) -> object:
+    '''
+        helper function to sort files in a natural way
+    '''
     def convert(text): return int(text) if text.isdigit() else text.lower()
     def alphanum_key(key): return [convert(c)
                                    for c in re.split('([0-9]+)', key)]
     return sorted(data, key=alphanum_key)
 
 
-def compare_dmc_checkpoints(env_params, path_to_dmc_models, file_name, is_ai_array, num_games, seed):
+def compare_dmc_checkpoints(game_settings, path_to_dmc_models, save_path, is_ai_array, num_games, seed) -> None:
+    '''
+        this function serves to observe the checkpoints of a DMC model and compare each player for each checkpoint with another
+
+    Input:
+        game_settings (dict): environment settings
+        path_to_dmc_models (str): the path to the checkpoint models
+        file_name (str): Path to save the results to
+        is_ai_array (list[bool]): list of length= 4; True = load model, False = load random agent
+        num_games (int): number of checkpoint comparison games
+        seed (int): random seed
+    '''
     files = [f for f in sorted_alphanumeric(os.listdir(
         path_to_dmc_models)) if os.path.isfile(os.path.join(path_to_dmc_models, f))]
 
@@ -720,12 +770,12 @@ def compare_dmc_checkpoints(env_params, path_to_dmc_models, file_name, is_ai_arr
     device = get_device()
 
     env = rlcard.make(
-        env_params['env_name'],
+        game_settings['env_name'],
         config={
             'seed': seed,
-            'game_variant': env_params['game_variant'],
-            'game_judge_by_points': env_params['game_judge_by_points'],
-            'game_activate_heuristic': env_params['game_activate_heuristic']
+            'game_variant': game_settings['game_variant'],
+            'game_judge_by_points': game_settings['game_judge_by_points'],
+            'game_activate_heuristic': game_settings['game_activate_heuristic']
         }
     )
 
@@ -757,14 +807,15 @@ def compare_dmc_checkpoints(env_params, path_to_dmc_models, file_name, is_ai_arr
         reward_results.append(":".join([str(reward[0]), str(reward[1])]))
 
     with open(path_to_dmc_models + '/' +
-              file_name, 'w', encoding='UTF8') as file:
+              save_path, 'w', encoding='UTF8') as file:
         writer = csv.writer(file)
-        writer.writerow(['timestep', 'reward'])
+        writer.writerow(['checkpoint', 'reward'])
         writer.writerows(zip(checkpoint_files, reward_results))
 
 
-def plot_curve(csv_path, save_path, name=""):
-    ''' Read data from csv file and plot the results
+def plot_curve(csv_path, save_path, name="") -> None:
+    ''' 
+        Read data from csv file and plot the results
     '''
     with open(csv_path) as csvfile:
         reader = csv.DictReader(csvfile)
@@ -791,74 +842,10 @@ def plot_curve(csv_path, save_path, name=""):
         fig.savefig(save_path)
 
 
-def get_percentages_relative_to_trick(path, threshhold=1):
-    """
-        file:
-        {
-            card: propability
-        }
-    """
-
-    with open(path, 'r') as json_file:
-        data = json.load(json_file)
-
-    sort_orders = sorted(data.items(), key=lambda x: x[1], reverse=False)
-    # print("sorted_data", sort_orders)
-    result = 0
-    low_trick_chance_cards = {}
-    for i in sort_orders:
-        result += i[1]/100*11
-        low_trick_chance_cards[i[0]] = i[1]
-        if result > threshhold:
-            break
-
-    print("result:", low_trick_chance_cards)
-
-
-def get_low_cards(path, save_path, threshhold=1):
-    """
-        file:
-        {
-            card: propability
-        }
-    """
-
-    with open(path, 'r') as json_file:
-        data = json.load(json_file)
-
-    # every card has a chance of (44/54) of beeing played in a game because of the blind cards
-    card_play_chance = 44/54
-
-    sort_orders = sorted(data.items(), key=lambda x: x[1], reverse=False)
-
-    result = 0
-    low_trick_chance_cards = {}
-    for i in sort_orders:
-        result += (i[1]/100)*card_play_chance
-        low_trick_chance_cards[i[0]] = i[1]
-        if result > threshhold:
-            break
-
-    with open(save_path, 'w') as f:
-        json.dump(low_trick_chance_cards, f, indent=4)
-
-
-def get_high_cards(path, save_path):
-    with open(path, 'r') as json_file:
-        data = json.load(json_file)
-
-    high_cards = {}
-
-    for key in data:
-        rank, suit = key.split("-")
-        if rank == "k" or rank == "d" or rank == "gstiess" or (suit == "trump" and int(rank) >= 7):
-            high_cards[key] = data[key]
-
-    with open(save_path, 'w') as f:
-        json.dump(high_cards, f, indent=4)
-
-
-def create_bar_graph(path, save_path):
+def create_bar_graph(path, save_path) -> None:
+    '''
+        helper function to create bar graph
+    '''
     x = []
     y = []
 
@@ -878,7 +865,16 @@ def create_bar_graph(path, save_path):
     fig.savefig(save_path)
 
 
-def create_bar_graph_colored(path, save_path, highcards_percentage=80, is_card_relative=False):
+def create_bar_graph_colored(path, save_path, highcards_percentage=80, is_card_relative=False) -> None:
+    '''
+        helper function to create colored bar graph with high/ low card split
+
+    Input
+        path (str): path to card probabilities
+        save_path (str): path to save the bar graph
+        highcards_percentage (float): high card split in %
+        is_card_relative (bool): relative to card play frequency?
+    '''
     x = []
     y = []
 
@@ -912,7 +908,17 @@ def create_bar_graph_colored(path, save_path, highcards_percentage=80, is_card_r
     fig.savefig(save_path)
 
 
-def split_80_20_cards(path, save_path, highcards_percentage=80, is_card_relative=False):
+def split_80_20_cards(path, save_path, highcards_percentage=80, is_card_relative=False) -> None:
+    '''
+        split cards into high and low cards
+
+    Input:
+        path (str): path to card win probabilities
+        save_path (str): path to save the results to
+        highcards_percentage (float): percentage that account for total high card win probabilites
+        is_card_relative: relative to card frequency?
+    '''
+
     with open(path, 'r') as json_file:
         data = json.load(json_file)
 
@@ -953,8 +959,10 @@ def split_80_20_cards(path, save_path, highcards_percentage=80, is_card_relative
         json.dump(high_cards, f, indent=4)
 
 
-def plot_combined(csv_dict, save_path, x_name, y_name, name=""):
+def plot_combined(csv_dict, save_path, x_name, y_name, name="") -> None:
     """
+        helper function for combining result in graph
+
         csv_dict= [
             {
                 'path': '...',
@@ -994,7 +1002,11 @@ def plot_combined(csv_dict, save_path, x_name, y_name, name=""):
     fig.savefig(save_path)
 
 
-def refactor_training_graph(csv_path, name, y_name, x_name, title, save_path, num_checkpoints):
+def refactor_training_graph(csv_path, name, y_name, x_name, title, save_path, num_checkpoints) -> None:
+    '''
+        helper function to refactor training graphs
+    '''
+
     xs = []
     ys = []
 

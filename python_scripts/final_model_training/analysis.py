@@ -1,7 +1,7 @@
 # random against human
 
 import rlcard
-from rlcard.games.cego.utility.eval import analyse_card_round_position, convert_to_agents
+from rlcard.games.cego.utility.eval import analyze_card_round_position, convert_to_agents
 
 from rlcard.utils import (
     get_device,
@@ -34,5 +34,5 @@ env.set_agents(agents)
 
 
 if __name__ == '__main__':
-    analyse_card_round_position(
+    analyze_card_round_position(
         env, "results/analysis_results/card_round.png", num_games, 0)
