@@ -18,22 +18,20 @@
 
 This repository contains the full source code of the thesis.
 
-The framework is a fork of [RLCard](https://github.com/datamllab/rlcard) and, therefore, parts of this repository are external source code. The following folders/ files contain thesis specific content and are, therefore, **not external source code**:
+The framework is a fork of [RLCard](https://github.com/datamllab/rlcard) and, therefore, the **src/rl_env** folder contains external source code. The following files / folders in **src/rl_env** do **not** contain external code:
 
-* [rlcard/games/cego](rlcard/games/cego)
-* [rlcard/envs/cego.py](rlcard/envs/cego.py)
-* [rlcard/agents/human_agents/cego_human_agent.py](rlcard/agents/human_agents/cego_human_agent.py)
-* [results](results)
-* [python_scripts](python_scripts)
-* [deepl-ai-service](deepl-ai-service)
-* [thesis](thesis)
+* [src/rl_env/rlcard/games/cego](src/rl_env/rlcard/games/cego)
+* [src/rl_env/rlcard/envs/cego.py](src/rl_env/rlcard/envs/cego.py)
+* [src/rl_env/rlcard/agents/human_agents/cego_human_agent.py](src/rl_env/rlcard/agents/human_agents/cego_human_agent.py)
+* [src/rl_env/results](src/rl_env/results)
+* [src/rl_env/python_scripts](src/rl_env/python_scripts)
 
 ## Description of the structure:
 
 ### Class Diagramm of Game Implementation:
 ![Class Diagram](readme_imgs/class_diagram_rlcard_cego_simple.drawio.png)
 
-### File Stucture:
+### File Stucture of **src** folder:
 * [rlcard/games/cego](rlcard/games/cego): The implementation of the game logic.
     * jsondata: contains card encoding, high cards and low cards list.
     * testing: contains script for testing the environment
@@ -54,7 +52,7 @@ The framework is a fork of [RLCard](https://github.com/datamllab/rlcard) and, th
         * scripts for final dmc, dqn, and nfsp training
 * [deepl-ai-service](deepl-ai-service): The API that makes the model available.
     * this is a seperate service that requires a seperate setup
-    * [more details here]()
+    * [more details here](src/deepl-ai-service/README.md)
 * [thesis](thesis): contains the Thesis PDF.
 
 ## Setting up the Environment
